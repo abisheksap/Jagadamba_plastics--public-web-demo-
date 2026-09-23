@@ -1,6 +1,14 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
+const variant = v.object({
+  id: v.string(),
+  size: v.string(),
+  spec: v.optional(v.string()),
+  price: v.optional(v.number()),
+  packing: v.optional(v.string()),
+});
+
 export default defineSchema({
   products: defineTable({
     name: v.string(),
@@ -11,6 +19,8 @@ export default defineSchema({
     image: v.string(),
     imageStorageId: v.optional(v.id("_storage")),
     specs: v.array(v.string()),
+    variants: v.array(variant),
+    priceNote: v.optional(v.string()),
     featured: v.boolean(),
     sortOrder: v.number(),
   }),

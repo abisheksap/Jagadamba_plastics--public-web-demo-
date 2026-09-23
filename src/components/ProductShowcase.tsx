@@ -38,32 +38,36 @@ const starPositions = [
   { left: "62%", top: "22%", delay: 1.02, tw: 0.49 },
 ];
 
-/** Layout slots for the family-shot cluster — tanks + pipes at the back,
- * fittings gathered in front (mirrors the prototype). */
+/** Layout slots for the family-shot cluster — the two water tanks as the
+ * front-centre pair, pipes behind, fittings gathered in front (mirrors the
+ * prototype). Match strings are lowercase substrings of product names. */
 function buildSlots(products: Product[]): OrbitItem[] {
   const byName = (needle: string) => products.find((p) => p.name.toLowerCase().includes(needle));
   const layout: Array<{ match: string; cls: string; bx: number; by: number; z: number; w?: string; h?: string }> = [
-    { match: "black tank", cls: "chip-tank chip-tank-b", bx: -94, by: -31, z: 1, w: "114px", h: "150px" },
-    { match: "green water tank", cls: "chip-tank", bx: 8, by: -44, z: 2, h: "166px" },
-    { match: "borewell", cls: "chip-pipe", bx: 77, by: -22, z: 2 },
-    { match: "ug drainage", cls: "chip-pipe", bx: 103.5, by: -3, z: 2 },
-    { match: "hdpe pipe", cls: "chip-pipe", bx: 140, by: -6, z: 2, w: "66px", h: "168px" },
-    { match: "pvc pipe", cls: "chip-pipe chip-pipe-lg", bx: -168, by: -28, z: 1 },
-    { match: "cpvc pipe", cls: "chip-pipe", bx: -213, by: -12, z: 1, w: "60px", h: "155px" },
-    { match: "coil", cls: "chip-coil", bx: -274, by: 10, z: 1 },
-    { match: "cpvc elbow 90", cls: "chip-round", bx: -59, by: 109, z: 3, w: "64px", h: "61px" },
-    { match: "cpvc elbow 45", cls: "chip-round", bx: -156, by: 78, z: 3 },
-    { match: "cross tee", cls: "chip-round", bx: -285, by: 94, z: 3 },
-    { match: "cpvc union", cls: "chip-round", bx: -213, by: 82, z: 3 },
-    { match: "concealed valve", cls: "chip-round", bx: -107, by: 64, z: 3, w: "64px", h: "61px" },
-    { match: "reducing tee", cls: "chip-round", bx: -55, by: 53, z: 3 },
-    { match: "male thread", cls: "chip-round", bx: 23, by: 47, z: 3 },
-    { match: "double tee", cls: "chip-round", bx: 6, by: 113, z: 3 },
-    { match: "single tee", cls: "chip-round", bx: 68, by: 104, z: 3 },
-    { match: "coupler", cls: "chip-round", bx: 120, by: 90, z: 3 },
-    { match: "bend 45", cls: "chip-round", bx: 146, by: 24, z: 3 },
-    { match: "end cap", cls: "chip-round", bx: 177, by: 104, z: 3, w: "64px", h: "61px" },
-    { match: "p-trap", cls: "chip-round", bx: 198, by: 50, z: 3 },
+    // front-centre tank pair — both prominent
+    { match: "jagadamba water tank", cls: "chip-tank", bx: -40, by: -42, z: 3, h: "172px" },
+    { match: "black tank", cls: "chip-tank chip-tank-b", bx: 46, by: -34, z: 3, w: "122px", h: "158px" },
+    // pipes behind
+    { match: "borewell", cls: "chip-pipe", bx: 110, by: -20, z: 2 },
+    { match: "ug drainage", cls: "chip-pipe", bx: 138, by: -2, z: 2 },
+    { match: "hdpe pipe", cls: "chip-pipe", bx: 148, by: 16, z: 2, w: "66px", h: "168px" },
+    { match: "ns upvc", cls: "chip-pipe chip-pipe-lg", bx: -116, by: -26, z: 2 },
+    { match: "cpvc pipe sdr", cls: "chip-pipe", bx: -156, by: -10, z: 2, w: "60px", h: "155px" },
+    { match: "pvc pipe (commercial)", cls: "chip-pipe", bx: -186, by: 8, z: 1 },
+    // fittings in front
+    { match: "cpvc elbow 90", cls: "chip-round", bx: -59, by: 109, z: 4, w: "64px", h: "61px" },
+    { match: "cpvc elbow 45", cls: "chip-round", bx: -156, by: 78, z: 4 },
+    { match: "cross tee", cls: "chip-round", bx: -213, by: 94, z: 4 },
+    { match: "cpvc union", cls: "chip-round", bx: -213, by: 82, z: 4 },
+    { match: "concealed valve", cls: "chip-round", bx: -107, by: 64, z: 4, w: "64px", h: "61px" },
+    { match: "reducing tee", cls: "chip-round", bx: -55, by: 53, z: 4 },
+    { match: "male thread", cls: "chip-round", bx: 23, by: 47, z: 4 },
+    { match: "double tee", cls: "chip-round", bx: 6, by: 113, z: 4 },
+    { match: "single tee", cls: "chip-round", bx: 68, by: 104, z: 4 },
+    { match: "coupler", cls: "chip-round", bx: 120, by: 90, z: 4 },
+    { match: "bend 45", cls: "chip-round", bx: 146, by: 24, z: 4 },
+    { match: "end cap", cls: "chip-round", bx: 177, by: 104, z: 4, w: "64px", h: "61px" },
+    { match: "p trap", cls: "chip-round", bx: 198, by: 50, z: 4 },
   ];
 
   const items: OrbitItem[] = [];
@@ -75,18 +79,21 @@ function buildSlots(products: Product[]): OrbitItem[] {
       items.push({ product, ...slot });
     }
   }
-  // any CMS-added products the layout doesn't know about get a front-row slot
+  // CMS-added products the layout doesn't know about: featured items join a
+  // back ring, capped so the family shot stays readable on large catalogs.
+  const MAX_CHIPS = 24;
   let extra = 0;
   for (const product of products) {
-    if (!used.has(product.id)) {
+    if (items.length >= MAX_CHIPS) break;
+    if (!used.has(product.id) && product.featured) {
       used.add(product.id);
-      const ang = (extra / Math.max(1, products.length - used.size + 4)) * Math.PI * 2;
+      const ang = (extra / 10) * Math.PI * 2;
       items.push({
         product,
         cls: "chip-round",
-        bx: Math.cos(ang) * 210,
-        by: 60 + Math.sin(ang) * 40,
-        z: 3,
+        bx: Math.cos(ang) * 235,
+        by: -8 + Math.sin(ang) * 44,
+        z: 1,
       });
       extra += 1;
     }

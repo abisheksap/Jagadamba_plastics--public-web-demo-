@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { EnquiryForm } from "../components/EnquiryForm";
 import { useSiteData } from "../data/SiteDataProvider";
+import type { Product, ProductVariant } from "../data/types";
 import { PRODUCT_CATEGORIES } from "../data/types";
 
 const ArrowIcon = (
@@ -11,14 +12,54 @@ const ArrowIcon = (
   </svg>
 );
 
-export function ProductsPage() {
-  const { products } = useSiteData();
-  const [filter, setFilter] = useState<string>("All");
+const SearchIcon = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+    <circle cx="11" cy="11" r="7" />
+    <path d="m20 20-3.8-3.8" />
+  </svg>
+);
 
-  const filtered = useMemo(
-    () => (filter === "All" ? products : products.filter((p) => p.category === filter)),
-    [products, filter],
-  );
+export function formatPrice(n: number): string {
+  return `Rs ${n.toLocaleString("en-IN", { maximumFractionDigits: 1 })}`;
+}
+
+function fromPrice(p: Product, showPrices: boolean): string | null {
+  if (!showPrices) return null;
+  const prices = (p.variants ?? []).map((v) => v.price).filter((x): x is number => typeof x === "number");
+  if (prices.length === 0) return null;
+  const min = Math.min(...prices);
+  return `From ${formatPrice(min)}`;
+}
+
+function variantLabel(v: ProductVariant): string {
+  return v.spec ? `${v.size} — ${v.spec}` : v.size;
+}
+
+/* ============================== CATALOG PAGE ============================== */
+
+export function ProductsPage() {
+  const { products, settings } = useSiteData();
+  const [filter, setFilter] = useState<string>("All");
+  const [query, setQuery] = useState("");
+  const showPrices = settings.showPrices !== false;
+
+  const counts = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const p of products) m.set(p.category, (m.get(p.category) ?? 0) + 1);
+    return m;
+  }, [products]);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return products
+      .filter((p) => filter === "All" || p.category === filter)
+      .filter((p) => {
+        if (!q) return true;
+        const inVariants = (p.variants ?? []).some((v) => `${v.size} ${v.spec ?? ""}`.toLowerCase().includes(q));
+        return `${p.name} ${p.tagline} ${p.description} ${p.category}`.toLowerCase().includes(q) || inVariants;
+      })
+      .sort((a, b) => a.sortOrder - b.sortOrder);
+  }, [products, filter, query]);
 
   return (
     <>
@@ -34,9 +75,19 @@ export function ProductsPage() {
             Every line, <span className="grad">one standard.</span>
           </h1>
           <p className="sub">
-            {products.length} products across water storage, pressure pipe and fittings —
-            manufactured in Chitwan to national standard.
+            {products.length} products across pipes, fittings, tanks and tools — manufactured in
+            Chitwan to national standard.
           </p>
+          <div className="catalog-search" style={{ maxWidth: 460, marginTop: 30 }}>
+            <span className="catalog-search-icon">{SearchIcon}</span>
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search products or sizes (e.g. 110mm, PN16)…"
+              aria-label="Search products"
+            />
+          </div>
         </div>
       </section>
 
@@ -46,26 +97,35 @@ export function ProductsPage() {
             {["All", ...PRODUCT_CATEGORIES].map((c) => (
               <button key={c} className={`filter-pill${filter === c ? " active" : ""}`} onClick={() => setFilter(c)}>
                 {c}
+                {c !== "All" && counts.get(c) ? <span className="pill-count">{counts.get(c)}</span> : null}
               </button>
             ))}
           </div>
           {filtered.length === 0 ? (
-            <div className="empty-state">No products in this category yet.</div>
+            <div className="empty-state">No products match “{query || filter}”.</div>
           ) : (
             <div className="product-grid-future">
-              {filtered.map((p) => (
-                <Link key={p.id} to={`/products/${p.id}`} className="p-card-future">
-                  <span className="p-tag-future">{p.category.toUpperCase()}</span>
-                  {p.featured && <span className="p-feat-future">★ FEATURED</span>}
-                  <div className="p-media-future">
-                    <img src={p.image} alt={p.name} loading="lazy" />
-                  </div>
-                  <h3>{p.name}</h3>
-                  <div className="tagline">{p.tagline}</div>
-                  <p className="desc">{p.description}</p>
-                  <div className="p-link-future">View specification {ArrowIcon}</div>
-                </Link>
-              ))}
+              {filtered.map((p) => {
+                const fp = fromPrice(p, showPrices);
+                return (
+                  <Link key={p.id} to={`/products/${p.id}`} className="p-card-future">
+                    <span className="p-tag-future">{p.category.toUpperCase()}</span>
+                    {p.featured && <span className="p-feat-future">★ FEATURED</span>}
+                    <div className="p-media-future">
+                      <img src={p.image} alt={p.name} loading="lazy" />
+                    </div>
+                    <h3>{p.name}</h3>
+                    <div className="tagline">{p.tagline}</div>
+                    <div className="p-meta-row">
+                      {(p.variants?.length ?? 0) > 0 && (
+                        <span className="p-variants-count">{p.variants.length} variants</span>
+                      )}
+                      {fp && <span className="p-price-from">{fp}</span>}
+                    </div>
+                    <div className="p-link-future">View details {ArrowIcon}</div>
+                  </Link>
+                );
+              })}
             </div>
           )}
         </div>
@@ -88,10 +148,13 @@ export function ProductsPage() {
   );
 }
 
+/* ============================ DETAIL PAGE ============================= */
+
 export function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { products, settings } = useSiteData();
   const product = products.find((p) => p.id === id);
+  const showPrices = settings.showPrices !== false;
 
   if (!product) {
     return (
@@ -115,6 +178,8 @@ export function ProductDetailPage() {
   const related = products
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, 3);
+  const variants = product.variants ?? [];
+  const hasPrices = showPrices && variants.some((v) => typeof v.price === "number");
 
   return (
     <>
@@ -169,6 +234,62 @@ export function ProductDetailPage() {
             </div>
           </div>
 
+          {/* VARIANTS / PRICE TABLE */}
+          {variants.length > 0 && (
+            <div className="variant-block" style={{ marginTop: 70 }}>
+              <div className="section-head-future" style={{ marginBottom: 24 }}>
+                <div>
+                  <div className="kicker-future">
+                    <span className="kf-dot" />
+                    SIZES &amp; RATES
+                  </div>
+                  <h2 style={{ fontSize: "clamp(22px,2.6vw,30px)" }}>
+                    {variants.length} variants available.
+                  </h2>
+                </div>
+                {hasPrices && settings.priceListDate && (
+                  <p className="price-effective mono">
+                    PRICE LIST · EFFECTIVE {settings.priceListDate}
+                  </p>
+                )}
+              </div>
+
+              {hasPrices ? (
+                <div className="price-table-wrap">
+                  <table className="price-table">
+                    <thead>
+                      <tr>
+                        <th>SIZE</th>
+                        <th>RATE</th>
+                        {variants.some((v) => v.packing) && <th>PACKING</th>}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {variants.map((v) => (
+                        <tr key={v.id}>
+                          <td>
+                            <span className="v-size">{variantLabel(v)}</span>
+                          </td>
+                          <td className="v-price mono">{typeof v.price === "number" ? formatPrice(v.price) : "—"}</td>
+                          {variants.some((x) => x.packing) && <td className="v-packing">{v.packing ?? "—"}</td>}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {product.priceNote && <p className="price-note">ℹ {product.priceNote}</p>}
+                </div>
+              ) : (
+                <div className="variant-chips">
+                  {variants.map((v) => (
+                    <span key={v.id} className="variant-chip mono">
+                      {variantLabel(v)}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           {related.length > 0 && (
             <>
               <h3 style={{ margin: "80px 0 28px", fontSize: 24, color: "#fff" }}>
@@ -183,7 +304,7 @@ export function ProductDetailPage() {
                     </div>
                     <h3>{p.name}</h3>
                     <div className="tagline">{p.tagline}</div>
-                    <div className="p-link-future">View specification {ArrowIcon}</div>
+                    <div className="p-link-future">View details {ArrowIcon}</div>
                   </Link>
                 ))}
               </div>

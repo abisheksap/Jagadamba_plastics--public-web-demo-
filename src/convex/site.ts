@@ -215,6 +215,8 @@ export const getSettings = query({
       address: map.address ?? "Bharatpur-4, Chitwan, Narayanghat, Nepal",
       facebook: map.facebook ?? "https://www.facebook.com/jagadambaplasticindustry",
       youtube: map.youtube ?? "https://www.youtube.com/@JagadambaPipeFittings",
+      showPrices: map.showPrices ?? true,
+      priceListDate: map.priceListDate ?? "2082/09/01",
     };
   },
 });
@@ -290,6 +292,16 @@ export const upsertProduct = mutation({
     image: v.string(),
     imageStorageId: v.optional(v.id("_storage")),
     specs: v.array(v.string()),
+    variants: v.array(
+      v.object({
+        id: v.string(),
+        size: v.string(),
+        spec: v.optional(v.string()),
+        price: v.optional(v.number()),
+        packing: v.optional(v.string()),
+      }),
+    ),
+    priceNote: v.optional(v.string()),
     featured: v.boolean(),
     sortOrder: v.number(),
     passcode: v.string(),
@@ -310,6 +322,27 @@ export const deleteProduct = mutation({
   handler: async (ctx, args) => {
     await assertAdmin(ctx, args.passcode);
     await ctx.db.delete(args.id);
+  },
+});
+
+export const setProductVariants = mutation({
+  args: {
+    id: v.id("products"),
+    variants: v.array(
+      v.object({
+        id: v.string(),
+        size: v.string(),
+        spec: v.optional(v.string()),
+        price: v.optional(v.number()),
+        packing: v.optional(v.string()),
+      }),
+    ),
+    passcode: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await assertAdmin(ctx, args.passcode);
+    await ctx.db.patch(args.id, { variants: args.variants });
+    return true;
   },
 });
 
@@ -385,6 +418,8 @@ export const updateSettings = mutation({
     address: v.string(),
     facebook: v.string(),
     youtube: v.string(),
+    showPrices: v.boolean(),
+    priceListDate: v.string(),
     passcode: v.string(),
   },
   handler: async (ctx, args) => {

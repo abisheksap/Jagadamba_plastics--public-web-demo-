@@ -24,6 +24,7 @@ export default function Home() {
   const { products, gallery, reviews: allReviews, settings } = useSiteData();
   const featured = products.filter((p) => p.featured).slice(0, 6);
   const reviews = pickApproved(allReviews).slice(0, 3);
+  const variantCount = products.reduce((n, p) => n + (p.variants?.length ?? 0), 0);
 
   return (
     <>
@@ -58,7 +59,7 @@ export default function Home() {
             </div>
             <div className="hero-meta">
               <div>
-                <div className="num mono">{products.length}+</div>
+                <div className="num mono">{products.length}</div>
                 <div className="lbl">Products in range</div>
               </div>
               <div>
@@ -90,7 +91,7 @@ export default function Home() {
               { target: 2063, suffix: " B.S.", label: "Founded — milestone of the Manakamana Group" },
               { target: 6, label: "Product lines, one supply chain" },
               { target: 77, label: "Districts reached by our dealer network" },
-              { target: 100, suffix: "+", label: "SKUs in the full catalog" },
+              { target: Math.max(variantCount, 100), label: "Sizes & rates in the price list" },
             ]}
           />
         </div>

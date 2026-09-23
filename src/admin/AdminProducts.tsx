@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import type { ChangeEvent, DragEvent, FormEvent } from "react";
 import { adminCredential } from "../data/adminAuth";
 import { useAdminOps, useSiteData } from "../data/SiteDataProvider";
-import type { Product, ProductCategory } from "../data/types";
+import type { Product, ProductCategory, ProductVariant } from "../data/types";
 import { PRODUCT_CATEGORIES } from "../data/types";
 
 const blank = (): Product => ({
@@ -13,17 +13,20 @@ const blank = (): Product => ({
   description: "",
   image: "",
   specs: [],
+  variants: [],
   featured: false,
   sortOrder: 99,
 });
 
 export default function AdminProducts() {
-  const { products, mode } = useSiteData();
+  const { products, mode, settings } = useSiteData();
   const ops = useAdminOps(adminCredential());
   const [editing, setEditing] = useState<Product | null>(null);
   const [specsText, setSpecsText] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [savedMsg, setSavedMsg] = useState("");
+  const [filter, setFilter] = useState("All");
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const startNew = () => {
@@ -32,7 +35,7 @@ export default function AdminProducts() {
   };
 
   const startEdit = (p: Product) => {
-    setEditing({ ...p });
+    setEditing({ ...p, specs: [...p.specs], variants: (p.variants ?? []).map((v) => ({ ...v })) });
     setSpecsText(p.specs.join("\n"));
   };
 
@@ -61,6 +64,33 @@ export default function AdminProducts() {
     void onPickFile(e.target.files?.[0]);
   };
 
+  // ---------- variants editor ----------
+  const setVariants = (variants: ProductVariant[]) => setEditing((e) => (e ? { ...e, variants } : e));
+
+  const addVariant = () => {
+    if (!editing) return;
+    setVariants([...(editing.variants ?? []), { id: `v-${Date.now().toString(36)}`, size: "", price: undefined }]);
+  };
+
+  const updateVariant = (idx: number, patch: Partial<ProductVariant>) => {
+    if (!editing) return;
+    setVariants((editing.variants ?? []).map((v, i) => (i === idx ? { ...v, ...patch } : v)));
+  };
+
+  const removeVariant = (idx: number) => {
+    if (!editing) return;
+    setVariants((editing.variants ?? []).filter((_, i) => i !== idx));
+  };
+
+  const moveVariant = (idx: number, dir: -1 | 1) => {
+    if (!editing) return;
+    const next = [...(editing.variants ?? [])];
+    const j = idx + dir;
+    if (j < 0 || j >= next.length) return;
+    [next[idx], next[j]] = [next[j], next[idx]];
+    setVariants(next);
+  };
+
   const onSave = async (e: FormEvent) => {
     e.preventDefault();
     if (!editing) return;
@@ -74,11 +104,16 @@ export default function AdminProducts() {
         .split("\n")
         .map((s) => s.trim())
         .filter(Boolean),
+      variants: (editing.variants ?? [])
+        .map((v) => ({ ...v, size: v.size.trim() }))
+        .filter((v) => v.size.length > 0),
       id: editing.id || `p-${Date.now().toString(36)}`,
     };
     try {
       await ops.upsertProduct(product);
       setEditing(null);
+      setSavedMsg(`Saved — ${product.name} is live.`);
+      setTimeout(() => setSavedMsg(""), 3000);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Save failed");
     }
@@ -93,7 +128,24 @@ export default function AdminProducts() {
     }
   };
 
-  const sorted = [...products].sort((a, b) => a.sortOrder - b.sortOrder);
+  const onTogglePrices = async (checked: boolean) => {
+    try {
+      const next = { ...settings, showPrices: checked };
+      if (mode === "convex") {
+        const { convexAdminOps } = await import("../data/backend");
+        await convexAdminOps(adminCredential()).updateSettings(next);
+      } else {
+        await ops.updateSettings(next);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Toggle failed");
+    }
+  };
+
+  const sorted = [...products]
+    .filter((p) => filter === "All" || p.category === filter)
+    .sort((a, b) => a.sortOrder - b.sortOrder);
+  const variantTotal = products.reduce((n, p) => n + (p.variants?.length ?? 0), 0);
 
   return (
     <>
@@ -101,7 +153,7 @@ export default function AdminProducts() {
         <div>
           <h1>Products</h1>
           <div className="sub">
-            {products.length} products on the public catalog
+            {products.length} products · {variantTotal} size/price variants
             {mode === "convex" ? " · synced live via Convex" : ""}.
           </div>
         </div>
@@ -115,6 +167,30 @@ export default function AdminProducts() {
           <span style={{ color: "#ff8a8f" }}>{error}</span>
         </div>
       )}
+      {savedMsg && (
+        <div className="admin-card" style={{ borderColor: "#2e7d55" }}>
+          <span style={{ color: "#7dd4a8" }}>{savedMsg}</span>
+        </div>
+      )}
+
+      {/* PUBLIC PRICE VISIBILITY TOGGLE */}
+      <div className="admin-card">
+        <h3>Pricing visibility</h3>
+        <label className={`admin-toggle${settings.showPrices !== false ? " on" : ""}`}>
+          <input
+            type="checkbox"
+            checked={settings.showPrices !== false}
+            onChange={(e) => void onTogglePrices(e.target.checked)}
+          />
+          <span>
+            <span className="t-title">Show prices on the website</span>
+            <span className="t-sub" style={{ display: "block" }}>
+              When on, cards show "From Rs …" and product pages show the full size/rate table. When
+              off, sizes appear without rates and visitors are invited to call instead.
+            </span>
+          </span>
+        </label>
+      </div>
 
       {editing && (
         <div className="admin-card">
@@ -228,9 +304,69 @@ export default function AdminProducts() {
                     placeholder={"UV-stabilised outer layer\nFood-grade interior"}
                   />
                 </div>
+                <div className="admin-field">
+                  <label htmlFor="p-pnote">PRICE NOTE (shown under the rate table)</label>
+                  <input
+                    id="p-pnote"
+                    value={editing.priceNote ?? ""}
+                    onChange={(e) => setEditing({ ...editing, priceNote: e.target.value })}
+                    placeholder="e.g. Rates are per litre of tank capacity…"
+                  />
+                </div>
               </div>
             </div>
-            <div style={{ display: "flex", gap: 10 }}>
+
+            {/* VARIANTS */}
+            <div className="admin-field" style={{ marginTop: 20 }}>
+              <label>SIZES &amp; RATES ({(editing.variants ?? []).length})</label>
+              <div className="variants-editor">
+                {(editing.variants ?? []).map((v, i) => (
+                  <div key={v.id} className="variant-row">
+                    <input
+                      className="vr-size"
+                      value={v.size}
+                      onChange={(e) => updateVariant(i, { size: e.target.value })}
+                      placeholder='Size — e.g. 1/2" or 25mm'
+                      aria-label="Variant size"
+                    />
+                    <input
+                      className="vr-price"
+                      type="number"
+                      step="any"
+                      value={v.price ?? ""}
+                      onChange={(e) =>
+                        updateVariant(i, { price: e.target.value === "" ? undefined : Number(e.target.value) })
+                      }
+                      placeholder="Rate (Rs)"
+                      aria-label="Variant price"
+                    />
+                    <input
+                      className="vr-packing"
+                      value={v.packing ?? ""}
+                      onChange={(e) => updateVariant(i, { packing: e.target.value || undefined })}
+                      placeholder="Packing (optional)"
+                      aria-label="Variant packing"
+                    />
+                    <div className="vr-actions">
+                      <button type="button" className="admin-btn small" onClick={() => moveVariant(i, -1)} aria-label="Move up">
+                        ↑
+                      </button>
+                      <button type="button" className="admin-btn small" onClick={() => moveVariant(i, 1)} aria-label="Move down">
+                        ↓
+                      </button>
+                      <button type="button" className="admin-btn small danger" onClick={() => removeVariant(i)} aria-label="Remove variant">
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <button type="button" className="admin-btn" onClick={addVariant}>
+                + Add size/rate row
+              </button>
+            </div>
+
+            <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
               <button className="admin-btn primary" type="submit" disabled={!editing.name.trim() || !editing.image}>
                 Save product
               </button>
@@ -243,6 +379,13 @@ export default function AdminProducts() {
       )}
 
       <div className="admin-card">
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
+          {["All", ...PRODUCT_CATEGORIES].map((c) => (
+            <button key={c} className={`filter-pill${filter === c ? " active" : ""}`} onClick={() => setFilter(c)}>
+              {c}
+            </button>
+          ))}
+        </div>
         <div className="table-wrap">
           <table className="admin-table">
             <thead>
@@ -250,6 +393,7 @@ export default function AdminProducts() {
                 <th></th>
                 <th>NAME</th>
                 <th>CATEGORY</th>
+                <th>VARIANTS</th>
                 <th>ORDER</th>
                 <th>FEATURED</th>
                 <th>ACTIONS</th>
@@ -270,6 +414,7 @@ export default function AdminProducts() {
                     <div style={{ fontSize: 12.5, color: "#7f93a3" }}>{p.tagline}</div>
                   </td>
                   <td>{p.category}</td>
+                  <td className="mono">{p.variants?.length ?? 0}</td>
                   <td className="mono">{p.sortOrder}</td>
                   <td>{p.featured ? <span className="badge approved">HOME</span> : "—"}</td>
                   <td>

@@ -1,0 +1,3955 @@
+{
+ "meta": {
+  "effective": "2082/09/01",
+  "source": "jp-plastic-price-list-2082-09-01.xlsx",
+  "hdpeExcludesVat": true,
+  "tankRateUnit": "Rs per litre",
+  "notes": [
+   "Prices are based at Ex-factory Chitwan, inclusive of 13% VAT and Excise duty \u2014 except the HDPE price list.",
+   "Prices are subject to change without any prior notice.",
+   "This price list replaces all previous price lists."
+  ]
+ },
+ "rows": [
+  {
+   "category": "CPVC Pipe",
+   "product": "CPVC Pipe SDR 11",
+   "mm": "15mm",
+   "inch": "1/2\"",
+   "spec": "SDR 11",
+   "packing": null,
+   "rate": 475.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Pipe",
+   "product": "CPVC Pipe SDR 11",
+   "mm": "20mm",
+   "inch": "3/4\"",
+   "spec": "SDR 11",
+   "packing": null,
+   "rate": 720.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Pipe",
+   "product": "CPVC Pipe SDR 11",
+   "mm": "25mm",
+   "inch": "1\"",
+   "spec": "SDR 11",
+   "packing": null,
+   "rate": 1115.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Pipe",
+   "product": "CPVC Pipe SDR 11",
+   "mm": "32mm",
+   "inch": "1-1/4\"",
+   "spec": "SDR 11",
+   "packing": null,
+   "rate": 1640.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Pipe",
+   "product": "CPVC Pipe SDR 11",
+   "mm": "40mm",
+   "inch": "1-1/2\"",
+   "spec": "SDR 11",
+   "packing": null,
+   "rate": 2305.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Pipe",
+   "product": "CPVC Pipe SDR 11",
+   "mm": "50mm",
+   "inch": "2\"",
+   "spec": "SDR 11",
+   "packing": null,
+   "rate": 3760.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Bush",
+   "mm": null,
+   "inch": "3/4\"x1/2\"",
+   "spec": null,
+   "packing": 1000.0,
+   "rate": 16.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Bush",
+   "mm": null,
+   "inch": "1\"x1/2\"",
+   "spec": null,
+   "packing": 1000.0,
+   "rate": 37.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Bush",
+   "mm": null,
+   "inch": "1\"x3/4\"",
+   "spec": null,
+   "packing": 800.0,
+   "rate": 39.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Bush",
+   "mm": null,
+   "inch": "1-1/4\"x1/2\"",
+   "spec": null,
+   "packing": 500.0,
+   "rate": 85.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Bush",
+   "mm": null,
+   "inch": "1-1/4\"x3/4\"",
+   "spec": null,
+   "packing": 500.0,
+   "rate": 73.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Bush",
+   "mm": null,
+   "inch": "1-1/4\"x1\"",
+   "spec": null,
+   "packing": 500.0,
+   "rate": 65.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Bush",
+   "mm": null,
+   "inch": "1-1/2\"x3/4\"",
+   "spec": null,
+   "packing": 500.0,
+   "rate": 101.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Bush",
+   "mm": null,
+   "inch": "1-1/2\"x1\"",
+   "spec": null,
+   "packing": 500.0,
+   "rate": 100.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Bush",
+   "mm": null,
+   "inch": "1-1/2\"x1-1/4\"",
+   "spec": null,
+   "packing": 500.0,
+   "rate": 99.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Bush",
+   "mm": null,
+   "inch": "2\"x3/4\"",
+   "spec": null,
+   "packing": 200.0,
+   "rate": 235.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Bush",
+   "mm": null,
+   "inch": "2\"x1\"",
+   "spec": null,
+   "packing": 200.0,
+   "rate": 240.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Bush",
+   "mm": null,
+   "inch": "2\"x1-1/4\"",
+   "spec": null,
+   "packing": 200.0,
+   "rate": 280.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Bush",
+   "mm": null,
+   "inch": "2\"x1-1/2\"",
+   "spec": null,
+   "packing": 150.0,
+   "rate": 275.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer (Coupler)",
+   "mm": null,
+   "inch": "3/4\"x1/2\"",
+   "spec": null,
+   "packing": 600.0,
+   "rate": 35.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer (Coupler)",
+   "mm": null,
+   "inch": "1\"x1/2\"",
+   "spec": null,
+   "packing": 300.0,
+   "rate": 43.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer (Coupler)",
+   "mm": null,
+   "inch": "1\"x3/4\"",
+   "spec": null,
+   "packing": 300.0,
+   "rate": 43.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer (Coupler)",
+   "mm": null,
+   "inch": "1-1/4\"x1/2\"",
+   "spec": null,
+   "packing": 210.0,
+   "rate": 115.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer (Coupler)",
+   "mm": null,
+   "inch": "1-1/4\"x3/4\"",
+   "spec": null,
+   "packing": 120.0,
+   "rate": 125.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer (Coupler)",
+   "mm": null,
+   "inch": "1-1/4\"x1\"",
+   "spec": null,
+   "packing": 120.0,
+   "rate": 127.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer (Coupler)",
+   "mm": null,
+   "inch": "1-1/2\"x3/4\"",
+   "spec": null,
+   "packing": 120.0,
+   "rate": 180.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer (Coupler)",
+   "mm": null,
+   "inch": "1-1/2\"x1\"",
+   "spec": null,
+   "packing": 120.0,
+   "rate": 172.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer (Coupler)",
+   "mm": null,
+   "inch": "1-1/2\"x1-1/4\"",
+   "spec": null,
+   "packing": 75.0,
+   "rate": 180.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer (Coupler)",
+   "mm": null,
+   "inch": "2\"x3/4\"",
+   "spec": null,
+   "packing": 60.0,
+   "rate": 260.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer (Coupler)",
+   "mm": null,
+   "inch": "2\"x1\"",
+   "spec": null,
+   "packing": 50.0,
+   "rate": 295.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer (Coupler)",
+   "mm": null,
+   "inch": "2\"x1-1/4\"",
+   "spec": null,
+   "packing": 40.0,
+   "rate": 318.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer (Coupler)",
+   "mm": null,
+   "inch": "2\"x1-1/2\"",
+   "spec": null,
+   "packing": 40.0,
+   "rate": 312.0,
+   "note": "Size pairing reconstructed from standard reducer sizing to match scanned rate/qty count \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Tee",
+   "mm": null,
+   "inch": "Combo #1",
+   "spec": null,
+   "packing": 300.0,
+   "rate": 62.0,
+   "note": "Exact size pairing not legible in scan \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Tee",
+   "mm": null,
+   "inch": "Combo #2",
+   "spec": null,
+   "packing": 100.0,
+   "rate": 95.0,
+   "note": "Exact size pairing not legible in scan \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Tee",
+   "mm": null,
+   "inch": "Combo #3",
+   "spec": null,
+   "packing": 40.0,
+   "rate": 245.0,
+   "note": "Exact size pairing not legible in scan \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Tee",
+   "mm": null,
+   "inch": "Combo #4",
+   "spec": null,
+   "packing": 150.0,
+   "rate": 95.0,
+   "note": "Exact size pairing not legible in scan \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Tee",
+   "mm": null,
+   "inch": "Combo #5",
+   "spec": null,
+   "packing": 40.0,
+   "rate": 310.0,
+   "note": "Exact size pairing not legible in scan \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Tee",
+   "mm": null,
+   "inch": "Combo #6",
+   "spec": null,
+   "packing": 15.0,
+   "rate": 550.0,
+   "note": "Exact size pairing not legible in scan \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Tee",
+   "mm": null,
+   "inch": "Combo #7",
+   "spec": null,
+   "packing": 10.0,
+   "rate": 600.0,
+   "note": "Exact size pairing not legible in scan \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Tee",
+   "mm": null,
+   "inch": "Combo #8",
+   "spec": null,
+   "packing": 10.0,
+   "rate": 590.0,
+   "note": "Exact size pairing not legible in scan \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Tee",
+   "mm": null,
+   "inch": "Combo #9",
+   "spec": null,
+   "packing": 40.0,
+   "rate": 165.0,
+   "note": "Exact size pairing not legible in scan \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Tee",
+   "mm": null,
+   "inch": "Combo #10",
+   "spec": null,
+   "packing": 15.0,
+   "rate": 160.0,
+   "note": "Exact size pairing not legible in scan \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Reducer Tee",
+   "mm": null,
+   "inch": "Combo #11",
+   "spec": null,
+   "packing": 15.0,
+   "rate": 270.0,
+   "note": "Exact size pairing not legible in scan \u2014 verify against original PDF"
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Tee (Brass Threaded)",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": "Brass Threaded",
+   "packing": 250.0,
+   "rate": 155.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Tee (Brass Threaded)",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": "Brass Threaded",
+   "packing": 150.0,
+   "rate": 245.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Tee (Brass Threaded)",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": "Brass Threaded",
+   "packing": 80.0,
+   "rate": 450.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Tee (Brass Threaded)",
+   "mm": "32",
+   "inch": "1-1/4\"",
+   "spec": "Brass Threaded",
+   "packing": 60.0,
+   "rate": 867.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Tee (Brass Threaded)",
+   "mm": null,
+   "inch": "3/4\"x1/2\"",
+   "spec": "Brass Threaded",
+   "packing": 160.0,
+   "rate": 165.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Tee (Brass Threaded)",
+   "mm": null,
+   "inch": "1\"x1/2\"",
+   "spec": "Brass Threaded",
+   "packing": 100.0,
+   "rate": 260.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Tee (Brass Threaded)",
+   "mm": null,
+   "inch": "1-1/4\"x1/2\"",
+   "spec": "Brass Threaded",
+   "packing": 50.0,
+   "rate": 348.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Male Threaded Adapter (Brass)",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": "Brass Threaded",
+   "packing": 400.0,
+   "rate": 198.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Male Threaded Adapter (Brass)",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": "Brass Threaded",
+   "packing": 200.0,
+   "rate": 295.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Male Threaded Adapter (Brass)",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": "Brass Threaded",
+   "packing": 120.0,
+   "rate": 490.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Male Threaded Adapter (Brass)",
+   "mm": "32",
+   "inch": "1-1/4\"",
+   "spec": "Brass Threaded",
+   "packing": 40.0,
+   "rate": 1025.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Male Threaded Adapter (Brass)",
+   "mm": "40",
+   "inch": "1-1/2\"",
+   "spec": "Brass Threaded",
+   "packing": 40.0,
+   "rate": 1305.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Male Threaded Adapter (Brass)",
+   "mm": "50",
+   "inch": "2\"",
+   "spec": "Brass Threaded",
+   "packing": 20.0,
+   "rate": 2375.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Male Threaded Adapter (Brass)",
+   "mm": null,
+   "inch": "3/4\"x1/2\"",
+   "spec": "Brass Threaded",
+   "packing": 300.0,
+   "rate": 215.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Male Threaded Adapter (Brass)",
+   "mm": null,
+   "inch": "1\"x1/2\"",
+   "spec": "Brass Threaded",
+   "packing": 40.0,
+   "rate": 335.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Coupler",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": null,
+   "packing": 1000.0,
+   "rate": 15.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Coupler",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": null,
+   "packing": 500.0,
+   "rate": 23.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Coupler",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": null,
+   "packing": 250.0,
+   "rate": 43.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Coupler",
+   "mm": "32",
+   "inch": "1-1/4\"",
+   "spec": null,
+   "packing": 100.0,
+   "rate": 92.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Coupler",
+   "mm": "40",
+   "inch": "1-1/2\"",
+   "spec": null,
+   "packing": 80.0,
+   "rate": 150.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Coupler",
+   "mm": "50",
+   "inch": "2\"",
+   "spec": null,
+   "packing": 30.0,
+   "rate": 315.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "End Cap",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": null,
+   "packing": 1200.0,
+   "rate": 17.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "End Cap",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": null,
+   "packing": 800.0,
+   "rate": 25.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "End Cap",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": null,
+   "packing": 400.0,
+   "rate": 38.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "End Cap",
+   "mm": "32",
+   "inch": "1-1/4\"",
+   "spec": null,
+   "packing": 150.0,
+   "rate": 68.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "End Cap",
+   "mm": "40",
+   "inch": "1-1/2\"",
+   "spec": null,
+   "packing": 120.0,
+   "rate": 105.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "End Cap",
+   "mm": "50",
+   "inch": "2\"",
+   "spec": null,
+   "packing": 60.0,
+   "rate": 195.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Threaded Adapter",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": null,
+   "packing": 500.0,
+   "rate": 30.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Threaded Adapter",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": null,
+   "packing": 400.0,
+   "rate": 52.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Threaded Adapter",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": null,
+   "packing": 300.0,
+   "rate": 87.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Threaded Adapter",
+   "mm": "32",
+   "inch": "1-1/4\"",
+   "spec": null,
+   "packing": 160.0,
+   "rate": 195.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Threaded Adapter",
+   "mm": "40",
+   "inch": "1-1/2\"",
+   "spec": null,
+   "packing": 80.0,
+   "rate": 265.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Threaded Adapter",
+   "mm": "50",
+   "inch": "2\"",
+   "spec": null,
+   "packing": 60.0,
+   "rate": 440.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Male Adapter (Plastic Threaded)",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": null,
+   "packing": 400.0,
+   "rate": 23.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Male Adapter (Plastic Threaded)",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": null,
+   "packing": 300.0,
+   "rate": 38.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Male Adapter (Plastic Threaded)",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": null,
+   "packing": 200.0,
+   "rate": 62.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Male Adapter (Plastic Threaded)",
+   "mm": "32",
+   "inch": "1-1/4\"",
+   "spec": null,
+   "packing": 120.0,
+   "rate": 120.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Male Adapter (Plastic Threaded)",
+   "mm": "40",
+   "inch": "1-1/2\"",
+   "spec": null,
+   "packing": 60.0,
+   "rate": 168.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Male Adapter (Plastic Threaded)",
+   "mm": "50",
+   "inch": "2\"",
+   "spec": null,
+   "packing": 30.0,
+   "rate": 310.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Elbow 45\u00b0",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": null,
+   "packing": 500.0,
+   "rate": 20.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Elbow 45\u00b0",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": null,
+   "packing": 400.0,
+   "rate": 36.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Elbow 45\u00b0",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": null,
+   "packing": 200.0,
+   "rate": 60.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Elbow 45\u00b0",
+   "mm": "32",
+   "inch": "1-1/4\"",
+   "spec": null,
+   "packing": 60.0,
+   "rate": 105.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Elbow 45\u00b0",
+   "mm": "40",
+   "inch": "1-1/2\"",
+   "spec": null,
+   "packing": 50.0,
+   "rate": 245.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Elbow 45\u00b0",
+   "mm": "50",
+   "inch": "2\"",
+   "spec": null,
+   "packing": 30.0,
+   "rate": 545.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Tank Nipple",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": null,
+   "packing": 250.0,
+   "rate": 140.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Tank Nipple",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": null,
+   "packing": 150.0,
+   "rate": 142.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Tank Nipple",
+   "mm": null,
+   "inch": "1\"",
+   "spec": null,
+   "packing": 75.0,
+   "rate": 198.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Tank Nipple",
+   "mm": "32",
+   "inch": "1-1/4\"",
+   "spec": null,
+   "packing": 45.0,
+   "rate": 420.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Tank Nipple",
+   "mm": "40",
+   "inch": "1-1/2\"",
+   "spec": null,
+   "packing": 30.0,
+   "rate": 462.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Tank Nipple",
+   "mm": "50",
+   "inch": "2\"",
+   "spec": null,
+   "packing": 24.0,
+   "rate": 780.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "TEE",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": null,
+   "packing": 400.0,
+   "rate": 28.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "TEE",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": null,
+   "packing": 200.0,
+   "rate": 50.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "TEE",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": null,
+   "packing": 100.0,
+   "rate": 85.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "TEE",
+   "mm": "32",
+   "inch": "1-1/4\"",
+   "spec": null,
+   "packing": 40.0,
+   "rate": 210.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "TEE",
+   "mm": "40",
+   "inch": "1-1/2\"",
+   "spec": null,
+   "packing": 40.0,
+   "rate": 285.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "TEE",
+   "mm": "50",
+   "inch": "2\"",
+   "spec": null,
+   "packing": 15.0,
+   "rate": 650.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Union",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": null,
+   "packing": 180.0,
+   "rate": 170.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Union",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": null,
+   "packing": 125.0,
+   "rate": 220.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Union",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": null,
+   "packing": 100.0,
+   "rate": 260.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Union",
+   "mm": "32",
+   "inch": "1-1/4\"",
+   "spec": null,
+   "packing": 40.0,
+   "rate": 465.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Union",
+   "mm": "40",
+   "inch": "1-1/2\"",
+   "spec": null,
+   "packing": 30.0,
+   "rate": 620.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Union",
+   "mm": "50",
+   "inch": "2\"",
+   "spec": null,
+   "packing": 20.0,
+   "rate": 1050.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Ball Valve",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": null,
+   "packing": 150.0,
+   "rate": 300.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Ball Valve",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": null,
+   "packing": 100.0,
+   "rate": 425.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Ball Valve",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": null,
+   "packing": 40.0,
+   "rate": 680.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Ball Valve",
+   "mm": "32",
+   "inch": "1-1/4\"",
+   "spec": null,
+   "packing": 24.0,
+   "rate": 1300.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Ball Valve",
+   "mm": "40",
+   "inch": "1-1/2\"",
+   "spec": null,
+   "packing": 18.0,
+   "rate": 2050.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Ball Valve",
+   "mm": "50",
+   "inch": "2\"",
+   "spec": null,
+   "packing": 24.0,
+   "rate": 3320.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Metal Pipe Clip",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": null,
+   "packing": 1000.0,
+   "rate": 15.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Metal Pipe Clip",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": null,
+   "packing": 800.0,
+   "rate": 22.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Metal Pipe Clip",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": null,
+   "packing": 800.0,
+   "rate": 26.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Metal Pipe Clip",
+   "mm": "32",
+   "inch": "1-1/4\"",
+   "spec": null,
+   "packing": 600.0,
+   "rate": 32.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Metal Pipe Clip",
+   "mm": "40",
+   "inch": "1-1/2\"",
+   "spec": null,
+   "packing": 400.0,
+   "rate": 42.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Metal Pipe Clip",
+   "mm": "50",
+   "inch": "2\"",
+   "spec": null,
+   "packing": 200.0,
+   "rate": 50.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Elbow 90",
+   "mm": null,
+   "inch": "3/4\"x1/2\"",
+   "spec": null,
+   "packing": 400.0,
+   "rate": 39.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Elbow 90",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": null,
+   "packing": 600.0,
+   "rate": 22.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Elbow 90",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": null,
+   "packing": 300.0,
+   "rate": 35.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Elbow 90",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": null,
+   "packing": 150.0,
+   "rate": 70.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Elbow 90",
+   "mm": "32",
+   "inch": "1-1/4\"",
+   "spec": null,
+   "packing": 50.0,
+   "rate": 150.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Elbow 90",
+   "mm": "40",
+   "inch": "1-1/2\"",
+   "spec": null,
+   "packing": 50.0,
+   "rate": 210.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Elbow 90",
+   "mm": "50",
+   "inch": "2\"",
+   "spec": null,
+   "packing": 32.0,
+   "rate": 510.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Elbow Brass",
+   "mm": null,
+   "inch": "3/4\"x1/2\"",
+   "spec": "Brass",
+   "packing": 200.0,
+   "rate": 140.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Elbow Brass",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": "Brass",
+   "packing": 200.0,
+   "rate": 130.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Elbow Brass",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": "Brass",
+   "packing": 200.0,
+   "rate": 205.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Elbow Brass",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": "Brass",
+   "packing": 120.0,
+   "rate": 380.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Elbow Brass",
+   "mm": "32",
+   "inch": "1-1/4\"",
+   "spec": "Brass",
+   "packing": 150.0,
+   "rate": 1073.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Elbow Brass",
+   "mm": null,
+   "inch": "1-1/2\"",
+   "spec": "Brass",
+   "packing": 100.0,
+   "rate": 218.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Female Elbow Brass",
+   "mm": null,
+   "inch": "1\"x1-1/2\"",
+   "spec": "Brass",
+   "packing": 100.0,
+   "rate": 415.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "FTA Brass (Female Threaded Adapter)",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": "Brass",
+   "packing": 200.0,
+   "rate": 220.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "FTA Brass (Female Threaded Adapter)",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": "Brass",
+   "packing": 200.0,
+   "rate": 278.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "FTA Brass (Female Threaded Adapter)",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": "Brass",
+   "packing": 120.0,
+   "rate": 550.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "FTA Brass (Female Threaded Adapter)",
+   "mm": "32",
+   "inch": "1-1/4\"",
+   "spec": "Brass",
+   "packing": 60.0,
+   "rate": 1025.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "FTA Brass (Female Threaded Adapter)",
+   "mm": "40",
+   "inch": "1-1/2\"",
+   "spec": "Brass",
+   "packing": 50.0,
+   "rate": 1290.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "FTA Brass (Female Threaded Adapter)",
+   "mm": "50",
+   "inch": "2\"",
+   "spec": "Brass",
+   "packing": 20.0,
+   "rate": 2120.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "FTA Brass (Female Threaded Adapter)",
+   "mm": null,
+   "inch": "3/4\"x1/2\"",
+   "spec": "Brass",
+   "packing": 300.0,
+   "rate": 155.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "FTA Brass (Female Threaded Adapter)",
+   "mm": null,
+   "inch": "1\"x1/2\"",
+   "spec": "Brass",
+   "packing": 200.0,
+   "rate": 225.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "FTA Brass (Female Threaded Adapter)",
+   "mm": null,
+   "inch": "1-1/4\"x1\"",
+   "spec": "Brass",
+   "packing": 40.0,
+   "rate": 355.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "End Plug",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": null,
+   "packing": 300.0,
+   "rate": 20.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "End Plug",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": null,
+   "packing": 200.0,
+   "rate": 42.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "CPVC Solvent Cement",
+   "mm": null,
+   "inch": null,
+   "spec": "20 ml",
+   "packing": 50.0,
+   "rate": 144.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "CPVC Solvent Cement",
+   "mm": null,
+   "inch": null,
+   "spec": "59 ml",
+   "packing": 240.0,
+   "rate": 305.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "CPVC Solvent Cement",
+   "mm": null,
+   "inch": null,
+   "spec": "118 ml",
+   "packing": 144.0,
+   "rate": 490.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "CPVC Solvent Cement",
+   "mm": null,
+   "inch": null,
+   "spec": "237 ml",
+   "packing": 96.0,
+   "rate": 740.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "FTA Hex Brass",
+   "mm": null,
+   "inch": "3/4\"x1/2\"",
+   "spec": "Brass",
+   "packing": 200.0,
+   "rate": 360.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "FTA Hex Brass",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": "Brass",
+   "packing": 300.0,
+   "rate": 265.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "FTA Hex Brass",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": "Brass",
+   "packing": 200.0,
+   "rate": 400.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "FTA Hex Brass",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": "Brass",
+   "packing": 100.0,
+   "rate": 700.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "FTA Hex Brass",
+   "mm": "32",
+   "inch": "1-1/4\"",
+   "spec": "Brass",
+   "packing": 30.0,
+   "rate": 1499.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "FTA Hex Brass",
+   "mm": "40",
+   "inch": "1-1/2\"",
+   "spec": "Brass",
+   "packing": 25.0,
+   "rate": 1790.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "FTA Hex Brass",
+   "mm": "50",
+   "inch": "2\"",
+   "spec": "Brass",
+   "packing": 20.0,
+   "rate": 2925.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "MTA Hex Brass",
+   "mm": null,
+   "inch": "3/4\"x1/2\"",
+   "spec": "Brass",
+   "packing": 200.0,
+   "rate": 285.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "MTA Hex Brass",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": "Brass",
+   "packing": 300.0,
+   "rate": 275.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "MTA Hex Brass",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": "Brass",
+   "packing": 200.0,
+   "rate": 375.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "MTA Hex Brass",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": "Brass",
+   "packing": 100.0,
+   "rate": 660.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "MTA Hex Brass",
+   "mm": "32",
+   "inch": "1-1/4\"",
+   "spec": "Brass",
+   "packing": 30.0,
+   "rate": 1460.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "MTA Hex Brass",
+   "mm": "40",
+   "inch": "1-1/2\"",
+   "spec": "Brass",
+   "packing": 30.0,
+   "rate": 1870.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "MTA Hex Brass",
+   "mm": "50",
+   "inch": "2\"",
+   "spec": "Brass",
+   "packing": 20.0,
+   "rate": 3200.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Triple Brass Elbow",
+   "mm": "40",
+   "inch": "1\"x1/2\"",
+   "spec": "Brass",
+   "packing": 50.0,
+   "rate": 805.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Triple Brass Elbow",
+   "mm": null,
+   "inch": "3/4\"x1/2\"",
+   "spec": "Brass",
+   "packing": 50.0,
+   "rate": 740.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Concealed Valve",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": null,
+   "packing": 20.0,
+   "rate": 2550.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Concealed Valve",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": null,
+   "packing": 20.0,
+   "rate": 1820.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Cross TEE",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": null,
+   "packing": 300.0,
+   "rate": 60.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Cross TEE",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": null,
+   "packing": 150.0,
+   "rate": 132.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Cross TEE",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": null,
+   "packing": 75.0,
+   "rate": 230.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Step Over Bend",
+   "mm": "15",
+   "inch": "1/2\"",
+   "spec": null,
+   "packing": 125.0,
+   "rate": 140.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Step Over Bend",
+   "mm": "20",
+   "inch": "3/4\"",
+   "spec": null,
+   "packing": 100.0,
+   "rate": 185.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Step Over Bend",
+   "mm": "25",
+   "inch": "1\"",
+   "spec": null,
+   "packing": 70.0,
+   "rate": 370.0,
+   "note": null
+  },
+  {
+   "category": "CPVC Fittings",
+   "product": "Double Brass Elbow",
+   "mm": null,
+   "inch": "3/4\"x1/2\"",
+   "spec": "Brass",
+   "packing": 55.0,
+   "rate": 410.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Coupler",
+   "mm": "50mm",
+   "inch": null,
+   "spec": null,
+   "packing": 250.0,
+   "rate": 58.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Coupler",
+   "mm": "75mm",
+   "inch": null,
+   "spec": null,
+   "packing": 66.0,
+   "rate": 155.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Coupler",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 56.0,
+   "rate": 270.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Coupler",
+   "mm": "160mm",
+   "inch": null,
+   "spec": null,
+   "packing": 12.0,
+   "rate": 570.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Coupler",
+   "mm": "200mm",
+   "inch": null,
+   "spec": null,
+   "packing": 10.0,
+   "rate": 1785.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "PVC Solvent Cement",
+   "mm": null,
+   "inch": null,
+   "spec": "100 ml",
+   "packing": 24.0,
+   "rate": 145.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "PVC Solvent Cement",
+   "mm": null,
+   "inch": null,
+   "spec": "250 ml",
+   "packing": 24.0,
+   "rate": 303.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "PVC Solvent Cement",
+   "mm": null,
+   "inch": null,
+   "spec": "500 ml",
+   "packing": 12.0,
+   "rate": 539.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "PVC Solvent Cement",
+   "mm": null,
+   "inch": null,
+   "spec": "1000 ml",
+   "packing": 12.0,
+   "rate": 963.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Single Tee Door",
+   "mm": "75mm",
+   "inch": null,
+   "spec": null,
+   "packing": 24.0,
+   "rate": 380.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Single Tee Door",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 18.0,
+   "rate": 720.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Single Tee Door",
+   "mm": "160mm",
+   "inch": null,
+   "spec": null,
+   "packing": 6.0,
+   "rate": 1380.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Reducer \"Y\"",
+   "mm": "160x110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 6.0,
+   "rate": 2000.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Double Tee",
+   "mm": "75mm",
+   "inch": null,
+   "spec": null,
+   "packing": 20.0,
+   "rate": 622.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Double Tee",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 15.0,
+   "rate": 1000.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Double Tee (With Door)",
+   "mm": "75mm",
+   "inch": null,
+   "spec": null,
+   "packing": 24.0,
+   "rate": 883.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Double Tee (With Door)",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 15.0,
+   "rate": 1202.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Socket Plug",
+   "mm": "75mm",
+   "inch": null,
+   "spec": null,
+   "packing": 150.0,
+   "rate": 127.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Socket Plug",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 130.0,
+   "rate": 195.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Multi Floor Trap",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 30.0,
+   "rate": 730.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Square Tile with Jali",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 100.0,
+   "rate": 180.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Square Tile",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 100.0,
+   "rate": 135.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Single Tee",
+   "mm": "50mm",
+   "inch": null,
+   "spec": null,
+   "packing": 100.0,
+   "rate": 110.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Single Tee",
+   "mm": "75mm",
+   "inch": null,
+   "spec": null,
+   "packing": 28.0,
+   "rate": 280.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Single Tee",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 24.0,
+   "rate": 510.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Single Tee",
+   "mm": "160mm",
+   "inch": null,
+   "spec": null,
+   "packing": 7.0,
+   "rate": 1170.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Single Tee",
+   "mm": "200mm",
+   "inch": null,
+   "spec": null,
+   "packing": 3.0,
+   "rate": 4280.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Metal Pipe Clip",
+   "mm": "50mm",
+   "inch": null,
+   "spec": null,
+   "packing": 100.0,
+   "rate": 50.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Metal Pipe Clip",
+   "mm": "75mm",
+   "inch": null,
+   "spec": null,
+   "packing": 50.0,
+   "rate": 65.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Metal Pipe Clip",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 25.0,
+   "rate": 95.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Metal Pipe Clip",
+   "mm": "160mm",
+   "inch": null,
+   "spec": null,
+   "packing": 25.0,
+   "rate": 180.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Cleaning Pipe",
+   "mm": "75mm",
+   "inch": null,
+   "spec": null,
+   "packing": 36.0,
+   "rate": 285.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Cleaning Pipe",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 27.0,
+   "rate": 575.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Reducer",
+   "mm": "75x50mm",
+   "inch": null,
+   "spec": null,
+   "packing": 100.0,
+   "rate": 110.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Reducer",
+   "mm": "110x75mm",
+   "inch": null,
+   "spec": null,
+   "packing": 42.0,
+   "rate": 255.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Reducer",
+   "mm": "160x110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 20.0,
+   "rate": 520.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Reducer",
+   "mm": "200x160mm",
+   "inch": null,
+   "spec": null,
+   "packing": 6.0,
+   "rate": 1560.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Bend 45\u00b0",
+   "mm": "50mm",
+   "inch": null,
+   "spec": null,
+   "packing": 200.0,
+   "rate": 65.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Bend 45\u00b0",
+   "mm": "75mm",
+   "inch": null,
+   "spec": null,
+   "packing": 60.0,
+   "rate": 174.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Bend 45\u00b0",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 45.0,
+   "rate": 308.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Bend 45\u00b0",
+   "mm": "160mm",
+   "inch": null,
+   "spec": null,
+   "packing": 16.0,
+   "rate": 820.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Bend 45\u00b0",
+   "mm": "200mm",
+   "inch": null,
+   "spec": null,
+   "packing": 4.0,
+   "rate": 3020.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Reducer Tee",
+   "mm": "110x75mm",
+   "inch": null,
+   "spec": null,
+   "packing": 27.0,
+   "rate": 526.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Reducer Tee",
+   "mm": "160x110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 9.0,
+   "rate": 1210.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "End Cap",
+   "mm": "50mm",
+   "inch": null,
+   "spec": null,
+   "packing": 500.0,
+   "rate": 52.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "End Cap",
+   "mm": "160mm",
+   "inch": null,
+   "spec": null,
+   "packing": 24.0,
+   "rate": 460.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "P Trap",
+   "mm": "110x110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 15.0,
+   "rate": 920.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Door Bend 87.5\u00b0",
+   "mm": "75mm",
+   "inch": null,
+   "spec": null,
+   "packing": 40.0,
+   "rate": 270.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Door Bend 87.5\u00b0",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 32.0,
+   "rate": 451.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Door Bend 87.5\u00b0",
+   "mm": "160mm",
+   "inch": null,
+   "spec": null,
+   "packing": 10.0,
+   "rate": 1070.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Bend 87.5\u00b0",
+   "mm": "50mm",
+   "inch": null,
+   "spec": null,
+   "packing": 150.0,
+   "rate": 68.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Bend 87.5\u00b0",
+   "mm": "75mm",
+   "inch": null,
+   "spec": null,
+   "packing": 44.0,
+   "rate": 198.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Bend 87.5\u00b0",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 32.0,
+   "rate": 360.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Bend 87.5\u00b0",
+   "mm": "160mm",
+   "inch": null,
+   "spec": null,
+   "packing": 10.0,
+   "rate": 860.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Bend 87.5\u00b0",
+   "mm": "200mm",
+   "inch": null,
+   "spec": null,
+   "packing": 10.0,
+   "rate": 3075.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Single \"Y\"",
+   "mm": "75mm",
+   "inch": null,
+   "spec": null,
+   "packing": 24.0,
+   "rate": 368.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Single \"Y\"",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 18.0,
+   "rate": 711.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Single \"Y\"",
+   "mm": "160mm",
+   "inch": null,
+   "spec": null,
+   "packing": 6.0,
+   "rate": 2510.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Single \"Y\" (With Door)",
+   "mm": "75mm",
+   "inch": null,
+   "spec": null,
+   "packing": 18.0,
+   "rate": 441.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Single \"Y\" (With Door)",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 14.0,
+   "rate": 847.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Vent Cowl",
+   "mm": "75mm",
+   "inch": null,
+   "spec": null,
+   "packing": 300.0,
+   "rate": 72.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Vent Cowl",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 120.0,
+   "rate": 120.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Round Jali",
+   "mm": "110mm",
+   "inch": null,
+   "spec": null,
+   "packing": 200.0,
+   "rate": 45.0,
+   "note": null
+  },
+  {
+   "category": "PVC Fittings",
+   "product": "Nahani Trap",
+   "mm": "110x75mm",
+   "inch": null,
+   "spec": null,
+   "packing": 26.0,
+   "rate": 422.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 NS UPVC (NS 206/046)",
+   "product": "NS UPVC Pipe",
+   "mm": "50mm",
+   "inch": null,
+   "spec": "6 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 180.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 NS UPVC (NS 206/046)",
+   "product": "NS UPVC Pipe",
+   "mm": "75mm",
+   "inch": null,
+   "spec": "4 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 290.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 NS UPVC (NS 206/046)",
+   "product": "NS UPVC Pipe",
+   "mm": "75mm",
+   "inch": null,
+   "spec": "6 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 435.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 NS UPVC (NS 206/046)",
+   "product": "NS UPVC Pipe",
+   "mm": "110mm",
+   "inch": null,
+   "spec": "4 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 565.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 NS UPVC (NS 206/046)",
+   "product": "NS UPVC Pipe",
+   "mm": "110mm",
+   "inch": null,
+   "spec": "6 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 890.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 NS UPVC (NS 206/046)",
+   "product": "NS UPVC Pipe",
+   "mm": "160mm",
+   "inch": null,
+   "spec": "2.5 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 835.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 NS UPVC (NS 206/046)",
+   "product": "NS UPVC Pipe",
+   "mm": "160mm",
+   "inch": null,
+   "spec": "4 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 1290.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 NS UPVC (NS 206/046)",
+   "product": "NS UPVC Pipe",
+   "mm": "160mm",
+   "inch": null,
+   "spec": "6 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 1990.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 NS UPVC (NS 206/046)",
+   "product": "NS UPVC Pipe",
+   "mm": "200mm",
+   "inch": null,
+   "spec": "2.5 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 1375.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 NS UPVC (NS 206/046)",
+   "product": "NS UPVC Pipe",
+   "mm": "200mm",
+   "inch": null,
+   "spec": "4 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 2130.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 NS UPVC (NS 206/046)",
+   "product": "NS UPVC Pipe",
+   "mm": "200mm",
+   "inch": null,
+   "spec": "6 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 3290.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 Commercial (Non-NS)",
+   "product": "PVC Pipe (Commercial)",
+   "mm": "50mm",
+   "inch": null,
+   "spec": "6 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 160.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 Commercial (Non-NS)",
+   "product": "PVC Pipe (Commercial)",
+   "mm": "50mm",
+   "inch": null,
+   "spec": "10 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 230.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 Commercial (Non-NS)",
+   "product": "PVC Pipe (Commercial)",
+   "mm": "75mm",
+   "inch": null,
+   "spec": "4 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 250.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 Commercial (Non-NS)",
+   "product": "PVC Pipe (Commercial)",
+   "mm": "75mm",
+   "inch": null,
+   "spec": "6 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 375.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 Commercial (Non-NS)",
+   "product": "PVC Pipe (Commercial)",
+   "mm": "75mm",
+   "inch": null,
+   "spec": "10 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 540.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 Commercial (Non-NS)",
+   "product": "PVC Pipe (Commercial)",
+   "mm": "110mm",
+   "inch": null,
+   "spec": "4 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 475.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 Commercial (Non-NS)",
+   "product": "PVC Pipe (Commercial)",
+   "mm": "110mm",
+   "inch": null,
+   "spec": "6 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 785.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 Commercial (Non-NS)",
+   "product": "PVC Pipe (Commercial)",
+   "mm": "110mm",
+   "inch": null,
+   "spec": "10 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 1230.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 Commercial (Non-NS)",
+   "product": "PVC Pipe (Commercial)",
+   "mm": "160mm",
+   "inch": null,
+   "spec": "4 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 1130.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 Commercial (Non-NS)",
+   "product": "PVC Pipe (Commercial)",
+   "mm": "160mm",
+   "inch": null,
+   "spec": "6 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 1735.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 Commercial (Non-NS)",
+   "product": "PVC Pipe (Commercial)",
+   "mm": "160mm",
+   "inch": null,
+   "spec": "10 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 2690.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 Commercial (Non-NS)",
+   "product": "PVC Pipe (Commercial)",
+   "mm": "200mm",
+   "inch": null,
+   "spec": "2.5 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 1180.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 Commercial (Non-NS)",
+   "product": "PVC Pipe (Commercial)",
+   "mm": "200mm",
+   "inch": null,
+   "spec": "4 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 1850.0,
+   "note": null
+  },
+  {
+   "category": "PVC Pipe \u2014 Commercial (Non-NS)",
+   "product": "PVC Pipe (Commercial)",
+   "mm": "200mm",
+   "inch": null,
+   "spec": "6 kgf/cm\u00b2",
+   "packing": null,
+   "rate": 2850.0,
+   "note": null
+  },
+  {
+   "category": "Borewell PVC Pipe (BS:3505)",
+   "product": "Plain Socket PVC Pipe Class C",
+   "mm": "48mm",
+   "inch": "1-1/2\"",
+   "spec": null,
+   "packing": null,
+   "rate": 202.0,
+   "note": null
+  },
+  {
+   "category": "Borewell PVC Pipe (BS:3505)",
+   "product": "Plain Socket PVC Pipe Class C",
+   "mm": "60mm",
+   "inch": "2\"",
+   "spec": null,
+   "packing": null,
+   "rate": 225.0,
+   "note": null
+  },
+  {
+   "category": "Borewell PVC Pipe (BS:3505)",
+   "product": "Plain Socket PVC Pipe Class C",
+   "mm": "114mm",
+   "inch": "4\"",
+   "spec": null,
+   "packing": null,
+   "rate": 906.0,
+   "note": null
+  },
+  {
+   "category": "Borewell PVC Pipe (BS:3505)",
+   "product": "Plain Socket PVC Pipe Class C",
+   "mm": "168mm",
+   "inch": "6\"",
+   "spec": null,
+   "packing": null,
+   "rate": 2030.0,
+   "note": null
+  },
+  {
+   "category": "Borewell PVC Pipe (BS:3505)",
+   "product": "Plain Socket PVC Pipe Class D",
+   "mm": "48mm",
+   "inch": "1-1/2\"",
+   "spec": null,
+   "packing": null,
+   "rate": 215.0,
+   "note": null
+  },
+  {
+   "category": "Borewell PVC Pipe (BS:3505)",
+   "product": "Plain Socket PVC Pipe Class D",
+   "mm": "60mm",
+   "inch": "2\"",
+   "spec": null,
+   "packing": null,
+   "rate": 275.0,
+   "note": null
+  },
+  {
+   "category": "Borewell PVC Pipe (BS:3505)",
+   "product": "Plain Socket PVC Pipe Class D",
+   "mm": "114mm",
+   "inch": "4\"",
+   "spec": null,
+   "packing": null,
+   "rate": 1220.0,
+   "note": null
+  },
+  {
+   "category": "Borewell PVC Pipe (BS:3505)",
+   "product": "Plain Socket PVC Pipe Class D",
+   "mm": "168mm",
+   "inch": "6\"",
+   "spec": null,
+   "packing": null,
+   "rate": 2650.0,
+   "note": null
+  },
+  {
+   "category": "Borewell PVC Pipe (BS:3505)",
+   "product": "Plain Socket PVC Pipe Class E",
+   "mm": "48mm",
+   "inch": "1-1/2\"",
+   "spec": null,
+   "packing": null,
+   "rate": 270.0,
+   "note": null
+  },
+  {
+   "category": "Borewell PVC Pipe (BS:3505)",
+   "product": "Plain Socket PVC Pipe Class E",
+   "mm": "60mm",
+   "inch": "2\"",
+   "spec": null,
+   "packing": null,
+   "rate": 350.0,
+   "note": null
+  },
+  {
+   "category": "Borewell PVC Pipe (BS:3505)",
+   "product": "Plain Socket PVC Pipe Class E",
+   "mm": "114mm",
+   "inch": "4\"",
+   "spec": null,
+   "packing": null,
+   "rate": 1540.0,
+   "note": null
+  },
+  {
+   "category": "Borewell PVC Pipe (BS:3505)",
+   "product": "Plain Socket PVC Pipe Class E",
+   "mm": "168mm",
+   "inch": "6\"",
+   "spec": null,
+   "packing": null,
+   "rate": 3200.0,
+   "note": null
+  },
+  {
+   "category": "UG Drainage uPVC Pipe",
+   "product": "UG Drainage Plain Socket SN4",
+   "mm": "75mm",
+   "inch": "2-1/2\"",
+   "spec": null,
+   "packing": null,
+   "rate": 440.0,
+   "note": null
+  },
+  {
+   "category": "UG Drainage uPVC Pipe",
+   "product": "UG Drainage Plain Socket SN4",
+   "mm": "110mm",
+   "inch": "4\"",
+   "spec": null,
+   "packing": null,
+   "rate": 820.0,
+   "note": null
+  },
+  {
+   "category": "UG Drainage uPVC Pipe",
+   "product": "UG Drainage Plain Socket SN4",
+   "mm": "160mm",
+   "inch": "6\"",
+   "spec": null,
+   "packing": null,
+   "rate": 1960.0,
+   "note": null
+  },
+  {
+   "category": "UG Drainage uPVC Pipe",
+   "product": "UG Drainage Plain Socket SN4",
+   "mm": "200mm",
+   "inch": "8\"",
+   "spec": null,
+   "packing": null,
+   "rate": 3030.0,
+   "note": null
+  },
+  {
+   "category": "UG Drainage uPVC Pipe",
+   "product": "UG Drainage Plain Socket SN8",
+   "mm": "75mm",
+   "inch": "2-1/2\"",
+   "spec": null,
+   "packing": null,
+   "rate": 590.0,
+   "note": null
+  },
+  {
+   "category": "UG Drainage uPVC Pipe",
+   "product": "UG Drainage Plain Socket SN8",
+   "mm": "110mm",
+   "inch": "4\"",
+   "spec": null,
+   "packing": null,
+   "rate": 1060.0,
+   "note": null
+  },
+  {
+   "category": "UG Drainage uPVC Pipe",
+   "product": "UG Drainage Plain Socket SN8",
+   "mm": "160mm",
+   "inch": "6\"",
+   "spec": null,
+   "packing": null,
+   "rate": 2290.0,
+   "note": null
+  },
+  {
+   "category": "UG Drainage uPVC Pipe",
+   "product": "UG Drainage Plain Socket SN8",
+   "mm": "200mm",
+   "inch": "8\"",
+   "spec": null,
+   "packing": null,
+   "rate": 3590.0,
+   "note": null
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "16mm",
+   "inch": null,
+   "spec": "PN16 / SDR9",
+   "packing": null,
+   "rate": 24.9,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "16mm",
+   "inch": null,
+   "spec": "PN20 / SDR7.4",
+   "packing": null,
+   "rate": 29.1,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "20mm",
+   "inch": null,
+   "spec": "PN16 / SDR9",
+   "packing": null,
+   "rate": 33.3,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "20mm",
+   "inch": null,
+   "spec": "PN20 / SDR7.4",
+   "packing": null,
+   "rate": 38.7,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "25mm",
+   "inch": null,
+   "spec": "PN10 / SDR13.6",
+   "packing": null,
+   "rate": 42.3,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "25mm",
+   "inch": null,
+   "spec": "PN12.5 / SDR11",
+   "packing": null,
+   "rate": 49.8,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "25mm",
+   "inch": null,
+   "spec": "PN16 / SDR9",
+   "packing": null,
+   "rate": 59.4,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "25mm",
+   "inch": null,
+   "spec": "PN20 / SDR7.4",
+   "packing": null,
+   "rate": 69.3,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "32mm",
+   "inch": null,
+   "spec": "PN8 / SDR17",
+   "packing": null,
+   "rate": 55.2,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "32mm",
+   "inch": null,
+   "spec": "PN10 / SDR13.6",
+   "packing": null,
+   "rate": 67.5,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "32mm",
+   "inch": null,
+   "spec": "PN12.5 / SDR11",
+   "packing": null,
+   "rate": 80.4,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "32mm",
+   "inch": null,
+   "spec": "PN16 / SDR9",
+   "packing": null,
+   "rate": 97.5,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "32mm",
+   "inch": null,
+   "spec": "PN20 / SDR7.4",
+   "packing": null,
+   "rate": 114.3,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "40mm",
+   "inch": null,
+   "spec": "PN6 / SDR21",
+   "packing": null,
+   "rate": 69.9,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "40mm",
+   "inch": null,
+   "spec": "PN8 / SDR17",
+   "packing": null,
+   "rate": 85.8,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "40mm",
+   "inch": null,
+   "spec": "PN10 / SDR13.6",
+   "packing": null,
+   "rate": 105.9,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "40mm",
+   "inch": null,
+   "spec": "PN12.5 / SDR11",
+   "packing": null,
+   "rate": 128.1,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "40mm",
+   "inch": null,
+   "spec": "PN16 / SDR9",
+   "packing": null,
+   "rate": 151.8,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "40mm",
+   "inch": null,
+   "spec": "PN20 / SDR7.4",
+   "packing": null,
+   "rate": 175.8,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "50mm",
+   "inch": null,
+   "spec": "PN5 / SDR26",
+   "packing": null,
+   "rate": 92.4,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "50mm",
+   "inch": null,
+   "spec": "PN6 / SDR21",
+   "packing": null,
+   "rate": 108.6,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "50mm",
+   "inch": null,
+   "spec": "PN8 / SDR17",
+   "packing": null,
+   "rate": 134.4,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "50mm",
+   "inch": null,
+   "spec": "PN10 / SDR13.6",
+   "packing": null,
+   "rate": 163.5,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "50mm",
+   "inch": null,
+   "spec": "PN12.5 / SDR11",
+   "packing": null,
+   "rate": 198.6,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "50mm",
+   "inch": null,
+   "spec": "PN16 / SDR9",
+   "packing": null,
+   "rate": 235.5,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "50mm",
+   "inch": null,
+   "spec": "PN20 / SDR7.4",
+   "packing": null,
+   "rate": 276.9,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "63mm",
+   "inch": null,
+   "spec": "PN5 / SDR26",
+   "packing": null,
+   "rate": 146.1,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "63mm",
+   "inch": null,
+   "spec": "PN6 / SDR21",
+   "packing": null,
+   "rate": 171.6,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "63mm",
+   "inch": null,
+   "spec": "PN8 / SDR17",
+   "packing": null,
+   "rate": 209.4,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "63mm",
+   "inch": null,
+   "spec": "PN10 / SDR13.6",
+   "packing": null,
+   "rate": 260.1,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "63mm",
+   "inch": null,
+   "spec": "PN12.5 / SDR11",
+   "packing": null,
+   "rate": 313.8,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "63mm",
+   "inch": null,
+   "spec": "PN16 / SDR9",
+   "packing": null,
+   "rate": 369.3,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "63mm",
+   "inch": null,
+   "spec": "PN20 / SDR7.4",
+   "packing": null,
+   "rate": 440.1,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "75mm",
+   "inch": null,
+   "spec": "PN3 / SDR41",
+   "packing": null,
+   "rate": 134.4,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "75mm",
+   "inch": null,
+   "spec": "PN4 / SDR33",
+   "packing": null,
+   "rate": 159.6,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "75mm",
+   "inch": null,
+   "spec": "PN5 / SDR26",
+   "packing": null,
+   "rate": 200.1,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "75mm",
+   "inch": null,
+   "spec": "PN6 / SDR21",
+   "packing": null,
+   "rate": 246.0,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "75mm",
+   "inch": null,
+   "spec": "PN8 / SDR17",
+   "packing": null,
+   "rate": 302.4,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "75mm",
+   "inch": null,
+   "spec": "PN10 / SDR13.6",
+   "packing": null,
+   "rate": 368.7,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "75mm",
+   "inch": null,
+   "spec": "PN12.5 / SDR11",
+   "packing": null,
+   "rate": 443.4,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "75mm",
+   "inch": null,
+   "spec": "PN16 / SDR9",
+   "packing": null,
+   "rate": 525.3,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "75mm",
+   "inch": null,
+   "spec": "PN20 / SDR7.4",
+   "packing": null,
+   "rate": 619.8,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "90mm",
+   "inch": null,
+   "spec": "PN3 / SDR41",
+   "packing": null,
+   "rate": 184.8,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "90mm",
+   "inch": null,
+   "spec": "PN4 / SDR33",
+   "packing": null,
+   "rate": 234.3,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "90mm",
+   "inch": null,
+   "spec": "PN5 / SDR26",
+   "packing": null,
+   "rate": 290.4,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "90mm",
+   "inch": null,
+   "spec": "PN6 / SDR21",
+   "packing": null,
+   "rate": 348.9,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "90mm",
+   "inch": null,
+   "spec": "PN8 / SDR17",
+   "packing": null,
+   "rate": 424.2,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "90mm",
+   "inch": null,
+   "spec": "PN10 / SDR13.6",
+   "packing": null,
+   "rate": 528.3,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "90mm",
+   "inch": null,
+   "spec": "PN12.5 / SDR11",
+   "packing": null,
+   "rate": 631.5,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "90mm",
+   "inch": null,
+   "spec": "PN16 / SDR9",
+   "packing": null,
+   "rate": 752.1,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "90mm",
+   "inch": null,
+   "spec": "PN20 / SDR7.4",
+   "packing": null,
+   "rate": 889.5,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "110mm",
+   "inch": null,
+   "spec": "PN3 / SDR41",
+   "packing": null,
+   "rate": 278.7,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "110mm",
+   "inch": null,
+   "spec": "PN4 / SDR33",
+   "packing": null,
+   "rate": 343.8,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "110mm",
+   "inch": null,
+   "spec": "PN5 / SDR26",
+   "packing": null,
+   "rate": 430.5,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "110mm",
+   "inch": null,
+   "spec": "PN6 / SDR21",
+   "packing": null,
+   "rate": 529.2,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "110mm",
+   "inch": null,
+   "spec": "PN8 / SDR17",
+   "packing": null,
+   "rate": 638.4,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "110mm",
+   "inch": null,
+   "spec": "PN10 / SDR13.6",
+   "packing": null,
+   "rate": 778.2,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "110mm",
+   "inch": null,
+   "spec": "PN12.5 / SDR11",
+   "packing": null,
+   "rate": 941.4,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "110mm",
+   "inch": null,
+   "spec": "PN16 / SDR9",
+   "packing": null,
+   "rate": 1127.7,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "110mm",
+   "inch": null,
+   "spec": "PN20 / SDR7.4",
+   "packing": null,
+   "rate": 1328.4,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "125mm",
+   "inch": null,
+   "spec": "PN3 / SDR41",
+   "packing": null,
+   "rate": 360.3,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "125mm",
+   "inch": null,
+   "spec": "PN4 / SDR33",
+   "packing": null,
+   "rate": 439.5,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "125mm",
+   "inch": null,
+   "spec": "PN5 / SDR26",
+   "packing": null,
+   "rate": 548.7,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "125mm",
+   "inch": null,
+   "spec": "PN6 / SDR21",
+   "packing": null,
+   "rate": 675.9,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "125mm",
+   "inch": null,
+   "spec": "PN8 / SDR17",
+   "packing": null,
+   "rate": 820.2,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "125mm",
+   "inch": null,
+   "spec": "PN10 / SDR13.6",
+   "packing": null,
+   "rate": 1003.5,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "125mm",
+   "inch": null,
+   "spec": "PN12.5 / SDR11",
+   "packing": null,
+   "rate": 1221.3,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "125mm",
+   "inch": null,
+   "spec": "PN16 / SDR9",
+   "packing": null,
+   "rate": 1450.5,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "125mm",
+   "inch": null,
+   "spec": "PN20 / SDR7.4",
+   "packing": null,
+   "rate": 1712.1,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "140mm",
+   "inch": null,
+   "spec": "PN3 / SDR41",
+   "packing": null,
+   "rate": 458.7,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "140mm",
+   "inch": null,
+   "spec": "PN4 / SDR33",
+   "packing": null,
+   "rate": 552.9,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "140mm",
+   "inch": null,
+   "spec": "PN5 / SDR26",
+   "packing": null,
+   "rate": 687.0,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "140mm",
+   "inch": null,
+   "spec": "PN6 / SDR21",
+   "packing": null,
+   "rate": 846.6,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "140mm",
+   "inch": null,
+   "spec": "PN8 / SDR17",
+   "packing": null,
+   "rate": 1030.5,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "140mm",
+   "inch": null,
+   "spec": "PN10 / SDR13.6",
+   "packing": null,
+   "rate": 1257.3,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "140mm",
+   "inch": null,
+   "spec": "PN12.5 / SDR11",
+   "packing": null,
+   "rate": 1532.4,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "140mm",
+   "inch": null,
+   "spec": "PN16 / SDR9",
+   "packing": null,
+   "rate": 1823.7,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "140mm",
+   "inch": null,
+   "spec": "PN20 / SDR7.4",
+   "packing": null,
+   "rate": 2153.4,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "160mm",
+   "inch": null,
+   "spec": "PN3 / SDR41",
+   "packing": null,
+   "rate": 580.5,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "160mm",
+   "inch": null,
+   "spec": "PN4 / SDR33",
+   "packing": null,
+   "rate": 722.4,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "160mm",
+   "inch": null,
+   "spec": "PN5 / SDR26",
+   "packing": null,
+   "rate": 901.8,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "160mm",
+   "inch": null,
+   "spec": "PN6 / SDR21",
+   "packing": null,
+   "rate": 1110.3,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "160mm",
+   "inch": null,
+   "spec": "PN8 / SDR17",
+   "packing": null,
+   "rate": 1352.1,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "160mm",
+   "inch": null,
+   "spec": "PN10 / SDR13.6",
+   "packing": null,
+   "rate": 1648.2,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "160mm",
+   "inch": null,
+   "spec": "PN12.5 / SDR11",
+   "packing": null,
+   "rate": 1997.7,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "160mm",
+   "inch": null,
+   "spec": "PN16 / SDR9",
+   "packing": null,
+   "rate": 2376.0,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "160mm",
+   "inch": null,
+   "spec": "PN20 / SDR7.4",
+   "packing": null,
+   "rate": 2811.6,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "180mm",
+   "inch": null,
+   "spec": "PN3 / SDR41",
+   "packing": null,
+   "rate": 731.4,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "180mm",
+   "inch": null,
+   "spec": "PN4 / SDR33",
+   "packing": null,
+   "rate": 914.1,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "180mm",
+   "inch": null,
+   "spec": "PN5 / SDR26",
+   "packing": null,
+   "rate": 1146.0,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "180mm",
+   "inch": null,
+   "spec": "PN6 / SDR21",
+   "packing": null,
+   "rate": 1395.3,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "180mm",
+   "inch": null,
+   "spec": "PN8 / SDR17",
+   "packing": null,
+   "rate": 1696.2,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "180mm",
+   "inch": null,
+   "spec": "PN10 / SDR13.6",
+   "packing": null,
+   "rate": 2084.7,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "180mm",
+   "inch": null,
+   "spec": "PN12.5 / SDR11",
+   "packing": null,
+   "rate": 2518.5,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "180mm",
+   "inch": null,
+   "spec": "PN16 / SDR9",
+   "packing": null,
+   "rate": 3001.5,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "180mm",
+   "inch": null,
+   "spec": "PN20 / SDR7.4",
+   "packing": null,
+   "rate": 3551.4,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "200mm",
+   "inch": null,
+   "spec": "PN3 / SDR41",
+   "packing": null,
+   "rate": 908.7,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "200mm",
+   "inch": null,
+   "spec": "PN4 / SDR33",
+   "packing": null,
+   "rate": 1119.9,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "200mm",
+   "inch": null,
+   "spec": "PN5 / SDR26",
+   "packing": null,
+   "rate": 1402.8,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "200mm",
+   "inch": null,
+   "spec": "PN6 / SDR21",
+   "packing": null,
+   "rate": 1728.6,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "200mm",
+   "inch": null,
+   "spec": "PN8 / SDR17",
+   "packing": null,
+   "rate": 2094.6,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "200mm",
+   "inch": null,
+   "spec": "PN10 / SDR13.6",
+   "packing": null,
+   "rate": 2565.3,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "200mm",
+   "inch": null,
+   "spec": "PN12.5 / SDR11",
+   "packing": null,
+   "rate": 3106.5,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "200mm",
+   "inch": null,
+   "spec": "PN16 / SDR9",
+   "packing": null,
+   "rate": 3713.7,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "HDPE PE100 Pipe (NS 40:2079)",
+   "product": "HDPE PE100 Pipe",
+   "mm": "200mm",
+   "inch": null,
+   "spec": "PN20 / SDR7.4",
+   "packing": null,
+   "rate": 4384.2,
+   "note": "Price excludes 13% VAT/Excise (unlike other price lists on this sheet)"
+  },
+  {
+   "category": "Water Storage Tank",
+   "product": "Jagadamba Tank \u2014 Threaded",
+   "mm": null,
+   "inch": null,
+   "spec": "Rate per litre",
+   "packing": null,
+   "rate": 10.0,
+   "note": "Rate is per litre of tank capacity, not a flat price \u2014 multiply by tank size in litres"
+  },
+  {
+   "category": "Water Storage Tank",
+   "product": "Jagadamba Tank \u2014 Heavy Threaded",
+   "mm": null,
+   "inch": null,
+   "spec": "Rate per litre",
+   "packing": null,
+   "rate": 11.0,
+   "note": "Rate is per litre of tank capacity, not a flat price \u2014 multiply by tank size in litres"
+  },
+  {
+   "category": "Water Storage Tank",
+   "product": "Jagadamba Tank \u2014 Extra Heavy Threaded",
+   "mm": null,
+   "inch": null,
+   "spec": "Rate per litre",
+   "packing": null,
+   "rate": 12.0,
+   "note": "Rate is per litre of tank capacity, not a flat price \u2014 multiply by tank size in litres"
+  },
+  {
+   "category": "Water Storage Tank",
+   "product": "200L / 300L Size Surcharge (Additional)",
+   "mm": null,
+   "inch": null,
+   "spec": "Additional Rs/litre, Heavy & Extra Heavy only",
+   "packing": null,
+   "rate": 1.4,
+   "note": "Additive to the base per-litre rate; only available on Heavy and Extra Heavy tanks"
+  },
+  {
+   "category": "Water Storage Tank",
+   "product": "Colour Tank Surcharge (Additional)",
+   "mm": null,
+   "inch": null,
+   "spec": "Additional Rs/litre",
+   "packing": null,
+   "rate": 0.3,
+   "note": "Additive to the base per-litre rate"
+  },
+  {
+   "category": "Tools & Accessories",
+   "product": "Pressure Testing Machine",
+   "mm": null,
+   "inch": null,
+   "spec": null,
+   "packing": null,
+   "rate": 13450.0,
+   "note": null
+  },
+  {
+   "category": "Tools & Accessories",
+   "product": "CPVC Pipe Cutter",
+   "mm": null,
+   "inch": "36mm",
+   "spec": null,
+   "packing": null,
+   "rate": 1420.0,
+   "note": null
+  },
+  {
+   "category": "Tools & Accessories",
+   "product": "CPVC Pipe Cutter",
+   "mm": null,
+   "inch": "63mm",
+   "spec": null,
+   "packing": null,
+   "rate": 2845.0,
+   "note": null
+  }
+ ]
+}

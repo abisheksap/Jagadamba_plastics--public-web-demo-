@@ -1,0 +1,248 @@
+/* Catalog & price-list styling (Products page, cards, variant tables). */
+
+/* ============ catalog search ============ */
+.catalog-search {
+  position: relative;
+}
+.catalog-search input {
+  width: 100%;
+  padding: 14px 18px 14px 46px;
+  border-radius: 999px;
+  border: 1px solid rgba(93, 138, 184, 0.35);
+  background: rgba(8, 26, 47, 0.65);
+  color: #eef6ff;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  backdrop-filter: blur(8px);
+}
+.catalog-search input:focus {
+  border-color: var(--cyan, #37d6f5);
+  box-shadow: 0 0 0 3px rgba(55, 214, 245, 0.15);
+}
+.catalog-search input::placeholder {
+  color: rgba(160, 190, 215, 0.55);
+}
+.catalog-search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--cyan, #37d6f5);
+  display: flex;
+  pointer-events: none;
+}
+.catalog-search-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* filter pill variant counts */
+.filter-pill .pill-count {
+  display: inline-block;
+  margin-left: 7px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-family: var(--font-mono);
+  background: rgba(55, 214, 245, 0.12);
+  color: var(--cyan, #37d6f5);
+}
+.filter-pill.active .pill-count {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+/* card meta row: variant count + from-price */
+.p-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.p-variants-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: #a9c2d8;
+  border: 1px solid rgba(93, 138, 184, 0.35);
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+.p-price-from {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #7ee2a8;
+  white-space: nowrap;
+}
+
+/* ============ variant chips (prices hidden) ============ */
+.variant-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 6px;
+}
+.variant-chip {
+  font-size: 12px;
+  color: #a9c2d8;
+  border: 1px solid rgba(93, 138, 184, 0.35);
+  background: rgba(8, 26, 47, 0.5);
+  border-radius: 999px;
+  padding: 6px 13px;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.variant-chip:hover {
+  border-color: var(--cyan, #37d6f5);
+  color: #eef6ff;
+}
+
+/* ============ price table ============ */
+.price-table-wrap {
+  border: 1px solid rgba(93, 138, 184, 0.28);
+  border-radius: 16px;
+  background: rgba(8, 26, 47, 0.55);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+.price-effective {
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  color: var(--cyan, #37d6f5);
+}
+.price-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14.5px;
+}
+.price-table th {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--cyan, #37d6f5);
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(93, 138, 184, 0.3);
+  background: rgba(4, 18, 43, 0.6);
+}
+.price-table td {
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(93, 138, 184, 0.14);
+  color: #c6d9ea;
+}
+.price-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.price-table tbody tr {
+  transition: background 0.18s ease;
+}
+.price-table tbody tr:hover {
+  background: rgba(55, 214, 245, 0.05);
+}
+.price-table .v-size {
+  color: #eef6ff;
+  font-weight: 500;
+}
+.price-table .v-price {
+  color: #7ee2a8;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.price-table .v-packing {
+  font-size: 12.5px;
+  color: #a9c2d8;
+  white-space: nowrap;
+}
+.price-note {
+  margin: 12px 4px 0;
+  font-size: 12.5px;
+  color: #f0c987;
+}
+@media (max-width: 640px) {
+  .price-table th,
+  .price-table td {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+
+/* ============ admin extras ============ */
+.admin-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid rgba(93, 138, 184, 0.28);
+  border-radius: 12px;
+  background: rgba(8, 26, 47, 0.4);
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 0.2s ease;
+}
+.admin-toggle:hover {
+  border-color: rgba(55, 214, 245, 0.45);
+}
+.admin-toggle input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #e02129;
+  margin-top: 2px;
+  cursor: pointer;
+}
+.admin-toggle .t-title {
+  font-weight: 600;
+  color: #fff;
+  font-size: 14.5px;
+}
+.admin-toggle .t-sub {
+  font-size: 12.5px;
+  color: #7f93a3;
+  margin-top: 3px;
+}
+.admin-toggle.on {
+  border-color: rgba(126, 226, 168, 0.5);
+}
+
+/* variants editor */
+.variants-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.variant-row {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+.variant-row input {
+  background: rgba(4, 18, 43, 0.6);
+  border: 1px solid rgba(93, 138, 184, 0.3);
+  border-radius: 8px;
+  padding: 9px 11px;
+  color: #eef6ff;
+  font-size: 13.5px;
+  min-width: 0;
+}
+.variant-row input:focus {
+  outline: none;
+  border-color: var(--cyan, #37d6f5);
+}
+.variant-row .vr-price {
+  font-family: var(--font-mono);
+}
+.vr-actions {
+  display: flex;
+  gap: 4px;
+}
+@media (max-width: 720px) {
+  .variant-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}

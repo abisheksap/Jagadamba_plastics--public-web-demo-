@@ -133,6 +133,33 @@ export default function AdminSettings() {
               <input id="s-yt" value={form.youtube} onChange={(e) => setForm({ ...form, youtube: e.target.value })} />
             </div>
           </div>
+          <div className="admin-grid-2">
+            <div className="admin-field">
+              <label htmlFor="s-pld">PRICE LIST EFFECTIVE DATE (shown above price tables)</label>
+              <input
+                id="s-pld"
+                value={form.priceListDate ?? ""}
+                onChange={(e) => setForm({ ...form, priceListDate: e.target.value })}
+                placeholder="e.g. 2082/09/01"
+              />
+            </div>
+            <div className="admin-field">
+              <label>PRICING VISIBILITY</label>
+              <label className={`admin-toggle${form.showPrices !== false ? " on" : ""}`}>
+                <input
+                  type="checkbox"
+                  checked={form.showPrices !== false}
+                  onChange={(e) => setForm({ ...form, showPrices: e.target.checked })}
+                />
+                <span>
+                  <span className="t-title">Show prices on the website</span>
+                  <span className="t-sub" style={{ display: "block" }}>
+                    Off = visitors see sizes but no rates, and are invited to call.
+                  </span>
+                </span>
+              </label>
+            </div>
+          </div>
           <button className="admin-btn primary" type="submit">
             Save changes
           </button>{" "}

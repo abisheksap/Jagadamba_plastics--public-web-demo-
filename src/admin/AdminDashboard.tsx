@@ -5,9 +5,11 @@ export default function AdminDashboard() {
   const data = useSiteData();
   const pendingReviews = data.reviews.filter((r) => r.status === "pending");
   const newEnquiries = data.enquiries.filter((e) => e.status === "new");
+  const variantTotal = data.products.reduce((n, p) => n + (p.variants?.length ?? 0), 0);
 
   const cards = [
     { label: "Products live", num: data.products.length, to: "/admin/products" },
+    { label: "Size / rate variants", num: variantTotal, to: "/admin/products" },
     { label: "Gallery items", num: data.gallery.length, to: "/admin/gallery" },
     { label: "Reviews awaiting approval", num: pendingReviews.length, to: "/admin/reviews", accent: pendingReviews.length > 0 },
     { label: "New enquiries", num: newEnquiries.length, to: "/admin/enquiries", accent: newEnquiries.length > 0 },
@@ -90,6 +92,9 @@ export default function AdminDashboard() {
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           <Link to="/admin/products" className="admin-btn primary">
             Add a product
+          </Link>
+          <Link to="/admin/products" className="admin-btn">
+            Toggle price visibility
           </Link>
           <Link to="/admin/gallery" className="admin-btn">
             Upload gallery photo

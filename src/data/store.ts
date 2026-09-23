@@ -5,34 +5,72 @@
 // Upgrades to a hosted backend (e.g. Convex) can swap the persistence
 // functions without touching UI code.
 import { buildSeedData } from "./seed";
-import type { Enquiry, GalleryItem, Product, Review, SiteData } from "./types";
+import type { Enquiry, GalleryItem, Product, ProductVariant, Review, SiteData } from "./types";
+import { DEFAULT_SETTINGS } from "./types";
 
-const STORAGE_KEY = "jagadamba-site-data-v1";
+const STORAGE_KEY = "jagadamba-site-data-v2";
+const LEGACY_KEY = "jagadamba-site-data-v1";
 
 let data: SiteData = load();
 const listeners = new Set<() => void>();
 const notify = () => listeners.forEach((l) => l());
+
+/** Ids of the pre-price-list seed catalog (21 products). */
+const OLD_SEED_IDS = new Set([
+  "p-green-tank", "p-black-tank", "p-hdpe-pipe", "p-hdpe-coil", "p-borewell",
+  "p-pvc-bundle", "p-cpvc-bundle", "p-ug-drainage", "p-pvc-double-tee", "p-pvc-single-tee",
+  "p-pvc-coupler", "p-pvc-bend-45", "p-pvc-end-cap", "p-pvc-p-trap", "p-cpvc-elbow-90",
+  "p-cpvc-elbow-45", "p-cpvc-cross-tee", "p-cpvc-union", "p-cpvc-concealed-valve",
+  "p-cpvc-reducing-tee", "p-cpvc-male-adapter",
+]);
 
 function load(): SiteData {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw) as SiteData;
-      // shallow-shape guard: reseed if the structure is unrecognisable
-      if (
-        Array.isArray(parsed.products) &&
-        Array.isArray(parsed.gallery) &&
-        Array.isArray(parsed.reviews) &&
-        Array.isArray(parsed.enquiries) &&
-        parsed.settings
-      ) {
+      if (isValid(parsed)) {
+        // migrate products written before variants existed
+        parsed.products = parsed.products.map((p) => ({ ...p, variants: p.variants ?? [] }));
+        parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
         return parsed;
+      }
+    }
+    // carry user edits from the v1 record forward (preserves admin work)
+    const legacyRaw = localStorage.getItem(LEGACY_KEY);
+    if (legacyRaw) {
+      const legacy = JSON.parse(legacyRaw) as SiteData;
+      if (isValid(legacy)) {
+        const seed = buildSeedData();
+        const untouched = legacy.products.every((p) => OLD_SEED_IDS.has(p.id));
+        const products = untouched
+          ? seed.products // old seed was never edited — upgrade to the full priced catalog
+          : legacy.products.map((p) => ({ ...p, variants: p.variants ?? [] }));
+        return {
+          products,
+          gallery: legacy.gallery,
+          reviews: legacy.reviews,
+          enquiries: legacy.enquiries,
+          settings: { ...DEFAULT_SETTINGS, ...legacy.settings },
+        };
       }
     }
   } catch {
     // corrupted record — fall through to a fresh seed
   }
   return buildSeedData();
+}
+
+function isValid(d: unknown): d is SiteData {
+  const v = d as SiteData;
+  return (
+    !!v &&
+    Array.isArray(v.products) &&
+    Array.isArray(v.gallery) &&
+    Array.isArray(v.reviews) &&
+    Array.isArray(v.enquiries) &&
+    !!v.settings
+  );
 }
 
 function persist() {
@@ -71,6 +109,15 @@ export function upsertProduct(product: Product) {
 export function deleteProduct(id: string) {
   data.products = data.products.filter((p) => p.id !== id);
   persist();
+}
+
+/** Replace the whole variant list of a product in one action. */
+export function setProductVariants(productId: string, variants: ProductVariant[]) {
+  const p = data.products.find((x) => x.id === productId);
+  if (p) {
+    p.variants = variants;
+    persist();
+  }
 }
 
 // ---------- gallery ----------

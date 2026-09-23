@@ -4,7 +4,7 @@
 // store so the site keeps working standalone.
 import { convexEnabled, getConvexClient } from "./convexClient";
 import * as local from "./store";
-import type { Enquiry, Review, SiteData } from "./types";
+import type { Enquiry, ProductVariant, Review, SiteData } from "./types";
 import { api } from "../convex/_generated/api";
 
 export const backendMode: "convex" | "local" = convexEnabled ? "convex" : "local";
@@ -69,6 +69,7 @@ export async function submitReview(
 export interface AdminOps {
   upsertProduct(p: any): Promise<void>;
   deleteProduct(id: string): Promise<void>;
+  setProductVariants(productId: string, variants: ProductVariant[]): Promise<void>;
   upsertGalleryItem(g: any): Promise<void>;
   deleteGalleryItem(id: string): Promise<void>;
   setReviewStatus(id: string, status: Review["status"]): Promise<void>;
@@ -87,6 +88,9 @@ export const localAdminOps: AdminOps = {
   },
   async deleteProduct(id) {
     local.deleteProduct(id);
+  },
+  async setProductVariants(productId, variants) {
+    local.setProductVariants(productId, variants);
   },
   async upsertGalleryItem(g) {
     local.upsertGalleryItem(g);
@@ -134,6 +138,8 @@ export function convexAdminOps(passcode: string): AdminOps {
         image: p.image,
         imageStorageId: p.imageStorageId,
         specs: p.specs,
+        variants: p.variants ?? [],
+        priceNote: p.priceNote,
         featured: p.featured,
         sortOrder: p.sortOrder,
         passcode,
@@ -141,6 +147,9 @@ export function convexAdminOps(passcode: string): AdminOps {
     },
     async deleteProduct(id) {
       await client.mutation(api.site.deleteProduct, { id, passcode });
+    },
+    async setProductVariants(productId, variants) {
+      await client.mutation(api.site.setProductVariants, { id: productId, variants, passcode });
     },
     async upsertGalleryItem(g) {
       await client.mutation(api.site.upsertGalleryItem, {
@@ -169,7 +178,16 @@ export function convexAdminOps(passcode: string): AdminOps {
       await client.mutation(api.site.deleteEnquiry, { id, passcode });
     },
     async updateSettings(s) {
-      await client.mutation(api.site.updateSettings, { ...s, passcode });
+      await client.mutation(api.site.updateSettings, {
+        phone: s.phone,
+        email: s.email,
+        address: s.address,
+        facebook: s.facebook,
+        youtube: s.youtube,
+        showPrices: s.showPrices,
+        priceListDate: s.priceListDate,
+        passcode,
+      });
     },
     async changePasscode(current, next) {
       await client.mutation(api.site.changePasscode, { current, next });

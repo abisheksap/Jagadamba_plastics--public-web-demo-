@@ -10,19 +10,28 @@ export function ReviewForm({ bare }: { bare?: boolean }) {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
 
-  const onSubmit = (e: FormEvent) => {
+  const [busy, setBusy] = useState(false);
+
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !quote.trim()) {
       setError("Please add your name and a short review.");
       return;
     }
-    submitReview({ name: name.trim(), business: business.trim(), rating, quote: quote.trim() });
-    setSent(true);
+    setBusy(true);
     setError("");
-    setName("");
-    setBusiness("");
-    setQuote("");
-    setRating(5);
+    try {
+      await submitReview({ name: name.trim(), business: business.trim(), rating, quote: quote.trim() });
+      setSent(true);
+      setName("");
+      setBusiness("");
+      setQuote("");
+      setRating(5);
+    } catch {
+      setError("Something went wrong — please try again in a moment.");
+    } finally {
+      setBusy(false);
+    }
   };
 
   const body = (
@@ -73,8 +82,8 @@ export function ReviewForm({ bare }: { bare?: boolean }) {
           onChange={(e) => setQuote(e.target.value)}
         />
       </div>
-      <button className="form-submit" type="submit">
-        {sent ? "Review submitted ✓" : "Submit review"}
+      <button className="form-submit" type="submit" disabled={busy}>
+        {sent ? "Review submitted ✓" : busy ? "Submitting…" : "Submit review"}
       </button>
       <div className={`form-note${error ? " error" : ""}`}>
         {error || (sent ? "Thank you! Your review is awaiting moderation." : "")}

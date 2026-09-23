@@ -14,22 +14,22 @@ export function EnquiryForm({ defaultInterest, bare }: { defaultInterest?: strin
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !phone.trim()) {
       setError("Please fill in your name and phone number.");
       return;
     }
     setBusy(true);
+    setError("");
     try {
-      submitEnquiry({
+      await submitEnquiry({
         name: name.trim(),
         phone: phone.trim(),
         interest,
         message: message.trim(),
       });
       setSent(true);
-      setError("");
       setName("");
       setPhone("");
       setMessage("");
