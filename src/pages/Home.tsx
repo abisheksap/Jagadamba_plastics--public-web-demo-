@@ -311,6 +311,11 @@ export default function Home() {
                 <div>
                   <div className="c-lbl">PHONE</div>
                   <a href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`}>{settings.phone}</a>
+                  {settings.phoneAlt && (
+                    <a href={`tel:${settings.phoneAlt.replace(/[^+\d]/g, "")}`} style={{ marginLeft: 14 }}>
+                      {settings.phoneAlt}
+                    </a>
+                  )}
                 </div>
               </div>
               <div className="contact-row-future">

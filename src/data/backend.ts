@@ -146,10 +146,10 @@ export function convexAdminOps(passcode: string): AdminOps {
       });
     },
     async deleteProduct(id) {
-      await client.mutation(api.site.deleteProduct, { id, passcode });
+      await client.mutation(api.site.deleteProduct, { id: id as any, passcode });
     },
     async setProductVariants(productId, variants) {
-      await client.mutation(api.site.setProductVariants, { id: productId, variants, passcode });
+      await client.mutation(api.site.setProductVariants, { id: productId as any, variants, passcode });
     },
     async upsertGalleryItem(g) {
       await client.mutation(api.site.upsertGalleryItem, {
@@ -163,23 +163,24 @@ export function convexAdminOps(passcode: string): AdminOps {
       });
     },
     async deleteGalleryItem(id) {
-      await client.mutation(api.site.deleteGalleryItem, { id, passcode });
+      await client.mutation(api.site.deleteGalleryItem, { id: id as any, passcode });
     },
     async setReviewStatus(id, status) {
-      await client.mutation(api.site.setReviewStatus, { id, status, passcode });
+      await client.mutation(api.site.setReviewStatus, { id: id as any, status, passcode });
     },
     async deleteReview(id) {
-      await client.mutation(api.site.deleteReview, { id, passcode });
+      await client.mutation(api.site.deleteReview, { id: id as any, passcode });
     },
     async setEnquiryStatus(id, status) {
-      await client.mutation(api.site.setEnquiryStatus, { id, status, passcode });
+      await client.mutation(api.site.setEnquiryStatus, { id: id as any, status, passcode });
     },
     async deleteEnquiry(id) {
-      await client.mutation(api.site.deleteEnquiry, { id, passcode });
+      await client.mutation(api.site.deleteEnquiry, { id: id as any, passcode });
     },
     async updateSettings(s) {
       await client.mutation(api.site.updateSettings, {
         phone: s.phone,
+        phoneAlt: s.phoneAlt,
         email: s.email,
         address: s.address,
         facebook: s.facebook,
@@ -205,7 +206,7 @@ export function convexAdminOps(passcode: string): AdminOps {
         body: blob,
       });
       const { storageId } = (await res.json()) as { storageId: string };
-      const url = (await client.query(api.site.getImageUrl, { storageId })) as string;
+      const url = (await client.query(api.site.getImageUrl, { storageId: storageId as any })) as string;
       return { url, storageId };
     },
   };

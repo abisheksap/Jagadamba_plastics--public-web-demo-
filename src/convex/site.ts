@@ -210,7 +210,8 @@ export const getSettings = query({
     const map: Record<string, any> = {};
     rows.forEach((r: any) => (map[r.key] = r.value));
     return {
-      phone: map.phone ?? "+977-56-000000",
+      phone: map.phone ?? "+977-56-528831",
+      phoneAlt: map.phoneAlt ?? "056-521340",
       email: map.email ?? "info@jagadambaplastic.com",
       address: map.address ?? "Bharatpur-4, Chitwan, Narayanghat, Nepal",
       facebook: map.facebook ?? "https://www.facebook.com/jagadambaplasticindustry",
@@ -414,6 +415,7 @@ export const deleteEnquiry = mutation({
 export const updateSettings = mutation({
   args: {
     phone: v.string(),
+    phoneAlt: v.optional(v.string()),
     email: v.string(),
     address: v.string(),
     facebook: v.string(),

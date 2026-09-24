@@ -46,7 +46,7 @@ function buildSlots(products: Product[]): OrbitItem[] {
   const layout: Array<{ match: string; cls: string; bx: number; by: number; z: number; w?: string; h?: string }> = [
     // front-centre tank pair — both prominent
     { match: "jagadamba water tank", cls: "chip-tank", bx: -40, by: -42, z: 3, h: "172px" },
-    { match: "black tank", cls: "chip-tank chip-tank-b", bx: 46, by: -34, z: 3, w: "122px", h: "158px" },
+    { match: "black tank", cls: "chip-tank chip-tank-b", bx: 44, by: -30, z: 4, w: "104px", h: "142px" },
     // pipes behind
     { match: "borewell", cls: "chip-pipe", bx: 110, by: -20, z: 2 },
     { match: "ug drainage", cls: "chip-pipe", bx: 138, by: -2, z: 2 },

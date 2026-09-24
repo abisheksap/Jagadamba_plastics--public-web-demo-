@@ -1,8 +1,12 @@
 """Convert the uploaded products/ folder into optimized web images.
 
 Outputs:
-  public/images/products-v2/  — full catalog images (~900px web-optimized)
-  public/images/orbit/        — tighter 640px crops for the home hero orbit
+  public/images/products-v2/  — full catalog images (~900px web-optimized PNGs)
+  public/images/orbit/        — tighter 640px copies for the home hero orbit
+
+All outputs are PNGs. Transparency in the source PNGs is preserved; the two
+tank photos and the one opaque PNG get their flat white background removed so
+every catalog image sits cleanly on any card color.
 """
 from __future__ import annotations
 
@@ -11,12 +15,17 @@ import sys
 import unicodedata
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageFilter
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "products"
 OUT_FULL = ROOT / "public" / "images" / "products-v2"
 OUT_ORBIT = ROOT / "public" / "images" / "orbit"
+
+# Pixels at least this bright in all channels count as "white background".
+WHITE_THRESHOLD = 244
+# Grow the background mask by this many pixels to kill white halos at edges.
+DESPOT = 1
 
 SLUG_MAP = {
     "01_Green_Tank.jpg": "green-tank",
@@ -83,21 +92,73 @@ def slugify(name: str) -> str:
     return stem or "product"
 
 
+def has_real_alpha(img: Image.Image) -> bool:
+    """True when the image actually uses its alpha channel."""
+    if img.mode not in ("RGBA", "LA", "PA"):
+        if img.mode == "P":
+            img = img.convert("RGBA")
+        else:
+            return False
+    if "A" not in img.getbands():
+        return False
+    lo, _hi = img.getchannel("A").getextrema()
+    return lo < 255
+
+
+def cut_white_background(img: Image.Image) -> Image.Image:
+    """Make near-white background pixels transparent (photo backgrounds)."""
+    rgba = img.convert("RGBA")
+    rgb = rgba.convert("RGB")
+    # Mask of pixels close to white.
+    gray = rgb.convert("L")
+    mask = gray.point(lambda v: 255 if v >= WHITE_THRESHOLD else 0)
+    # Flood from the borders so bright highlights inside the product survive.
+    from collections import deque
+
+    w, h = mask.size
+    px = mask.load()
+    seen = [[False] * w for _ in range(h)]
+    q: deque[tuple[int, int]] = deque()
+    for x in range(w):
+        for y in (0, h - 1):
+            if px[x, y] == 255 and not seen[y][x]:
+                seen[y][x] = True
+                q.append((x, y))
+    for y in range(h):
+        for x in (0, w - 1):
+            if px[x, y] == 255 and not seen[y][x]:
+                seen[y][x] = True
+                q.append((x, y))
+    while q:
+        x, y = q.popleft()
+        for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+            if 0 <= nx < w and 0 <= ny < h and not seen[ny][nx] and px[nx, ny] == 255:
+                seen[ny][nx] = True
+                q.append((nx, ny))
+    bg = Image.new("L", mask.size, 0)
+    bg.putdata([255 if seen[y][x] else 0 for y in range(h) for x in range(w)])
+    if DESPOT:
+        bg = bg.filter(ImageFilter.MinFilter(1 + 2 * DESPOT))
+    alpha = rgba.getchannel("A")
+    # Anything the border flood says is background becomes transparent.
+    from PIL import ImageChops
+
+    new_alpha = ImageChops.multiply(alpha, ImageChops.invert(bg))
+    rgba.putalpha(new_alpha)
+    return rgba
+
+
 def convert(src: Path, dst: Path, max_side: int) -> None:
     img = Image.open(src)
-    # Flatten any transparency onto white so JPEG output stays clean.
-    if img.mode in ("RGBA", "LA", "P"):
-        base = Image.new("RGB", img.size, (255, 255, 255))
-        img_rgba = img.convert("RGBA")
-        base.paste(img_rgba, mask=img_rgba.split()[-1])
-        img = base
+    if has_real_alpha(img):
+        out = img.convert("RGBA")
     else:
-        img = img.convert("RGB")
-    w, h = img.size
+        out = cut_white_background(img)
+    w, h = out.size
     scale = min(1.0, max_side / max(w, h))
     if scale < 1.0:
-        img = img.resize((round(w * scale), round(h * scale)), Image.LANCZOS)
-    img.save(dst, "JPEG", quality=85, optimize=True, progressive=True)
+        out = out.resize((round(w * scale), round(h * scale)), Image.LANCZOS)
+    out.save(dst, "PNG", optimize=True)
 
 
 def main() -> None:
@@ -108,10 +169,10 @@ def main() -> None:
         if src.suffix.lower() not in (".jpg", ".jpeg", ".png", ".webp"):
             continue
         slug = SLUG_MAP.get(src.name) or slugify(src.name)
-        convert(src, OUT_FULL / f"{slug}.jpg", 900)
-        convert(src, OUT_ORBIT / f"{slug}.jpg", 640)
+        convert(src, OUT_FULL / f"{slug}.png", 900)
+        convert(src, OUT_ORBIT / f"{slug}.png", 640)
         count += 1
-        print(f"  {src.name} -> {slug}.jpg")
+        print(f"  {src.name} -> {slug}.png")
     print(f"converted {count} images")
     sys.exit(0)
 

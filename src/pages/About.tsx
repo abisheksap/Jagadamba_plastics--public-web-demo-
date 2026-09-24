@@ -1,6 +1,49 @@
 import { Link } from "react-router-dom";
 import { StatsBand } from "../components/FutureUI";
 
+/** Word-for-word copy carried over from jagadambaplastic.com (the company's
+ * original site), so the corporate voice of the founders stays intact. */
+const DIRECTOR_MESSAGE = `JAGADAMBA PLASTIC PVT. LTD. was established in 2063 B.S., which proved to be the
+milestone of the Manakamana Group that everyone knows today. It has learned from the past and
+strived to make a better future in the plastic sector by putting all efforts into invention,
+innovation, reformation, replacement and market extension. Jagadamba Plastic Pvt. Ltd. is an
+enterprise including research, design, manufacture and marketing departments — strictly conformed
+to international standards and built on the introduction of advanced technology. We are striving
+for the perfect service to completely show our corporate image and product brand.`;
+
+const MD_MESSAGE = `The entire manufacturing, designing and testing are carried out by our qualified team of
+engineers and experts on a regular basis. Our various products are certified with NS by the
+Government of Nepal. Today we are proud and thankful that we are being loved and are able to be
+one of the best plastic industries in our country, overcoming all the needs and desires of our
+customers. It is all because of our customers, employees, distributors and advisors that we are
+able to stand at the peak — and we will keep on serving and fulfilling our customer needs and
+desires, the way we are doing now.`;
+
+interface Leader {
+  role: string;
+  name: string;
+  nepaliRole: string;
+  message: string;
+  initials: string;
+}
+
+const LEADERS: Leader[] = [
+  {
+    role: "Director",
+    name: "Jagadamba Plastic Industries Pvt. Ltd.",
+    nepaliRole: "निर्देशक",
+    message: DIRECTOR_MESSAGE,
+    initials: "JP",
+  },
+  {
+    role: "Managing Director",
+    name: "Manakamana Group",
+    nepaliRole: "प्रबन्ध निर्देशक",
+    message: MD_MESSAGE,
+    initials: "MG",
+  },
+];
+
 export default function About() {
   return (
     <>
@@ -22,27 +65,40 @@ export default function About() {
         </div>
       </section>
 
+      {/* OUR STORY — sourced from the company's original website */}
       <section className="section-pad" style={{ paddingTop: 80 }}>
         <div className="wrap">
           <div className="section-head-future" style={{ marginBottom: 40 }}>
             <div>
+              <div className="kicker-future">
+                <span className="kf-dot" />
+                OUR STORY
+              </div>
               <h2 style={{ fontSize: "clamp(24px,2.8vw,34px)" }}>
-                The <span className="grad">story</span> so far.
+                Who <span className="grad">we are.</span>
               </h2>
             </div>
             <p>
-              A milestone company of the Manakamana Group, manufacturing to Nepal Standard before
+              A milestone company of the Manakamana Group — manufacturing to Nepal Standard before
               anything reaches a dealer shelf.
             </p>
           </div>
-          <p style={{ color: "var(--text-mid)", fontSize: 16.5, lineHeight: 1.8, maxWidth: 760 }}>
-            Jagadamba Plastic Industries has manufactured HDPE, PVC and CPVC pipe, fittings and water
-            tanks in Bharatpur, Chitwan since 2063 B.S. What began as a single extrusion line now
-            spans six product families feeding a dealer network that stretches from Province 1 to
-            Province 7. Every batch is pressure-tested and dimension-checked against Nepal Standard —
-            that discipline is why contractors ask for Jagadamba pipe by name, and why our dealers
-            restock with confidence.
-          </p>
+          <div className="story-copy">
+            <p>
+              Jagadamba Plastic Industries has manufactured HDPE, PVC and CPVC pipe, fittings and
+              water tanks in Bharatpur, Chitwan since 2063 B.S. What began as a single extrusion line
+              now spans six product families feeding a dealer network that stretches from Province 1
+              to Province 7. Every batch is pressure-tested and dimension-checked against Nepal
+              Standard — that discipline is why contractors ask for Jagadamba pipe by name, and why
+              our dealers restock with confidence.
+            </p>
+            <p>
+              Jagadamba Plastic Pvt. Ltd. is an enterprise that spans research, design, manufacture
+              and marketing — strictly conformed to international standards and built on advanced
+              technology, with the entire manufacturing, design and testing carried out by our
+              qualified team of engineers and experts on a regular basis.
+            </p>
+          </div>
 
           <div className="timeline">
             <div className="tl-item">
@@ -77,6 +133,45 @@ export default function About() {
                 from household plumbing to national infrastructure sites.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* LEADERSHIP — the words of the Director & MD, carried from the original site */}
+      <section className="section-pad" style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <div className="section-head-future">
+            <div>
+              <div className="kicker-future">
+                <span className="kf-dot" />
+                LEADERSHIP
+              </div>
+              <h2>
+                Words from the <span className="grad">Director &amp; MD.</span>
+              </h2>
+            </div>
+            <p>
+              The vision that set our direction — in the words of the people who lead it, as shared
+              on jagadambaplastic.com.
+            </p>
+          </div>
+          <div className="leader-grid">
+            {LEADERS.map((l) => (
+              <figure className="leader-card" key={l.role}>
+                <span className="leader-quote-mark">“</span>
+                <blockquote>{l.message}</blockquote>
+                <figcaption>
+                  <span className="leader-avatar" aria-hidden="true">
+                    {l.initials}
+                  </span>
+                  <span className="leader-meta">
+                    <span className="leader-role">{l.role}</span>
+                    <span className="leader-name">{l.name}</span>
+                    <span className="leader-nepali">{l.nepaliRole}</span>
+                  </span>
+                </figcaption>
+              </figure>
+            ))}
           </div>
         </div>
       </section>

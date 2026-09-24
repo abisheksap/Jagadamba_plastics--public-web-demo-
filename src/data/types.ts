@@ -89,10 +89,13 @@ export interface SiteSettings {
   showPrices: boolean;
   /** Effective date label for the price list, e.g. "2082/09/01". */
   priceListDate: string;
+  /** Public contact numbers from the original site (056-528831, 056-521340). */
+  phoneAlt?: string;
 }
 
 export const DEFAULT_SETTINGS: SiteSettings = {
-  phone: "+977-56-000000",
+  phone: "+977-56-528831",
+  phoneAlt: "056-521340",
   email: "info@jagadambaplastic.com",
   address: "Bharatpur-4, Chitwan, Narayanghat, Nepal",
   facebook: "https://www.facebook.com/jagadambaplasticindustry",

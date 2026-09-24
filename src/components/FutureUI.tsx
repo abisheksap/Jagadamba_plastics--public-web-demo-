@@ -1,5 +1,5 @@
 /** Futuristic shared UI pieces: ticker, count-up stat cards, pipeline band. */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 const TICKER_ITEMS = [
   { pre: "MADE IN", b: "NEPAL" },
@@ -100,18 +100,48 @@ export function StatsBand({ stats }: { stats: FutureStat[] }) {
 /* ---------- pipeline flow band ---------- */
 export function ProcessFlow() {
   const nodes = ["EXTRUDE", "MOULD", "TEST", "CERTIFY", "DISPATCH"];
+  const nodeId = useId();
   return (
     <div className="flow-band" aria-hidden="true">
-      <svg viewBox="0 0 1200 96" preserveAspectRatio="xMidYMid meet">
-        <path className="flow-line" d="M0 48 H1200" />
+      <div className="flow-band-glow" />
+      <svg viewBox="0 0 1200 120" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient
+            id={`${nodeId}-pulse`}
+            gradientUnits="userSpaceOnUse"
+            x1="0"
+            y1="0"
+            x2="1200"
+            y2="0"
+          >
+            <stop offset="0%" stopColor="#59d2e8" stopOpacity="0.25" />
+            <stop offset="45%" stopColor="#59d2e8" />
+            <stop offset="100%" stopColor="#e02129" />
+          </linearGradient>
+        </defs>
+        <path className="flow-line" d="M0 60 H1200" />
         {nodes.map((n, i) => {
           const x = 130 + i * 220;
           return (
             <g key={n}>
-              <path className="flow-pulse" d="M0 48 H1200" style={{ animationDelay: `${i * 0.68}s` }} />
-              <circle className="flow-node" cx={x} cy={48} r={7} />
-              <text className="flow-node-label" x={x} y={76} textAnchor="middle">
+              <path
+                className="flow-pulse"
+                d="M0 60 H1200"
+                style={{ animationDelay: `${(i * 0.85).toFixed(2)}s`, stroke: `url(#${nodeId}-pulse)` }}
+              />
+              <circle className="flow-node" cx={x} cy={60} r={6} />
+              <circle
+                className="flow-node-halo"
+                cx={x}
+                cy={60}
+                r={11}
+                style={{ animationDelay: `${(i * 0.42).toFixed(2)}s` }}
+              />
+              <text className="flow-node-label" x={x} y={96} textAnchor="middle">
                 {n}
+              </text>
+              <text className="flow-node-step" x={x} y={30} textAnchor="middle">
+                {String(i + 1).padStart(2, "0")}
               </text>
             </g>
           );

@@ -29,7 +29,7 @@ function Chrome({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <TopBar phone={settings.phone} email={settings.email} />
+      <TopBar phone={settings.phone} email={settings.email} phoneAlt={settings.phoneAlt} />
       <ScrollTrack />
       <Nav />
       {children}

@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 
-export function TopBar({ phone, email }: { phone: string; email: string }) {
+export function TopBar({
+  phone,
+  email,
+  phoneAlt,
+}: {
+  phone: string;
+  email: string;
+  phoneAlt?: string;
+}) {
   return (
     <div className="topbar">
       <div className="topbar-brand">
@@ -10,6 +18,7 @@ export function TopBar({ phone, email }: { phone: string; email: string }) {
       </div>
       <div className="topbar-info">
         <a href={`tel:${phone.replace(/[^+\d]/g, "")}`}>☎ {phone}</a>
+        {phoneAlt && <a href={`tel:${phoneAlt.replace(/[^+\d]/g, "")}`}>☎ {phoneAlt}</a>}
         <a href={`mailto:${email}`}>{email}</a>
         <span>www.jagadambaplastic.com</span>
       </div>
@@ -71,9 +80,12 @@ export function Nav() {
     <nav className="nav" id="nav">
       <Link to="/" className="nav-logo" onClick={() => setOpen(false)}>
         <span className="mark-wrap">
-          <img className="mark" src="/images/logo.png" alt="Jagadamba Plastic logo" />
+          <img className="mark" src="/images/logo-legacy.png" alt="Jagadamba Plastic logo" />
         </span>
-        Jagadamba Plastic
+        <span className="nav-logo-text">
+          <span className="nav-logo-name">Jagadamba Plastic</span>
+          <span className="nav-logo-sub">Pipes · Fittings · Tanks — नेपालमा बनेको</span>
+        </span>
       </Link>
       <div className={`nav-links${open ? " open" : ""}`} id="navLinks">
         {LINKS.map((l) => (
@@ -98,7 +110,14 @@ export function Nav() {
 export function Footer({
   settings,
 }: {
-  settings: { phone: string; email: string; address: string; facebook: string; youtube: string };
+  settings: {
+    phone: string;
+    phoneAlt?: string;
+    email: string;
+    address: string;
+    facebook: string;
+    youtube: string;
+  };
 }) {
   return (
     <footer>
@@ -124,6 +143,9 @@ export function Footer({
           <div>
             <h4>REACH US</h4>
             <a href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`}>{settings.phone}</a>
+            {settings.phoneAlt && (
+              <a href={`tel:${settings.phoneAlt.replace(/[^+\d]/g, "")}`}>{settings.phoneAlt}</a>
+            )}
             <a href={`mailto:${settings.email}`}>{settings.email}</a>
             <a href={settings.facebook} target="_blank" rel="noreferrer">
               Facebook
