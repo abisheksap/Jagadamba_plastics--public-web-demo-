@@ -1,50 +1,10 @@
 import { Link } from "react-router-dom";
 import { StatsBand } from "../components/FutureUI";
-
-/** Word-for-word copy carried over from jagadambaplastic.com (the company's
- * original site), so the corporate voice of the founders stays intact. */
-const DIRECTOR_MESSAGE = `JAGADAMBA PLASTIC PVT. LTD. was established in 2063 B.S., which proved to be the
-milestone of the Manakamana Group that everyone knows today. It has learned from the past and
-strived to make a better future in the plastic sector by putting all efforts into invention,
-innovation, reformation, replacement and market extension. Jagadamba Plastic Pvt. Ltd. is an
-enterprise including research, design, manufacture and marketing departments — strictly conformed
-to international standards and built on the introduction of advanced technology. We are striving
-for the perfect service to completely show our corporate image and product brand.`;
-
-const MD_MESSAGE = `The entire manufacturing, designing and testing are carried out by our qualified team of
-engineers and experts on a regular basis. Our various products are certified with NS by the
-Government of Nepal. Today we are proud and thankful that we are being loved and are able to be
-one of the best plastic industries in our country, overcoming all the needs and desires of our
-customers. It is all because of our customers, employees, distributors and advisors that we are
-able to stand at the peak — and we will keep on serving and fulfilling our customer needs and
-desires, the way we are doing now.`;
-
-interface Leader {
-  role: string;
-  name: string;
-  nepaliRole: string;
-  message: string;
-  initials: string;
-}
-
-const LEADERS: Leader[] = [
-  {
-    role: "Director",
-    name: "Jagadamba Plastic Industries Pvt. Ltd.",
-    nepaliRole: "निर्देशक",
-    message: DIRECTOR_MESSAGE,
-    initials: "JP",
-  },
-  {
-    role: "Managing Director",
-    name: "Manakamana Group",
-    nepaliRole: "प्रबन्ध निर्देशक",
-    message: MD_MESSAGE,
-    initials: "MG",
-  },
-];
+import { useSiteData } from "../data/SiteDataProvider";
 
 export default function About() {
+  const { content } = useSiteData();
+  const LEADERS = content.leaders;
   return (
     <>
       <section className="page-hero">
@@ -56,12 +16,10 @@ export default function About() {
             ABOUT US
           </div>
           <h1>
-            Built for <span className="grad">every water need</span> in Nepal.
+            {content.aboutTitle.split(" ").slice(0, -4).join(" ")}{" "}
+            <span className="grad">{content.aboutTitle.split(" ").slice(-4).join(" ")}</span>
           </h1>
-          <p className="sub">
-            Government-certified plastic pipe and water storage manufacturing in Bharatpur, Chitwan —
-            supplying dealers across all seven provinces, district 1 to 77.
-          </p>
+          <p className="sub">{content.aboutSub}</p>
         </div>
       </section>
 
@@ -84,20 +42,8 @@ export default function About() {
             </p>
           </div>
           <div className="story-copy">
-            <p>
-              Jagadamba Plastic Industries has manufactured HDPE, PVC and CPVC pipe, fittings and
-              water tanks in Bharatpur, Chitwan since 2063 B.S. What began as a single extrusion line
-              now spans six product families feeding a dealer network that stretches from Province 1
-              to Province 7. Every batch is pressure-tested and dimension-checked against Nepal
-              Standard — that discipline is why contractors ask for Jagadamba pipe by name, and why
-              our dealers restock with confidence.
-            </p>
-            <p>
-              Jagadamba Plastic Pvt. Ltd. is an enterprise that spans research, design, manufacture
-              and marketing — strictly conformed to international standards and built on advanced
-              technology, with the entire manufacturing, design and testing carried out by our
-              qualified team of engineers and experts on a regular basis.
-            </p>
+            <p>{content.aboutStory1}</p>
+            <p>{content.aboutStory2}</p>
           </div>
 
           <div className="timeline">
@@ -157,12 +103,12 @@ export default function About() {
           </div>
           <div className="leader-grid">
             {LEADERS.map((l) => (
-              <figure className="leader-card" key={l.role}>
+              <figure className="leader-card" key={l.id}>
                 <span className="leader-quote-mark">“</span>
                 <blockquote>{l.message}</blockquote>
                 <figcaption>
                   <span className="leader-avatar" aria-hidden="true">
-                    {l.initials}
+                    {l.image ? <img src={l.image} alt={l.role} /> : l.initials}
                   </span>
                   <span className="leader-meta">
                     <span className="leader-role">{l.role}</span>

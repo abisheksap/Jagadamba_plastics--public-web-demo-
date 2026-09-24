@@ -5,11 +5,24 @@
 // Upgrades to a hosted backend (e.g. Convex) can swap the persistence
 // functions without touching UI code.
 import { buildSeedData } from "./seed";
-import type { Enquiry, GalleryItem, Product, ProductVariant, Review, SiteData } from "./types";
-import { DEFAULT_SETTINGS } from "./types";
+import { IMAGE_MANIFEST } from "./imageManifest";
+import type {
+  ActivityEntry,
+  ActivityKind,
+  Enquiry,
+  GalleryItem,
+  HeroChipLayout,
+  Product,
+  ProductVariant,
+  Review,
+  SiteContent,
+  SiteData,
+} from "./types";
+import { DEFAULT_CONTENT, DEFAULT_SETTINGS } from "./types";
 
 const STORAGE_KEY = "jagadamba-site-data-v2";
 const LEGACY_KEY = "jagadamba-site-data-v1";
+const MAX_ACTIVITY = 400;
 
 let data: SiteData = load();
 const listeners = new Set<() => void>();
@@ -33,7 +46,7 @@ function load(): SiteData {
         // migrate products written before variants existed
         parsed.products = parsed.products.map((p) => ({ ...p, variants: p.variants ?? [] }));
         parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
-        return parsed;
+        return migrateImages(parsed);
       }
     }
     // carry user edits from the v1 record forward (preserves admin work)
@@ -46,13 +59,13 @@ function load(): SiteData {
         const products = untouched
           ? seed.products // old seed was never edited — upgrade to the full priced catalog
           : legacy.products.map((p) => ({ ...p, variants: p.variants ?? [] }));
-        return {
+        return migrateImages({
           products,
           gallery: legacy.gallery,
           reviews: legacy.reviews,
           enquiries: legacy.enquiries,
           settings: { ...DEFAULT_SETTINGS, ...legacy.settings },
-        };
+        });
       }
     }
   } catch {
@@ -72,6 +85,41 @@ function isValid(d: unknown): d is SiteData {
     !!v.settings
   );
 }
+
+/**
+ * Repair product/gallery image paths that point at files that don't exist.
+ * The first catalog referenced .jpg files that were later converted to
+ * transparent .png — without this fix browsers that already saved the old
+ * catalog only ever show the alt text instead of the photo.
+ */
+function migrateImages(d: SiteData): SiteData {
+  const exists = new Set<string>();
+  const fileExists = (path: string) => {
+    if (exists.has(path)) return true;
+    const ok = IMAGE_SET.has(path);
+    if (ok) exists.add(path);
+    return ok;
+  };
+  const fix = (src: string | undefined): string => {
+    if (!src) return "";
+    if (!src.startsWith("/images/")) return src; // uploads / external URLs are fine
+    const swapExt = src.replace(/\.jpg\b/, ".png");
+    if (swapExt !== src && fileExists(swapExt)) return swapExt;
+    // slug fallback: keep whichever extension actually ships
+    const slug = src.split("?")[0].replace(/\.[a-z0-9]+$/i, "");
+    for (const ext of [".png", ".jpg", ".jpeg", ".webp"]) {
+      const candidate = `${slug}${ext}`;
+      if (fileExists(candidate)) return candidate;
+    }
+    return src;
+  };
+  d.products = d.products.map((p) => ({ ...p, image: fix(p.image) }));
+  d.gallery = d.gallery.map((g) => ({ ...g, image: fix(g.image) }));
+  return d;
+}
+
+/** Paths (without the leading "/") of every image shipped in /public. */
+const IMAGE_SET = new Set(IMAGE_MANIFEST.map((p) => p.replace(/^\//, "")));
 
 function persist() {
   try {
@@ -97,17 +145,37 @@ function uid(prefix: string): string {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
+/** Append a change-log entry. Call from every mutation. */
+function log(kind: ActivityKind, summary: string, detail?: string, byAdmin = true) {
+  const entry: ActivityEntry = {
+    id: uid("a"),
+    kind,
+    summary,
+    detail,
+    byAdmin,
+    createdAt: Date.now(),
+  };
+  data.activity = [entry, ...(data.activity ?? [])].slice(0, MAX_ACTIVITY);
+}
+
 // ---------- products ----------
 
 export function upsertProduct(product: Product) {
   const idx = data.products.findIndex((p) => p.id === product.id);
-  if (idx >= 0) data.products[idx] = product;
-  else data.products.unshift(product);
+  if (idx >= 0) {
+    data.products[idx] = product;
+    log("product", `Product updated — ${product.name}`);
+  } else {
+    data.products.unshift(product);
+    log("product", `Product added — ${product.name}`, product.category);
+  }
   persist();
 }
 
 export function deleteProduct(id: string) {
+  const p = data.products.find((x) => x.id === id);
   data.products = data.products.filter((p) => p.id !== id);
+  log("product", `Product deleted — ${p?.name ?? id}`);
   persist();
 }
 
@@ -116,6 +184,7 @@ export function setProductVariants(productId: string, variants: ProductVariant[]
   const p = data.products.find((x) => x.id === productId);
   if (p) {
     p.variants = variants;
+    log("product", `Prices updated — ${p.name}`, `${variants.length} size/rate rows`);
     persist();
   }
 }
@@ -124,13 +193,20 @@ export function setProductVariants(productId: string, variants: ProductVariant[]
 
 export function upsertGalleryItem(item: GalleryItem) {
   const idx = data.gallery.findIndex((g) => g.id === item.id);
-  if (idx >= 0) data.gallery[idx] = item;
-  else data.gallery.unshift(item);
+  if (idx >= 0) {
+    data.gallery[idx] = item;
+    log("gallery", `Gallery item updated — ${item.title}`);
+  } else {
+    data.gallery.unshift(item);
+    log("gallery", `Gallery item added — ${item.title}`, item.kind);
+  }
   persist();
 }
 
 export function deleteGalleryItem(id: string) {
+  const g = data.gallery.find((x) => x.id === id);
   data.gallery = data.gallery.filter((g) => g.id !== id);
+  log("gallery", `Gallery item deleted — ${g?.title ?? id}`);
   persist();
 }
 
@@ -145,17 +221,22 @@ export function submitReview(input: Pick<Review, "name" | "business" | "rating" 
     createdAt: Date.now(),
   };
   data.reviews = [review, ...data.reviews];
+  log("review", `Review submitted — ${input.name}`, `${input.rating}★ (awaiting approval)`, false);
   persist();
   return review.id;
 }
 
 export function setReviewStatus(id: string, status: Review["status"]) {
+  const r = data.reviews.find((x) => x.id === id);
   data.reviews = data.reviews.map((r) => (r.id === id ? { ...r, status } : r));
+  log("review", `Review ${status} — ${r?.name ?? id}`, r?.quote.slice(0, 80));
   persist();
 }
 
 export function deleteReview(id: string) {
+  const r = data.reviews.find((x) => x.id === id);
   data.reviews = data.reviews.filter((r) => r.id !== id);
+  log("review", `Review deleted — ${r?.name ?? id}`);
   persist();
 }
 
@@ -177,24 +258,62 @@ export function submitEnquiry(
     createdAt: Date.now(),
   };
   data.enquiries = [enquiry, ...data.enquiries];
+  log("enquiry", `Enquiry from ${input.name}`, input.interest, false);
   persist();
   return enquiry.id;
 }
 
 export function setEnquiryStatus(id: string, status: Enquiry["status"]) {
+  const e = data.enquiries.find((x) => x.id === id);
   data.enquiries = data.enquiries.map((e) => (e.id === id ? { ...e, status } : e));
+  log("enquiry", `Enquiry marked ${status} — ${e?.name ?? id}`);
   persist();
 }
 
 export function deleteEnquiry(id: string) {
+  const e = data.enquiries.find((x) => x.id === id);
   data.enquiries = data.enquiries.filter((e) => e.id !== id);
+  log("enquiry", `Enquiry deleted — ${e?.name ?? id}`);
   persist();
 }
 
 // ---------- settings ----------
 
 export function updateSettings(settings: SiteData["settings"]) {
+  const themeChanged = settings.theme !== data.settings.theme;
   data.settings = { ...settings };
+  log("settings", "Contact & settings updated", themeChanged ? `Theme → ${settings.theme}` : undefined);
+  persist();
+}
+
+// ---------- site content (hero + about + leaders) ----------
+
+export function getContent(): SiteContent {
+  return { ...DEFAULT_CONTENT, ...(data.content ?? {}), leaders: data.content?.leaders ?? DEFAULT_CONTENT.leaders };
+}
+
+export function updateContent(content: SiteContent) {
+  data.content = content;
+  log("content", "Site content updated", "Hero / about / leadership copy");
+  persist();
+}
+
+// ---------- hero group arrangement ----------
+
+export function getHeroLayout(): HeroChipLayout | undefined {
+  return data.heroLayout;
+}
+
+export function saveHeroLayout(layout: HeroChipLayout) {
+  data.heroLayout = { ...layout, updatedAt: Date.now() };
+  log("layout", "Home product group rearranged", `${layout.chips.length} products placed`);
+  persist();
+}
+
+export function clearHeroLayout() {
+  if (!data.heroLayout) return;
+  data.heroLayout = undefined;
+  log("layout", "Home product group reset", "Back to the default layout");
   persist();
 }
 
@@ -215,6 +334,7 @@ export function importData(json: string): boolean {
       parsed.settings
     ) {
       data = parsed;
+      log("admin", "Backup imported", `${parsed.products.length} products restored`);
       persist();
       return true;
     }
@@ -226,5 +346,6 @@ export function importData(json: string): boolean {
 
 export function resetToSeed() {
   data = buildSeedData();
+  log("admin", "Site reset to defaults");
   persist();
 }

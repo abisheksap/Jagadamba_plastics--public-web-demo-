@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import { Link } from "react-router-dom";
-import type { Product } from "../data/types";
+import type { HeroChipLayout, Product } from "../data/types";
 import { useSiteData } from "../data/SiteDataProvider";
 
 interface OrbitItem {
@@ -38,10 +38,19 @@ const starPositions = [
   { left: "62%", top: "22%", delay: 1.02, tw: 0.49 },
 ];
 
-/** Layout slots for the family-shot cluster — the two water tanks as the
+/** Visual family of a chip: tanks are big discs, pipes tall, fittings round. */
+function chipClassFor(p: Product): string {
+  if (p.category === "Water Tank") return "chip-tank";
+  if (p.category === "HDPE Pipe" || p.category === "PVC Pipe" || p.category === "CPVC Pipe") {
+    return "chip-pipe";
+  }
+  return "chip-round";
+}
+
+/** Layout slots for the default family-shot cluster — the two water tanks as the
  * front-centre pair, pipes behind, fittings gathered in front (mirrors the
  * prototype). Match strings are lowercase substrings of product names. */
-function buildSlots(products: Product[]): OrbitItem[] {
+function buildDefaultSlots(products: Product[]): OrbitItem[] {
   const byName = (needle: string) => products.find((p) => p.name.toLowerCase().includes(needle));
   const layout: Array<{ match: string; cls: string; bx: number; by: number; z: number; w?: string; h?: string }> = [
     // front-centre tank pair — both prominent
@@ -101,20 +110,43 @@ function buildSlots(products: Product[]): OrbitItem[] {
   return items;
 }
 
+/** Admin-arranged layout wins whenever it exists; missing products are dropped. */
+function buildFromSaved(products: Product[], saved: HeroChipLayout): OrbitItem[] {
+  const byId = new Map(products.map((p) => [p.id, p]));
+  const items: OrbitItem[] = [];
+  for (const chip of saved.chips) {
+    const product = byId.get(chip.productId);
+    if (!product) continue; // product deleted — skip gracefully
+    items.push({
+      product,
+      cls: chipClassFor(product),
+      bx: chip.bx,
+      by: chip.by,
+      z: chip.z,
+      w: chip.w != null ? `${chip.w}px` : undefined,
+      h: chip.h != null ? `${chip.h}px` : undefined,
+    });
+  }
+  return items;
+}
+
 function isLarge(cls: string) {
   return /chip-(tank|pipe|coil)/.test(cls) && !cls.includes("chip-round");
 }
 
 /** Hero product showcase: grouped family shot that scatters into a circle
- * on hover (desktop) or tap (touch), then reassembles. Products come live
- * from the CMS. */
+ * on hover (desktop) or tap (touch), then reassembles. Products and their
+ * placement come live from the CMS (Admin → Home group). */
 export function ProductShowcase() {
-  const { products } = useSiteData();
+  const { products, heroLayout } = useSiteData();
   const orbitRef = useRef<HTMLDivElement | null>(null);
   const heroRef = useRef<HTMLDivElement | null>(null);
   const headingRef = useRef<HTMLDivElement | null>(null);
 
-  const items = useMemo(() => buildSlots(products), [products]);
+  const items = useMemo(
+    () => (heroLayout?.chips?.length ? buildFromSaved(products, heroLayout) : buildDefaultSlots(products)),
+    [products, heroLayout],
+  );
 
   useEffect(() => {
     const orbit = orbitRef.current;

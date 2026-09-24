@@ -21,7 +21,7 @@ const HomeIcon = (
 );
 
 export default function Home() {
-  const { products, gallery, reviews: allReviews, settings } = useSiteData();
+  const { products, gallery, reviews: allReviews, settings, content } = useSiteData();
   const featured = products.filter((p) => p.featured).slice(0, 6);
   const reviews = pickApproved(allReviews).slice(0, 3);
   const variantCount = products.reduce((n, p) => n + (p.variants?.length ?? 0), 0);
@@ -37,18 +37,15 @@ export default function Home() {
           <div>
             <div className="hero-eyebrow">
               <span className="rule" />
-              BHARATPUR, CHITWAN · EST. 2063 B.S.
+              {content.heroEyebrow}
             </div>
             <h1>
-              <span className="line">Piping Nepal's</span>
+              <span className="line">{content.heroTitleLine1}</span>
               <span className="line">
-                growth, <span className="accent">since the ground up.</span>
+                <span className="accent">{content.heroTitleLine2}</span>
               </span>
             </h1>
-            <p className="hero-sub">
-              HDPE, PVC and CPVC pipes, fittings and water tanks manufactured in Chitwan and trusted
-              on sites across Nepal — from household plumbing to national infrastructure.
-            </p>
+            <p className="hero-sub">{content.heroSub}</p>
             <div className="hero-actions">
               <Link to="/products" className="btn btn-primary">
                 Explore our products

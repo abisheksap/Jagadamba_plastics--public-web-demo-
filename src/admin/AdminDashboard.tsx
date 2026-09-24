@@ -93,11 +93,17 @@ export default function AdminDashboard() {
           <Link to="/admin/products" className="admin-btn primary">
             Add a product
           </Link>
-          <Link to="/admin/products" className="admin-btn">
-            Toggle price visibility
+          <Link to="/admin/arranger" className="admin-btn">
+            Arrange home product group
+          </Link>
+          <Link to="/admin/content" className="admin-btn">
+            Edit hero &amp; leadership content
           </Link>
           <Link to="/admin/gallery" className="admin-btn">
             Upload gallery photo
+          </Link>
+          <Link to="/admin/activity" className="admin-btn">
+            View activity log
           </Link>
           <Link to="/admin/settings" className="admin-btn">
             Edit contact details

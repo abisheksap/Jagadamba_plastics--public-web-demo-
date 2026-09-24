@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { changePasscodeAnywhere, localAdminOps } from "../data/backend";
 import { useBackendMode, useSiteData } from "../data/SiteDataProvider";
+import { THEMES } from "../data/themes";
 import * as store from "../data/store";
 import type { SiteSettings } from "../data/types";
 
@@ -104,6 +105,35 @@ export default function AdminSettings() {
             it on other devices, or connect Convex in project settings to share everything live.
           </p>
         )}
+      </div>
+
+      <div className="admin-card">
+        <h3>Appearance — site theme</h3>
+        <p className="pill-note" style={{ marginBottom: 12 }}>
+          Applies to the whole website instantly. Saved with your settings.
+        </p>
+        <div className="theme-grid">
+          {THEMES.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              className={`theme-option${(form.theme ?? "deep-ocean") === t.id ? " active" : ""}`}
+              onClick={() => setForm({ ...form, theme: t.id })}
+            >
+              <span className="sw" aria-hidden="true">
+                <i style={{ background: t.swatch.bg }} />
+                <i style={{ background: t.swatch.accent }} />
+                <i style={{ background: t.swatch.cta }} />
+              </span>
+              <span>
+                <span className="t-name">{t.name}</span>
+                <span className="t-desc" style={{ display: "block" }}>
+                  {t.description}
+                </span>
+              </span>
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="admin-card">

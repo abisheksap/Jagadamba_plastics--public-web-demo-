@@ -4,7 +4,15 @@
 // store so the site keeps working standalone.
 import { convexEnabled, getConvexClient } from "./convexClient";
 import * as local from "./store";
-import type { Enquiry, ProductVariant, Review, SiteData } from "./types";
+import type {
+  ActivityEntry,
+  Enquiry,
+  HeroChipLayout,
+  ProductVariant,
+  Review,
+  SiteContent,
+  SiteData,
+} from "./types";
 import { api } from "../convex/_generated/api";
 
 export const backendMode: "convex" | "local" = convexEnabled ? "convex" : "local";
@@ -77,6 +85,9 @@ export interface AdminOps {
   setEnquiryStatus(id: string, status: Enquiry["status"]): Promise<void>;
   deleteEnquiry(id: string): Promise<void>;
   updateSettings(s: SiteData["settings"]): Promise<void>;
+  updateContent(c: SiteContent): Promise<void>;
+  saveHeroLayout(l: HeroChipLayout): Promise<void>;
+  clearHeroLayout(): Promise<void>;
   changePasscode(current: string, next: string): Promise<boolean>;
   uploadImage(file: File): Promise<{ url: string; storageId?: string }>;
 }
@@ -112,6 +123,15 @@ export const localAdminOps: AdminOps = {
   },
   async updateSettings(s) {
     local.updateSettings(s);
+  },
+  async updateContent(c) {
+    local.updateContent(c);
+  },
+  async saveHeroLayout(l) {
+    local.saveHeroLayout(l);
+  },
+  async clearHeroLayout() {
+    local.clearHeroLayout();
   },
   async changePasscode(current, next) {
     const { changePasscode } = await import("./adminAuth");
@@ -187,8 +207,18 @@ export function convexAdminOps(passcode: string): AdminOps {
         youtube: s.youtube,
         showPrices: s.showPrices,
         priceListDate: s.priceListDate,
+        theme: s.theme,
         passcode,
       });
+    },
+    async updateContent(c) {
+      await client.mutation(api.site.updateContent, { content: c as any, passcode });
+    },
+    async saveHeroLayout(l) {
+      await client.mutation(api.site.saveHeroLayout, { layout: l as any, passcode });
+    },
+    async clearHeroLayout() {
+      await client.mutation(api.site.clearHeroLayout, { passcode });
     },
     async changePasscode(current, next) {
       await client.mutation(api.site.changePasscode, { current, next });
@@ -210,4 +240,27 @@ export function convexAdminOps(passcode: string): AdminOps {
       return { url, storageId };
     },
   };
+}
+
+/** Recent change-log entries (Convex when connected, local otherwise). */
+export async function fetchActivity(): Promise<ActivityEntry[]> {
+  if (convexEnabled) {
+    const client = getConvexClient();
+    if (client) {
+      try {
+        const rows = (await client.query(api.site.listActivity, {})) as Array<{
+          _id: string;
+          kind: ActivityEntry["kind"];
+          summary: string;
+          detail?: string;
+          byAdmin: boolean;
+          createdAt: number;
+        }>;
+        return rows.map((r) => ({ id: r._id, kind: r.kind, summary: r.summary, detail: r.detail, byAdmin: r.byAdmin, createdAt: r.createdAt }));
+      } catch {
+        return [];
+      }
+    }
+  }
+  return local.getSiteData().activity ?? [];
 }

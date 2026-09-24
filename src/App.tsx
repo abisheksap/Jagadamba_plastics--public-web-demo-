@@ -1,14 +1,18 @@
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { SiteDataProvider, useSiteData } from "./data/SiteDataProvider";
+import { useThemeApplier } from "./data/theme";
 import { Footer, Nav, ScrollTrack, TopBar } from "./components/SiteChrome";
 import { RequireAdmin } from "./admin/RequireAdmin";
 import AdminLayout from "./admin/AdminLayout";
 import AdminDashboard from "./admin/AdminDashboard";
 import AdminProducts from "./admin/AdminProducts";
+import AdminArranger from "./admin/AdminArranger";
+import AdminContent from "./admin/AdminContent";
 import AdminGallery from "./admin/AdminGallery";
 import AdminReviews from "./admin/AdminReviews";
 import AdminEnquiries from "./admin/AdminEnquiries";
+import AdminActivity from "./admin/AdminActivity";
 import AdminSettings from "./admin/AdminSettings";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -17,6 +21,12 @@ import Gallery from "./pages/Gallery";
 import Reviews from "./pages/Reviews";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+
+function ThemeRoot() {
+  const { settings } = useSiteData();
+  useThemeApplier(settings.theme);
+  return null;
+}
 
 function Chrome({ children }: { children: React.ReactNode }) {
   const location = useLocation();
@@ -56,6 +66,7 @@ function PublicRoutes() {
 export default function App() {
   return (
     <SiteDataProvider>
+      <ThemeRoot />
       <BrowserRouter>
         <Routes>
           <Route
@@ -75,9 +86,12 @@ export default function App() {
                 <AdminLayout>
                   <Routes>
                     <Route path="products" element={<AdminProducts />} />
+                    <Route path="arranger" element={<AdminArranger />} />
+                    <Route path="content" element={<AdminContent />} />
                     <Route path="gallery" element={<AdminGallery />} />
                     <Route path="reviews" element={<AdminReviews />} />
                     <Route path="enquiries" element={<AdminEnquiries />} />
+                    <Route path="activity" element={<AdminActivity />} />
                     <Route path="settings" element={<AdminSettings />} />
                     <Route index element={<AdminDashboard />} />
                     <Route path="*" element={<AdminDashboard />} />

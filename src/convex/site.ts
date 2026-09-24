@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import type { HeroChipLayout, SiteContent } from "../data/types";
 
 // ---------- pure-TS SHA-256 (works in Convex's isolated runtime) ----------
 
@@ -108,6 +109,23 @@ async function setSetting(ctx: any, key: string, value: any) {
   else await ctx.db.insert("settings", { key, value });
 }
 
+/** Append to the change log shown in Admin → Activity. */
+async function logActivity(
+  ctx: any,
+  kind: string,
+  summary: string,
+  detail?: string,
+  byAdmin = true,
+) {
+  await ctx.db.insert("activity", {
+    kind,
+    summary,
+    detail,
+    byAdmin,
+    createdAt: Date.now(),
+  });
+}
+
 // ---------- public reads ----------
 // Image fields resolve to a servable URL: uploaded files via storage,
 // everything else passes the stored path/URL through.
@@ -143,6 +161,29 @@ export const listGallery = query({
   },
 });
 
+export const getContent = query({
+  handler: async (ctx): Promise<SiteContent | null> => {
+    const rows = await ctx.db.query("siteContent").collect();
+    const found = rows.find((r: any) => r.key === "main");
+    return (found?.content as SiteContent) ?? null;
+  },
+});
+
+export const getHeroLayout = query({
+  handler: async (ctx): Promise<HeroChipLayout | null> => {
+    const rows = await ctx.db.query("heroLayout").collect();
+    const found = rows.find((r: any) => r.key === "main");
+    return (found?.layout as HeroChipLayout) ?? null;
+  },
+});
+
+export const listActivity = query({
+  handler: async (ctx) => {
+    const rows = await ctx.db.query("activity").collect();
+    return rows.sort((a: any, b: any) => b.createdAt - a.createdAt).slice(0, 200);
+  },
+});
+
 /** One-time seeding of the default catalog when the database is empty. */
 export const seedIfEmpty = mutation({
   args: {
@@ -150,6 +191,7 @@ export const seedIfEmpty = mutation({
     gallery: v.array(v.any()),
     reviews: v.array(v.any()),
     settings: v.array(v.any()),
+    content: v.optional(v.any()),
   },
   handler: async (ctx, args) => {
     const existing = await ctx.db.query("products").collect();
@@ -169,6 +211,13 @@ export const seedIfEmpty = mutation({
     for (const s of args.settings) {
       await setSetting(ctx, s.key, s.value);
     }
+    if (args.content) {
+      const rows = await ctx.db.query("siteContent").collect();
+      const found = rows.find((r: any) => r.key === "main");
+      if (found) await ctx.db.patch(found._id, { content: args.content });
+      else await ctx.db.insert("siteContent", { key: "main", content: args.content });
+    }
+    await logActivity(ctx, "admin", "Initial catalog seeded");
     return true;
   },
 });
@@ -218,6 +267,7 @@ export const getSettings = query({
       youtube: map.youtube ?? "https://www.youtube.com/@JagadambaPipeFittings",
       showPrices: map.showPrices ?? true,
       priceListDate: map.priceListDate ?? "2082/09/01",
+      theme: map.theme ?? "deep-ocean",
     };
   },
 });
@@ -232,11 +282,13 @@ export const submitEnquiry = mutation({
     message: v.string(),
   },
   handler: async (ctx, args) => {
-    return await ctx.db.insert("enquiries", {
+    const id = await ctx.db.insert("enquiries", {
       ...args,
       status: "new",
       createdAt: Date.now(),
     });
+    await logActivity(ctx, "enquiry", `Enquiry from ${args.name}`, args.interest, false);
+    return id;
   },
 });
 
@@ -248,11 +300,13 @@ export const submitReview = mutation({
     quote: v.string(),
   },
   handler: async (ctx, args) => {
-    return await ctx.db.insert("reviews", {
+    const id = await ctx.db.insert("reviews", {
       ...args,
       status: "pending",
       createdAt: Date.now(),
     });
+    await logActivity(ctx, "review", `Review submitted — ${args.name}`, `${args.rating}★`, false);
+    return id;
   },
 });
 
@@ -277,6 +331,7 @@ export const changePasscode = mutation({
     const found = all.find((a: any) => a.key === "passcode");
     if (found) await ctx.db.patch(found._id, { passcodeHash: hash });
     else await ctx.db.insert("admin", { key: "passcode", passcodeHash: hash });
+    await logActivity(ctx, "admin", "Admin passcode changed");
     return true;
   },
 });
@@ -312,9 +367,12 @@ export const upsertProduct = mutation({
     const { passcode: _p, id, ...rest } = args;
     if (id) {
       await ctx.db.patch(id, rest);
+      await logActivity(ctx, "product", `Product updated — ${args.name}`);
       return id;
     }
-    return await ctx.db.insert("products", rest);
+    const newId = await ctx.db.insert("products", rest);
+    await logActivity(ctx, "product", `Product added — ${args.name}`, args.category);
+    return newId;
   },
 });
 
@@ -322,7 +380,9 @@ export const deleteProduct = mutation({
   args: { id: v.id("products"), passcode: v.string() },
   handler: async (ctx, args) => {
     await assertAdmin(ctx, args.passcode);
+    const p = await ctx.db.get(args.id);
     await ctx.db.delete(args.id);
+    await logActivity(ctx, "product", `Product deleted — ${p?.name ?? args.id}`);
   },
 });
 
@@ -342,7 +402,14 @@ export const setProductVariants = mutation({
   },
   handler: async (ctx, args) => {
     await assertAdmin(ctx, args.passcode);
+    const p = await ctx.db.get(args.id);
     await ctx.db.patch(args.id, { variants: args.variants });
+    await logActivity(
+      ctx,
+      "product",
+      `Prices updated — ${p?.name ?? args.id}`,
+      `${args.variants.length} size/rate rows`,
+    );
     return true;
   },
 });
@@ -362,9 +429,12 @@ export const upsertGalleryItem = mutation({
     const { passcode: _p, id, ...rest } = args;
     if (id) {
       await ctx.db.patch(id, rest);
+      await logActivity(ctx, "gallery", `Gallery item updated — ${args.title}`);
       return id;
     }
-    return await ctx.db.insert("gallery", rest);
+    const newId = await ctx.db.insert("gallery", rest);
+    await logActivity(ctx, "gallery", `Gallery item added — ${args.title}`, args.kind);
+    return newId;
   },
 });
 
@@ -372,7 +442,9 @@ export const deleteGalleryItem = mutation({
   args: { id: v.id("gallery"), passcode: v.string() },
   handler: async (ctx, args) => {
     await assertAdmin(ctx, args.passcode);
+    const g = await ctx.db.get(args.id);
     await ctx.db.delete(args.id);
+    await logActivity(ctx, "gallery", `Gallery item deleted — ${g?.title ?? args.id}`);
   },
 });
 
@@ -380,9 +452,11 @@ export const setReviewStatus = mutation({
   args: { id: v.id("reviews"), status: v.string(), passcode: v.string() },
   handler: async (ctx, args) => {
     await assertAdmin(ctx, args.passcode);
+    const r = await ctx.db.get(args.id);
     await ctx.db.patch(args.id, {
       status: args.status as "pending" | "approved" | "rejected",
     });
+    await logActivity(ctx, "review", `Review ${args.status} — ${r?.name ?? args.id}`);
   },
 });
 
@@ -390,7 +464,9 @@ export const deleteReview = mutation({
   args: { id: v.id("reviews"), passcode: v.string() },
   handler: async (ctx, args) => {
     await assertAdmin(ctx, args.passcode);
+    const r = await ctx.db.get(args.id);
     await ctx.db.delete(args.id);
+    await logActivity(ctx, "review", `Review deleted — ${r?.name ?? args.id}`);
   },
 });
 
@@ -398,9 +474,11 @@ export const setEnquiryStatus = mutation({
   args: { id: v.id("enquiries"), status: v.string(), passcode: v.string() },
   handler: async (ctx, args) => {
     await assertAdmin(ctx, args.passcode);
+    const e = await ctx.db.get(args.id);
     await ctx.db.patch(args.id, {
       status: args.status as "new" | "read" | "archived",
     });
+    await logActivity(ctx, "enquiry", `Enquiry marked ${args.status} — ${e?.name ?? args.id}`);
   },
 });
 
@@ -408,7 +486,9 @@ export const deleteEnquiry = mutation({
   args: { id: v.id("enquiries"), passcode: v.string() },
   handler: async (ctx, args) => {
     await assertAdmin(ctx, args.passcode);
+    const e = await ctx.db.get(args.id);
     await ctx.db.delete(args.id);
+    await logActivity(ctx, "enquiry", `Enquiry deleted — ${e?.name ?? args.id}`);
   },
 });
 
@@ -422,14 +502,62 @@ export const updateSettings = mutation({
     youtube: v.string(),
     showPrices: v.boolean(),
     priceListDate: v.string(),
+    theme: v.optional(v.string()),
     passcode: v.string(),
   },
   handler: async (ctx, args) => {
     await assertAdmin(ctx, args.passcode);
     const { passcode: _p, ...rest } = args;
+    const theme = rest.theme;
+    delete rest.theme;
     for (const [key, value] of Object.entries(rest)) {
       await setSetting(ctx, key, value);
     }
+    if (theme !== undefined) await setSetting(ctx, "theme", theme);
+    await logActivity(ctx, "settings", "Contact & settings updated", theme ? `Theme → ${theme}` : undefined);
+    return true;
+  },
+});
+
+export const updateContent = mutation({
+  args: { content: v.any(), passcode: v.string() },
+  handler: async (ctx, args) => {
+    await assertAdmin(ctx, args.passcode);
+    const rows = await ctx.db.query("siteContent").collect();
+    const found = rows.find((r: any) => r.key === "main");
+    if (found) await ctx.db.patch(found._id, { content: args.content });
+    else await ctx.db.insert("siteContent", { key: "main", content: args.content });
+    await logActivity(ctx, "content", "Site content updated", "Hero / about / leadership copy");
+    return true;
+  },
+});
+
+export const saveHeroLayout = mutation({
+  args: { layout: v.any(), passcode: v.string() },
+  handler: async (ctx, args) => {
+    await assertAdmin(ctx, args.passcode);
+    const rows = await ctx.db.query("heroLayout").collect();
+    const found = rows.find((r: any) => r.key === "main");
+    const layout = { ...args.layout, updatedAt: Date.now() };
+    if (found) await ctx.db.patch(found._id, { layout });
+    else await ctx.db.insert("heroLayout", { key: "main", layout });
+    await logActivity(
+      ctx,
+      "layout",
+      "Home product group rearranged",
+      `${(args.layout as HeroChipLayout).chips?.length ?? 0} products placed`,
+    );
+    return true;
+  },
+});
+
+export const clearHeroLayout = mutation({
+  args: { passcode: v.string() },
+  handler: async (ctx, args) => {
+    await assertAdmin(ctx, args.passcode);
+    const rows = await ctx.db.query("heroLayout").collect();
+    for (const row of rows) await ctx.db.delete(row._id);
+    await logActivity(ctx, "layout", "Home product group reset", "Back to the default layout");
     return true;
   },
 });

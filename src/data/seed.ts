@@ -1,6 +1,6 @@
 // Seed data: the generated price-list catalog plus demo gallery/reviews.
 import type { GalleryItem, Review, SiteData } from "./types";
-import { DEFAULT_SETTINGS } from "./types";
+import { DEFAULT_CONTENT, DEFAULT_SETTINGS } from "./types";
 import { SEED_PRODUCTS } from "./seedCatalog";
 
 export { SEED_PRODUCTS };
@@ -10,26 +10,26 @@ export const SEED_GALLERY: GalleryItem[] = [
     id: "g-reel",
     title: "Product reel",
     kind: "video",
-    image: "/images/products-v2/hdpe-pipe.jpg",
+    image: "/images/products/hdpe-pipe-bundle.png",
     videoUrl: "https://www.youtube.com/@JagadambaPipeFittings",
   },
   {
     id: "g-site-bharatpur",
     title: "Site — Bharatpur",
     kind: "photo",
-    image: "/images/products-v2/green-tank.jpg",
+    image: "/images/products-v2/green-tank.png",
   },
   {
     id: "g-site-pokhara",
     title: "Site — Pokhara",
     kind: "photo",
-    image: "/images/products-v2/pvc-pipe-bundle.jpg",
+    image: "/images/products-v2/pvc-pipe-bundle.png",
   },
   {
     id: "g-factory-chitwan",
     title: "Factory — Chitwan",
     kind: "photo",
-    image: "/images/products-v2/ug-drainage-pipe.jpg",
+    image: "/images/products-v2/ug-drainage-pipe.png",
   },
 ];
 
@@ -75,5 +75,6 @@ export function buildSeedData(): SiteData {
     reviews: SEED_REVIEWS.map((r) => ({ ...r })),
     enquiries: [],
     settings: { ...DEFAULT_SETTINGS },
+    content: JSON.parse(JSON.stringify(DEFAULT_CONTENT)) as SiteData["content"],
   };
 }

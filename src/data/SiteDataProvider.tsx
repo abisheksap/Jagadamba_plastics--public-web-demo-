@@ -6,7 +6,8 @@ import { convexEnabled, getConvexClient } from "./convexClient";
 import * as local from "./store";
 import { buildSeedData } from "./seed";
 import { convexAdminOps, localAdminOps, type AdminOps } from "./backend";
-import type { SiteData } from "./types";
+import type { HeroChipLayout, SiteContent, SiteData } from "./types";
+import { DEFAULT_CONTENT } from "./types";
 
 export type BackendMode = "convex" | "local";
 
@@ -16,6 +17,8 @@ export interface ReadModel {
   reviews: SiteData["reviews"];
   enquiries: SiteData["enquiries"];
   settings: SiteData["settings"];
+  content: SiteContent;
+  heroLayout: HeroChipLayout | undefined;
   ready: boolean;
 }
 
@@ -46,7 +49,12 @@ function LocalModel(): ReadModel {
   useEffect(() => {
     return local.subscribe(() => setData({ ...local.getSiteData() }));
   }, []);
-  return { ...data, ready: true };
+  return {
+    ...data,
+    content: { ...DEFAULT_CONTENT, ...(data.content ?? {}) },
+    heroLayout: data.heroLayout,
+    ready: true,
+  };
 }
 
 /* ---------------- Convex model ---------------- */
@@ -57,13 +65,17 @@ function ConvexModel(): ReadModel {
   const reviews = useQuery(api.site.listAllReviews) as unknown as SiteData["reviews"] | undefined;
   const enquiries = useQuery(api.site.listEnquiries) as unknown as SiteData["enquiries"] | undefined;
   const settings = useQuery(api.site.getSettings) as unknown as SiteData["settings"] | undefined;
+  const content = useQuery(api.site.getContent) as unknown as SiteContent | null | undefined;
+  const heroLayout = useQuery(api.site.getHeroLayout) as unknown as HeroChipLayout | null | undefined;
 
   const ready =
     products !== undefined &&
     gallery !== undefined &&
     reviews !== undefined &&
     enquiries !== undefined &&
-    settings !== undefined;
+    settings !== undefined &&
+    content !== undefined &&
+    heroLayout !== undefined;
 
   const [seedDone, setSeedDone] = useState(false);
   useEffect(() => {
@@ -78,6 +90,7 @@ function ConvexModel(): ReadModel {
           gallery: seed.gallery,
           reviews: seed.reviews,
           settings: Object.entries(seed.settings).map(([key, value]) => ({ key, value })),
+          content: seed.content,
         })
         .catch(() => {});
     }
@@ -89,6 +102,8 @@ function ConvexModel(): ReadModel {
     reviews: reviews ?? [],
     enquiries: enquiries ?? [],
     settings: settings ?? buildSeedData().settings,
+    content: content ? { ...DEFAULT_CONTENT, ...content } : DEFAULT_CONTENT,
+    heroLayout: heroLayout ?? undefined,
     ready,
   };
 }

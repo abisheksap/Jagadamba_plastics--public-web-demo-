@@ -6,9 +6,12 @@ import { signOut } from "../data/adminAuth";
 const NAV = [
   { to: "/admin", label: "Dashboard", end: true },
   { to: "/admin/products", label: "Products" },
+  { to: "/admin/arranger", label: "Home group" },
+  { to: "/admin/content", label: "Content" },
   { to: "/admin/gallery", label: "Gallery" },
   { to: "/admin/reviews", label: "Reviews" },
   { to: "/admin/enquiries", label: "Enquiries" },
+  { to: "/admin/activity", label: "Activity log" },
   { to: "/admin/settings", label: "Settings" },
 ];
 

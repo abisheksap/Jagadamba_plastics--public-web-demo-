@@ -9,7 +9,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Pipe",
     tagline: "Hot & cold lines, SDR 11",
     description: "Chlorinated PVC pressure pipe for hot and cold water plumbing. Heat-resistant formulation rated for household and industrial hot-water lines.",
-    image: "/images/products-v2/cpvc-coupler.jpg",
+    image: "/images/products-v2/cpvc-coupler.png",
     specs: ["SDR 11 pressure rating", "Hot & cold water rated", "Solvent-weld joints", "Sizes 1/2\" to 2\""],
     variants: [
       { id: "v1", size: "15mm \u00b7 1/2\" \u00b7 SDR 11", spec: "SDR 11", price: 475.0 },
@@ -28,7 +28,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Step down cleanly",
     description: "Reducing bush to step pipe sizes down within a socket joint.",
-    image: "/images/products-v2/cpvc-reducer-bush.jpg",
+    image: "/images/products-v2/cpvc-reducer-bush.png",
     specs: ["Solvent-weld sockets", "All standard reductions"],
     variants: [
       { id: "v1", size: "3/4\"x1/2\"", price: 16.0, packing: "Packing: 1000 pcs" },
@@ -54,7 +54,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Join two sizes",
     description: "Reducing coupler joining two different CPVC pipe sizes in-line.",
-    image: "/images/products-v2/cpvc-coupler-plain.jpg",
+    image: "/images/products-v2/cpvc-coupler-plain.png",
     specs: ["In-line reduction", "Solvent-weld sockets"],
     variants: [
       { id: "v1", size: "3/4\"x1/2\"", price: 35.0, packing: "Packing: 600 pcs" },
@@ -80,7 +80,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Branch to smaller lines",
     description: "Tee with a reduced branch for stepping main lines down to fixture branches.",
-    image: "/images/products-v2/cpvc-reducing-tee.jpg",
+    image: "/images/products-v2/cpvc-reducing-tee.png",
     specs: ["Reduced branch outlet", "Heat resistant"],
     variants: [
       { id: "v1", size: "Combo #1", price: 62.0, packing: "Packing: 300 pcs" },
@@ -104,7 +104,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Brass outlet branch",
     description: "Tee with brass female thread \u2014 a metal-safe outlet for mixer and tap connections.",
-    image: "/images/products-v2/cpvc-fta-plastic.jpg",
+    image: "/images/products-v2/cpvc-fta-plastic.png",
     specs: ["Brass threaded outlet", "Metal-to-plastic transition"],
     variants: [
       { id: "v1", size: "15 \u00b7 1/2\" \u00b7 Brass Threaded", spec: "Brass Threaded", price: 155.0, packing: "Packing: 250 pcs" },
@@ -124,7 +124,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Metal meets plastic",
     description: "Male brass threaded adapter for joining CPVC lines to threaded metal fittings.",
-    image: "/images/products-v2/cpvc-mta-brass.jpg",
+    image: "/images/products-v2/cpvc-mta-brass.png",
     specs: ["Brass thread insert", "Pressure-tight seal"],
     variants: [
       { id: "v1", size: "15 \u00b7 1/2\" \u00b7 Brass Threaded", spec: "Brass Threaded", price: 198.0, packing: "Packing: 400 pcs" },
@@ -145,7 +145,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Join runs cleanly",
     description: "Plain coupler joining two equal CPVC pipe sizes with precision-molded sockets.",
-    image: "/images/products-v2/cpvc-coupler.jpg",
+    image: "/images/products-v2/cpvc-coupler.png",
     specs: ["Uniform wall thickness", "Precision sockets"],
     variants: [
       { id: "v1", size: "15 \u00b7 1/2\"", price: 15.0, packing: "Packing: 1000 pcs" },
@@ -164,7 +164,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Close lines safely",
     description: "End cap sealing CPVC line ends for testing or future extension.",
-    image: "/images/products-v2/cpvc-end-cap.jpg",
+    image: "/images/products-v2/cpvc-end-cap.png",
     specs: ["Pressure-tight seal", "All standard sizes"],
     variants: [
       { id: "v1", size: "15 \u00b7 1/2\"", price: 17.0, packing: "Packing: 1200 pcs" },
@@ -183,7 +183,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Female thread transition",
     description: "Female threaded adapter (FTA) for tap and fixture connections on CPVC lines.",
-    image: "/images/products-v2/cpvc-fta.jpg",
+    image: "/images/products-v2/cpvc-fta.png",
     specs: ["Plastic thread", "Solvent-weld spigot"],
     variants: [
       { id: "v1", size: "15 \u00b7 1/2\"", price: 30.0, packing: "Packing: 500 pcs" },
@@ -202,7 +202,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Plastic-thread transition",
     description: "Male threaded adapter (MTA) with molded plastic thread for fixture connections.",
-    image: "/images/products-v2/cpvc-male-adapter-plastic.jpg",
+    image: "/images/products-v2/cpvc-male-adapter-plastic.png",
     specs: ["Molded plastic thread", "Solvent-weld spigot"],
     variants: [
       { id: "v1", size: "15 \u00b7 1/2\"", price: 23.0, packing: "Packing: 400 pcs" },
@@ -221,7 +221,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Gentle hot-line turn",
     description: "45\u00b0 CPVC elbow for gentler direction changes with low pressure loss.",
-    image: "/images/products-v2/cpvc-elbow-45.jpg",
+    image: "/images/products-v2/cpvc-elbow-45.png",
     specs: ["45\u00b0 turn", "Low pressure loss"],
     variants: [
       { id: "v1", size: "15 \u00b7 1/2\"", price: 20.0, packing: "Packing: 500 pcs" },
@@ -240,7 +240,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Tank outlet thread",
     description: "Nipple for tank outlets \u2014 threaded connection from storage to CPVC lines.",
-    image: "/images/products-v2/cpvc-tank-nipple.jpg",
+    image: "/images/products-v2/cpvc-tank-nipple.png",
     specs: ["Threaded both ends", "Tank-rated"],
     variants: [
       { id: "v1", size: "15 \u00b7 1/2\"", price: 140.0, packing: "Packing: 250 pcs" },
@@ -259,7 +259,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "The classic branch",
     description: "Equal tee branching a CPVC main into an equal-sized line.",
-    image: "/images/products-v2/cpvc-tee.jpg",
+    image: "/images/products-v2/cpvc-tee.png",
     specs: ["Equal outlets", "Heat resistant"],
     variants: [
       { id: "v1", size: "15 \u00b7 1/2\"", price: 28.0, packing: "Packing: 400 pcs" },
@@ -278,7 +278,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Serviceable joints",
     description: "Union fitting that lets hot-water lines be opened for service without cutting.",
-    image: "/images/products-v2/cpvc-union.jpg",
+    image: "/images/products-v2/cpvc-union.png",
     specs: ["Re-openable joint", "Service friendly"],
     variants: [
       { id: "v1", size: "15 \u00b7 1/2\"", price: 170.0, packing: "Packing: 180 pcs" },
@@ -297,7 +297,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Full-flow control",
     description: "CPVC ball valve for positive on/off control of hot and cold lines.",
-    image: "/images/products-v2/cpvc-ball-valve.jpg",
+    image: "/images/products-v2/cpvc-ball-valve.png",
     specs: ["Quarter-turn operation", "Full-bore flow"],
     variants: [
       { id: "v1", size: "15 \u00b7 1/2\"", price: 300.0, packing: "Packing: 150 pcs" },
@@ -316,7 +316,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Hold lines tight",
     description: "Clamp-style clip securing CPVC pipe runs to walls and structures.",
-    image: "/images/products-v2/cpvc-pipe-clip.jpg",
+    image: "/images/products-v2/cpvc-pipe-clip.png",
     specs: ["Rust-resistant metal", "Sizes 1/2\" to 1\""],
     variants: [
       { id: "v1", size: "15 \u00b7 1/2\"", price: 15.0, packing: "Packing: 1000 pcs" },
@@ -335,7 +335,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Hot-water corner piece",
     description: "90\u00b0 elbow for sharp direction changes on hot-water lines.",
-    image: "/images/products-v2/cpvc-elbow-90.jpg",
+    image: "/images/products-v2/cpvc-elbow-90.png",
     specs: ["90\u00b0 turn", "Solvent-weld sockets"],
     variants: [
       { id: "v1", size: "3/4\"x1/2\"", price: 39.0, packing: "Packing: 400 pcs" },
@@ -355,7 +355,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Brass corner outlet",
     description: "Elbow with brass female thread for angled tap and mixer connections.",
-    image: "/images/products-v2/cpvc-female-elbow-brass.jpg",
+    image: "/images/products-v2/cpvc-female-elbow-brass.png",
     specs: ["Brass thread outlet", "Heat resistant"],
     variants: [
       { id: "v1", size: "3/4\"x1/2\" \u00b7 Brass", spec: "Brass", price: 140.0, packing: "Packing: 200 pcs" },
@@ -375,7 +375,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Brass female adapter",
     description: "Brass-insert FTA for durable fixture connections on CPVC lines.",
-    image: "/images/products-v2/cpvc-fta.jpg",
+    image: "/images/products-v2/cpvc-fta.png",
     specs: ["Brass insert", "Pressure-tight"],
     variants: [
       { id: "v1", size: "15 \u00b7 1/2\" \u00b7 Brass", spec: "Brass", price: 220.0, packing: "Packing: 200 pcs" },
@@ -397,7 +397,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Plug a socket",
     description: "End plug closing a socket opening for testing or capping.",
-    image: "/images/products-v2/cpvc-end-plug.jpg",
+    image: "/images/products-v2/cpvc-end-plug.png",
     specs: ["Push-fit plug", "All standard sizes"],
     variants: [
       { id: "v1", size: "15 \u00b7 1/2\"", price: 20.0, packing: "Packing: 300 pcs" },
@@ -412,7 +412,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Weld it right",
     description: "Solvent cement formulated for CPVC \u2014 strong, fast-setting joints.",
-    image: "/images/products-v2/cpvc-socket-coupler.jpg",
+    image: "/images/products-v2/cpvc-socket-coupler.png",
     specs: ["CPVC formulation", "Fast setting"],
     variants: [
       { id: "v1", size: "20 ml", spec: "20 ml", price: 144.0, packing: "Packing: 50 pcs" },
@@ -429,7 +429,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Hex-grip adapter",
     description: "Hex-bodied brass FTA for wrench-tight fixture connections.",
-    image: "/images/products-v2/cpvc-fta.jpg",
+    image: "/images/products-v2/cpvc-fta.png",
     specs: ["Hex brass body", "Wrench friendly"],
     variants: [
       { id: "v1", size: "3/4\"x1/2\" \u00b7 Brass", spec: "Brass", price: 360.0, packing: "Packing: 200 pcs" },
@@ -449,7 +449,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Hex-grip adapter",
     description: "Hex-bodied brass MTA for wrench-tight CPVC-to-metal joints.",
-    image: "/images/products-v2/cpvc-mta-brass.jpg",
+    image: "/images/products-v2/cpvc-mta-brass.png",
     specs: ["Hex brass body", "Wrench friendly"],
     variants: [
       { id: "v1", size: "3/4\"x1/2\" \u00b7 Brass", spec: "Brass", price: 285.0, packing: "Packing: 200 pcs" },
@@ -469,7 +469,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Triple brass outlet",
     description: "Triple-outlet elbow with brass threads for clustered fixture connections.",
-    image: "/images/products-v2/cpvc-triple-female-elbow.jpg",
+    image: "/images/products-v2/cpvc-triple-female-elbow.png",
     specs: ["Three outlets", "Brass threads"],
     variants: [
       { id: "v1", size: "40 \u00b7 1\"x1/2\" \u00b7 Brass", spec: "Brass", price: 805.0, packing: "Packing: 50 pcs" },
@@ -484,7 +484,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Hidden control point",
     description: "Concealed valve body for flush-mounted control points in hot-water plumbing.",
-    image: "/images/products-v2/cpvc-concealed-valve.jpg",
+    image: "/images/products-v2/cpvc-concealed-valve.png",
     specs: ["Flush-mount body", "Serviceable cartridge"],
     variants: [
       { id: "v1", size: "25 \u00b7 1\"", price: 2550.0, packing: "Packing: 20 pcs" },
@@ -499,7 +499,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Four-way branch",
     description: "Cross tee for four-way branching on CPVC distribution.",
-    image: "/images/products-v2/cpvc-cross-tee-b.jpg",
+    image: "/images/products-v2/cpvc-cross-tee-b.png",
     specs: ["Four-way branch", "Uniform sockets"],
     variants: [
       { id: "v1", size: "15 \u00b7 1/2\"", price: 60.0, packing: "Packing: 300 pcs" },
@@ -515,7 +515,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Cross lines cleanly",
     description: "Step-over bend letting two CPVC lines cross without clashing.",
-    image: "/images/products-v2/cpvc-step-over-bend.jpg",
+    image: "/images/products-v2/cpvc-step-over-bend.png",
     specs: ["Offset geometry", "Solvent-weld"],
     variants: [
       { id: "v1", size: "15 \u00b7 1/2\"", price: 140.0, packing: "Packing: 125 pcs" },
@@ -531,7 +531,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Double brass outlet",
     description: "Double-outlet elbow with brass threads for twin fixture connections.",
-    image: "/images/products-v2/cpvc-triple-female-elbow.jpg",
+    image: "/images/products-v2/cpvc-triple-female-elbow.png",
     specs: ["Two outlets", "Brass threads"],
     variants: [
       { id: "v1", size: "3/4\"x1/2\" \u00b7 Brass", spec: "Brass", price: 410.0, packing: "Packing: 55 pcs" },
@@ -545,7 +545,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Join runs cleanly",
     description: "Coupler joining two equal PVC pipe sizes with a precision-molded socket.",
-    image: "/images/products-v2/pvc-coupler.jpg",
+    image: "/images/products-v2/pvc-coupler.png",
     specs: ["Socket & threaded types", "Uniform wall thickness"],
     variants: [
       { id: "v1", size: "50mm", price: 58.0, packing: "Packing: 250 pcs" },
@@ -563,7 +563,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Weld it right",
     description: "Solvent cement for PVC pressure and drainage joints \u2014 strong, fast-setting bonds.",
-    image: "/images/products-v2/pvc-socket-plug.jpg",
+    image: "/images/products-v2/pvc-socket-plug.png",
     specs: ["Fast setting", "Drainage & pressure rated"],
     variants: [
       { id: "v1", size: "100 ml", spec: "100 ml", price: 145.0, packing: "Packing: 24 pcs" },
@@ -580,7 +580,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Branch with access",
     description: "Single tee with removable door for drain access and cleaning.",
-    image: "/images/products-v2/pvc-single-tee-door.jpg",
+    image: "/images/products-v2/pvc-single-tee-door.png",
     specs: ["Access door", "Drainage rated"],
     variants: [
       { id: "v1", size: "75mm", price: 380.0, packing: "Packing: 24 pcs" },
@@ -596,7 +596,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Sweep to smaller",
     description: "Reducer Y combining a 45\u00b0 sweep with a size reduction for drainage lines.",
-    image: "/images/products-v2/pvc-single-y.jpg",
+    image: "/images/products-v2/pvc-single-y.png",
     specs: ["Sweep geometry", "Low clog risk"],
     variants: [
       { id: "v1", size: "160x110mm", price: 2000.0, packing: "Packing: 6 pcs" },
@@ -610,7 +610,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Branch twice",
     description: "Double-tee fitting branching twice, precision-molded for a tight seal.",
-    image: "/images/products-v2/pvc-double-tee.jpg",
+    image: "/images/products-v2/pvc-double-tee.png",
     specs: ["Precision molded", "Tight solvent weld"],
     variants: [
       { id: "v1", size: "75mm", price: 622.0, packing: "Packing: 20 pcs" },
@@ -625,7 +625,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Two branches + access",
     description: "Double tee with access door for two branches plus maintenance entry.",
-    image: "/images/products-v2/swr-double-tee-door.jpg",
+    image: "/images/products-v2/swr-double-tee-door.png",
     specs: ["Access door", "Two branches"],
     variants: [
       { id: "v1", size: "75mm", price: 883.0, packing: "Packing: 24 pcs" },
@@ -640,7 +640,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Plug a socket",
     description: "Socket plug closing PVC socket ends for testing or capping.",
-    image: "/images/products-v2/pvc-socket-plug.jpg",
+    image: "/images/products-v2/pvc-socket-plug.png",
     specs: ["Push-fit plug", "All standard sizes"],
     variants: [
       { id: "v1", size: "75mm", price: 127.0, packing: "Packing: 150 pcs" },
@@ -655,7 +655,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Multi-floor seal",
     description: "Multi-floor trap holding a deep water seal for multi-storey drainage.",
-    image: "/images/products-v2/pvc-multi-floor-trap.jpg",
+    image: "/images/products-v2/pvc-multi-floor-trap.png",
     specs: ["Deep water seal", "Odour-proof"],
     variants: [
       { id: "v1", size: "110mm", price: 730.0, packing: "Packing: 30 pcs" },
@@ -669,7 +669,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Floor drain tile",
     description: "Square floor tile with jali grate for terrace and bathroom drains.",
-    image: "/images/products-v2/pvc-square-tile-jali.jpg",
+    image: "/images/products-v2/pvc-square-tile-jali.png",
     specs: ["Jali grate", "Flush-fit tile"],
     variants: [
       { id: "v1", size: "110mm", price: 180.0, packing: "Packing: 100 pcs" },
@@ -683,7 +683,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Clean floor finish",
     description: "Square floor tile covering floor drains with a clean finish.",
-    image: "/images/products-v2/pvc-square-tile-jali.jpg",
+    image: "/images/products-v2/pvc-square-tile-jali.png",
     specs: ["Flush-fit tile", "Easy removal"],
     variants: [
       { id: "v1", size: "110mm", price: 135.0, packing: "Packing: 100 pcs" },
@@ -697,7 +697,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "The classic branch",
     description: "Single-tee branch fitting for standard PVC pressure and drainage lines.",
-    image: "/images/products-v2/pvc-single-tee.jpg",
+    image: "/images/products-v2/pvc-single-tee.png",
     specs: ["Equal & reducing sizes", "Pressure rated"],
     variants: [
       { id: "v1", size: "50mm", price: 110.0, packing: "Packing: 100 pcs" },
@@ -715,7 +715,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Hold lines tight",
     description: "Metal clip securing PVC pipe runs to walls and structures.",
-    image: "/images/products-v2/pvc-metal-clip.jpg",
+    image: "/images/products-v2/pvc-metal-clip.png",
     specs: ["Rust-resistant", "Quick install"],
     variants: [
       { id: "v1", size: "50mm", price: 50.0, packing: "Packing: 100 pcs" },
@@ -732,7 +732,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Access for rodding",
     description: "Cleaning pipe providing rodding access along drainage runs.",
-    image: "/images/products-v2/pvc-cleaning-pipe.jpg",
+    image: "/images/products-v2/pvc-cleaning-pipe.png",
     specs: ["Rodding access", "Drainage rated"],
     variants: [
       { id: "v1", size: "75mm", price: 285.0, packing: "Packing: 36 pcs" },
@@ -747,7 +747,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Step down in-line",
     description: "Reducer coupler stepping drainage lines down to smaller sizes in-line.",
-    image: "/images/products-v2/pvc-coupler.jpg",
+    image: "/images/products-v2/pvc-coupler.png",
     specs: ["In-line reduction", "Solvent weld"],
     variants: [
       { id: "v1", size: "75x50mm", price: 110.0, packing: "Packing: 100 pcs" },
@@ -764,7 +764,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Turns without turbulence",
     description: "45\u00b0 bend for smooth directional changes without flow turbulence.",
-    image: "/images/products-v2/pvc-bend-45.jpg",
+    image: "/images/products-v2/pvc-bend-45.png",
     specs: ["45\u00b0 turn", "Low turbulence bore"],
     variants: [
       { id: "v1", size: "50mm", price: 65.0, packing: "Packing: 200 pcs" },
@@ -782,7 +782,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Branch to smaller",
     description: "Reducing tee branching a drainage main down to smaller lines.",
-    image: "/images/products-v2/pvc-reducer-tee.jpg",
+    image: "/images/products-v2/pvc-reducer-tee.png",
     specs: ["Reduced branch", "Solvent weld"],
     variants: [
       { id: "v1", size: "110x75mm", price: 526.0, packing: "Packing: 27 pcs" },
@@ -797,7 +797,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Close lines safely",
     description: "End cap closing PVC lines safely for testing or future extension.",
-    image: "/images/products-v2/pvc-end-cap.jpg",
+    image: "/images/products-v2/pvc-end-cap.png",
     specs: ["Pressure-tight seal", "All standard sizes"],
     variants: [
       { id: "v1", size: "50mm", price: 52.0, packing: "Packing: 500 pcs" },
@@ -812,7 +812,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Seal out odours",
     description: "P-trap waste fitting holding a water seal to keep drain odours out.",
-    image: "/images/products-v2/pvc-p-trap.jpg",
+    image: "/images/products-v2/pvc-p-trap.png",
     specs: ["Odour-sealing water trap", "Self-cleaning curve"],
     variants: [
       { id: "v1", size: "110x110mm", price: 920.0, packing: "Packing: 15 pcs" },
@@ -826,7 +826,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Bend with access",
     description: "87.5\u00b0 bend with removable door for drainage access at direction changes.",
-    image: "/images/products-v2/pvc-bend-87-5-b.jpg",
+    image: "/images/products-v2/pvc-bend-87-5-b.png",
     specs: ["Access door", "87.5\u00b0 turn"],
     variants: [
       { id: "v1", size: "75mm", price: 270.0, packing: "Packing: 40 pcs" },
@@ -842,7 +842,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Near-sweep turn",
     description: "87.5\u00b0 near-sweep bend for efficient drainage direction changes.",
-    image: "/images/products-v2/pvc-bend-87-5.jpg",
+    image: "/images/products-v2/pvc-bend-87-5.png",
     specs: ["87.5\u00b0 turn", "Self-scouring flow"],
     variants: [
       { id: "v1", size: "50mm", price: 68.0, packing: "Packing: 150 pcs" },
@@ -860,7 +860,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Sweep branch",
     description: "Single-Y sweep branch for smooth, low-clog drainage branching.",
-    image: "/images/products-v2/pvc-single-y.jpg",
+    image: "/images/products-v2/pvc-single-y.png",
     specs: ["45\u00b0 sweep branch", "Low clog risk"],
     variants: [
       { id: "v1", size: "75mm", price: 368.0, packing: "Packing: 24 pcs" },
@@ -876,7 +876,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Sweep + access",
     description: "Single-Y with access door combining a smooth sweep with cleaning entry.",
-    image: "/images/products-v2/pvc-single-y-door.jpg",
+    image: "/images/products-v2/pvc-single-y-door.png",
     specs: ["Access door", "45\u00b0 sweep"],
     variants: [
       { id: "v1", size: "75mm", price: 441.0, packing: "Packing: 18 pcs" },
@@ -891,7 +891,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Cap the stack",
     description: "Vent cowl capping drainage stacks against rain and debris ingress.",
-    image: "/images/products-v2/pvc-round-jali.jpg",
+    image: "/images/products-v2/pvc-round-jali.png",
     specs: ["Rain-shielded cap", "Debris guard"],
     variants: [
       { id: "v1", size: "75mm", price: 72.0, packing: "Packing: 300 pcs" },
@@ -906,7 +906,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Grate it shut",
     description: "Round jali grate covering floor drains while water passes freely.",
-    image: "/images/products-v2/pvc-round-jali.jpg",
+    image: "/images/products-v2/pvc-round-jali.png",
     specs: ["Round grate", "Debris guard"],
     variants: [
       { id: "v1", size: "110mm", price: 45.0, packing: "Packing: 200 pcs" },
@@ -920,7 +920,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Fittings",
     tagline: "Floor-drain seal",
     description: "Nahani trap sealing floor drains against odours and insects.",
-    image: "/images/products-v2/pvc-nahani-trap.jpg",
+    image: "/images/products-v2/pvc-nahani-trap.png",
     specs: ["Floor-drain water seal", "Insect barrier"],
     variants: [
       { id: "v1", size: "110x75mm", price: 422.0, packing: "Packing: 26 pcs" },
@@ -934,7 +934,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Pipe",
     tagline: "Nationwide workhorse",
     description: "NS-certified uPVC pressure pipe to NS 206/046 \u2014 the standard for plumbing and distribution lines.",
-    image: "/images/products-v2/pvc-pipe-bundle.jpg",
+    image: "/images/products-v2/pvc-pipe-bundle.png",
     specs: ["NS 206/046 certified", "Smooth bore, high flow", "Sizes 50\u2013200mm"],
     variants: [
       { id: "v1", size: "50mm \u00b7 6 kgf/cm\u00b2", spec: "6 kgf/cm\u00b2", price: 180.0 },
@@ -958,7 +958,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Pipe",
     tagline: "Value grade, same care",
     description: "Commercial-grade uPVC pressure pipe for cost-sensitive projects that still demand clean, drink-safe lines.",
-    image: "/images/products-v2/pvc-pipe-bundle.jpg",
+    image: "/images/products-v2/pvc-pipe-bundle.png",
     specs: ["Economy grade", "Sizes 50\u2013200mm", "Pressure rated 2.5\u201310 kgf/cm\u00b2"],
     variants: [
       { id: "v1", size: "50mm \u00b7 6 kgf/cm\u00b2", spec: "6 kgf/cm\u00b2", price: 160.0 },
@@ -985,7 +985,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Pipe",
     tagline: "Deep-well strength",
     description: "High-strength borewell casing to BS:3505 in Class C, D and E \u2014 built to withstand deep-set groundwater extraction conditions.",
-    image: "/images/products-v2/borewell-casing-pipe.jpg",
+    image: "/images/products-v2/borewell-casing-pipe.png",
     specs: ["BS:3505 standard", "Class C / D / E", "Sizes 1\u00bd\"\u20136\""],
     variants: [
       { id: "v1", size: "48mm \u00b7 1-1/2\"", price: 202.0 },
@@ -1010,7 +1010,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "PVC Pipe",
     tagline: "Underground, under load",
     description: "Ring-stiffness SN4 and SN8 underground drainage pipe engineered for long-term structural load and corrosion resistance.",
-    image: "/images/products-v2/ug-drainage-pipe.jpg",
+    image: "/images/products-v2/ug-drainage-pipe.png",
     specs: ["SN4 & SN8 stiffness", "Corrosion proof", "Sizes 2\u00bd\"\u20138\""],
     variants: [
       { id: "v1", size: "75mm \u00b7 2-1/2\"", price: 440.0 },
@@ -1150,7 +1150,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "Water Tank",
     tagline: "Rooftop storage, built for the sun",
     description: "Threaded water storage tanks in three grades \u2014 Standard, Heavy and Extra Heavy \u2014 with 200L/300L and colour options. Rate shown is per litre of capacity.",
-    image: "/images/products-v2/green-tank.jpg",
+    image: "/images/products-v2/green-tank.png",
     specs: ["UV-stabilised layers", "Food-grade interior", "Threaded lids", "Standard / Heavy / Extra Heavy"],
     variants: [
       { id: "v1", size: "Rate per litre", spec: "Rate per litre", price: 10.0 },
@@ -1167,7 +1167,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "Water Tank",
     tagline: "Algae-free dark interior",
     description: "Dark-body storage tank that blocks sunlight to keep stored water cool and algae-free. Rate shown is per litre of capacity.",
-    image: "/images/products-v2/black-tank.jpg",
+    image: "/images/products-v2/black-tank.png",
     specs: ["Sunlight-blocking body", "Food-grade interior", "Multi-layer construction", "Colour-tank grade"],
     variants: [
       { id: "v1", size: "Rate per litre", spec: "Rate per litre", price: 10.0 },
@@ -1184,7 +1184,7 @@ export const SEED_PRODUCTS: Product[] = [
     category: "CPVC Fittings",
     tagline: "Fit it like a pro",
     description: "Pressure testing machine and CPVC pipe cutters for clean, professional installations.",
-    image: "/images/products-v2/cpvc-elbow-90.jpg",
+    image: "/images/products-v2/cpvc-elbow-90.png",
     specs: ["Pressure testing machine", "Cutters for 36mm & 63mm"],
     variants: [
       { id: "v1", size: "Standard", price: 13450.0 },

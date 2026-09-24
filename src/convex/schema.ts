@@ -9,6 +9,45 @@ const variant = v.object({
   packing: v.optional(v.string()),
 });
 
+const leader = v.object({
+  id: v.string(),
+  role: v.string(),
+  name: v.string(),
+  nepaliRole: v.string(),
+  message: v.string(),
+  initials: v.string(),
+  image: v.optional(v.string()),
+  imageStorageId: v.optional(v.id("_storage")),
+});
+
+const siteContent = v.object({
+  heroEyebrow: v.string(),
+  heroTitleLine1: v.string(),
+  heroTitleLine2: v.string(),
+  heroSub: v.string(),
+  aboutStory1: v.string(),
+  aboutStory2: v.string(),
+  aboutTitle: v.string(),
+  aboutSub: v.string(),
+  leaders: v.array(leader),
+});
+
+const heroChip = v.object({
+  productId: v.string(),
+  bx: v.number(),
+  by: v.number(),
+  z: v.number(),
+  w: v.optional(v.number()),
+  h: v.optional(v.number()),
+});
+
+const heroChipLayout = v.object({
+  version: v.number(),
+  chips: v.array(heroChip),
+  updatedAt: v.optional(v.number()),
+  updatedBy: v.optional(v.string()),
+});
+
 export default defineSchema({
   products: defineTable({
     name: v.string(),
@@ -55,4 +94,19 @@ export default defineSchema({
     key: v.string(),
     passcodeHash: v.string(),
   }),
+  siteContent: defineTable({
+    key: v.literal("main"),
+    content: siteContent,
+  }),
+  heroLayout: defineTable({
+    key: v.literal("main"),
+    layout: heroChipLayout,
+  }),
+  activity: defineTable({
+    kind: v.string(),
+    summary: v.string(),
+    detail: v.optional(v.string()),
+    byAdmin: v.boolean(),
+    createdAt: v.number(),
+  }).index("by_created", ["createdAt"]),
 });
