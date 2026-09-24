@@ -1,0 +1,720 @@
+<!-- ================================================================
+     ARRANGE CONTROLLER — DEVELOPMENT ONLY
+     Paste this block immediately before </body>.
+     Dormant unless the page is opened with ?arrange=1
+     Delete the whole block before the site goes public.
+     ================================================================ -->
+<script>
+(function () {
+  'use strict';
+
+  if (!/[?&]arrange=1/.test(location.search)) return;
+
+  var STAGE = 'showcaseOrbit';   // container holding the .orbit-chip nodes
+  var HOST  = 'heroVisual';      // scaled wrapper around the stage
+  var LSKEY = 'jpi.arrange.hero.v1';
+
+  var stage, host, chips = [], sel = [], undoStack = [];
+  var step = 1, snap = 0, showOverlap = true, alignToStage = false;
+  var drag = null;
+
+  /* ---------------------------------------------------------- styles */
+  function injectCSS() {
+    var css = [
+      /* neutralise the live hover-scatter + hover transforms while arranging */
+      'body.arr-on .showcase-orbit.scattered .orbit-chip{',
+      '  transform:translate(-50%,-50%) translate(var(--bx),var(--by)) !important;',
+      '  z-index:var(--z) !important;}',
+      'body.arr-on .orbit-chip{transition:none !important;}',
+      'body.arr-on .orbit-chip:hover .chip-disc{transform:none !important;}',
+      'body.arr-on .orbit-chip:hover img{filter:drop-shadow(0 12px 16px rgba(1,24,46,.5)) !important;}',
+      'body.arr-on .orbit-chip .chip-label{opacity:0 !important;}',
+      'body.arr-on .stardust,body.arr-on .scatter-caption{opacity:0 !important;}',
+      'body.arr-on #preloader{display:none !important;}',
+
+      /* selection + collision affordances */
+      '.orbit-chip.arr-sel{outline:2px solid #E02129;outline-offset:3px;}',
+      '.orbit-chip.arr-sel::after{content:attr(data-arr-n);position:absolute;top:-9px;left:-9px;',
+      '  width:18px;height:18px;border-radius:50%;background:#E02129;color:#fff;',
+      '  font:600 10px/18px "IBM Plex Mono",monospace;text-align:center;z-index:40;}',
+      '.orbit-chip.arr-hit{outline:2px dashed #E8A317;outline-offset:3px;}',
+      '.orbit-chip.arr-sel.arr-hit{outline:2px solid #E02129;box-shadow:0 0 0 5px rgba(232,163,23,.45);}',
+
+      /* stage guides */
+      '.arr-guide{position:absolute;pointer-events:none;z-index:30;background:rgba(224,33,41,.45);}',
+      '.arr-guide.v{left:50%;top:0;bottom:0;width:1px;}',
+      '.arr-guide.h{left:0;right:0;top:52%;height:1px;}',
+
+      /* panel */
+      '#arrPanel{position:fixed;top:0;right:0;bottom:0;width:322px;z-index:99999;',
+      '  background:#06182B;color:#D4DCE4;font:12px/1.45 "IBM Plex Mono",ui-monospace,monospace;',
+      '  border-left:1px solid rgba(93,138,184,.35);display:flex;flex-direction:column;',
+      '  box-shadow:-12px 0 34px rgba(0,0,0,.45);}',
+      '#arrPanel.min{width:150px;}',
+      '#arrPanel.min .arr-body{display:none;}',
+      '#arrPanel *{box-sizing:border-box;}',
+      '.arr-head{display:flex;align-items:center;justify-content:space-between;gap:8px;',
+      '  padding:11px 13px;border-bottom:1px solid rgba(93,138,184,.3);background:#03111F;}',
+      '.arr-head b{font-size:12px;font-weight:600;color:#fff;letter-spacing:.02em;}',
+      '.arr-head small{color:#7E93A8;font-size:10.5px;}',
+      '.arr-body{overflow-y:auto;padding:0 13px 18px;flex:1;}',
+      '.arr-sec{padding:12px 0;border-bottom:1px solid rgba(93,138,184,.18);}',
+      '.arr-sec:last-child{border-bottom:0;}',
+      '.arr-sec>h4{margin:0 0 8px;font:600 10.5px/1 "IBM Plex Mono",monospace;color:#6E8CA8;',
+      '  letter-spacing:.08em;text-transform:uppercase;}',
+      '.arr-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}',
+      '.arr-row+.arr-row{margin-top:6px;}',
+      '#arrPanel button{font:12px/1 "IBM Plex Mono",monospace;color:#D4DCE4;background:#0D2840;',
+      '  border:1px solid rgba(93,138,184,.35);border-radius:3px;padding:6px 8px;cursor:pointer;}',
+      '#arrPanel button:hover{background:#164066;color:#fff;}',
+      '#arrPanel button:focus-visible{outline:2px solid #E02129;outline-offset:1px;}',
+      '#arrPanel button.on{background:#E02129;border-color:#E02129;color:#fff;}',
+      '#arrPanel button.wide{flex:1;}',
+      '#arrPanel button.tiny{padding:5px 6px;min-width:30px;}',
+      '#arrPanel input[type=number],#arrPanel input[type=text]{width:62px;background:#03111F;',
+      '  border:1px solid rgba(93,138,184,.35);border-radius:3px;color:#fff;padding:5px 6px;',
+      '  font:12px/1 "IBM Plex Mono",monospace;}',
+      '#arrPanel label{color:#93A9BE;font-size:11px;display:inline-flex;align-items:center;gap:5px;}',
+      '.arr-list{max-height:212px;overflow-y:auto;border:1px solid rgba(93,138,184,.22);border-radius:3px;}',
+      '.arr-item{display:flex;align-items:center;gap:7px;padding:5px 8px;cursor:pointer;',
+      '  border-bottom:1px solid rgba(93,138,184,.12);}',
+      '.arr-item:last-child{border-bottom:0;}',
+      '.arr-item:hover{background:#0D2840;}',
+      '.arr-item.sel{background:#1B2F3F;color:#fff;box-shadow:inset 3px 0 0 #E02129;}',
+      '.arr-item i{font-style:normal;color:#5C7691;min-width:20px;font-size:10.5px;}',
+      '.arr-item span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}',
+      '.arr-item em{font-style:normal;color:#6E8CA8;font-size:10.5px;}',
+      '.arr-out{width:100%;height:118px;background:#03111F;color:#9FD0E8;border:1px solid rgba(93,138,184,.3);',
+      '  border-radius:3px;font:10.5px/1.4 "IBM Plex Mono",monospace;padding:7px;resize:vertical;}',
+      '.arr-note{color:#7E93A8;font-size:10.5px;margin-top:7px;}',
+      '.arr-flag{position:fixed;left:14px;bottom:14px;z-index:99999;background:#E02129;color:#fff;',
+      '  font:600 10.5px/1 "IBM Plex Mono",monospace;padding:7px 10px;border-radius:3px;letter-spacing:.06em;}'
+    ].join('\n');
+    var s = document.createElement('style');
+    s.id = 'arrStyles';
+    s.textContent = css;
+    document.head.appendChild(s);
+  }
+
+  /* ---------------------------------------------------------- model */
+  function num(el, prop) {
+    return parseFloat(el.style.getPropertyValue(prop)) || 0;
+  }
+
+  function build() {
+    chips = Array.prototype.slice.call(stage.querySelectorAll('.orbit-chip')).map(function (el, i) {
+      var lab = el.querySelector('.chip-label');
+      return {
+        i: i,
+        el: el,
+        label: lab ? lab.textContent.trim() : 'chip ' + i,
+        cls: el.className.replace('orbit-chip', '').trim(),
+        bx: num(el, '--bx'),
+        by: num(el, '--by'),
+        z: num(el, '--z') || 1,
+        w: el.offsetWidth,
+        h: el.offsetHeight,
+        w0: el.offsetWidth,
+        h0: el.offsetHeight
+      };
+    });
+  }
+
+  function snapshot() {
+    return chips.map(function (c) { return { bx: c.bx, by: c.by, z: c.z, w: c.w, h: c.h }; });
+  }
+
+  function pushUndo() {
+    undoStack.push(snapshot());
+    if (undoStack.length > 60) undoStack.shift();
+  }
+
+  function undo() {
+    var s = undoStack.pop();
+    if (!s) return;
+    s.forEach(function (v, i) {
+      if (!chips[i]) return;
+      chips[i].bx = v.bx; chips[i].by = v.by; chips[i].z = v.z;
+      chips[i].w = v.w; chips[i].h = v.h;
+    });
+    apply();
+  }
+
+  /* --------------------------------------------------------- render */
+  function apply(skipSave) {
+    chips.forEach(function (c) {
+      c.el.style.setProperty('--bx', round(c.bx) + 'px');
+      c.el.style.setProperty('--by', round(c.by) + 'px');
+      c.el.style.setProperty('--z', c.z);
+      if (c.w !== c.w0) c.el.style.width = round(c.w) + 'px';
+      else c.el.style.removeProperty('width');
+      if (c.h !== c.h0) c.el.style.height = round(c.h) + 'px';
+      else c.el.style.removeProperty('height');
+      c.el.classList.toggle('arr-sel', sel.indexOf(c.i) !== -1);
+      c.el.setAttribute('data-arr-n', sel.indexOf(c.i) + 1);
+    });
+    markOverlaps();
+    paintList();
+    paintReadout();
+    if (!skipSave) save();
+  }
+
+  function round(n) { return Math.round(n * 10) / 10; }
+
+  function box(c) {
+    return { l: c.bx - c.w / 2, r: c.bx + c.w / 2, t: c.by - c.h / 2, b: c.by + c.h / 2 };
+  }
+
+  function markOverlaps() {
+    chips.forEach(function (c) { c.el.classList.remove('arr-hit'); });
+    if (!showOverlap) return;
+    for (var a = 0; a < chips.length; a++) {
+      for (var b = a + 1; b < chips.length; b++) {
+        var A = box(chips[a]), B = box(chips[b]);
+        if (A.l < B.r && B.l < A.r && A.t < B.b && B.t < A.b) {
+          chips[a].el.classList.add('arr-hit');
+          chips[b].el.classList.add('arr-hit');
+        }
+      }
+    }
+  }
+
+  /* ------------------------------------------------------ selection */
+  function selected() {
+    return sel.map(function (i) { return chips[i]; });
+  }
+
+  function select(i, additive) {
+    if (additive) {
+      var at = sel.indexOf(i);
+      if (at === -1) sel.push(i); else sel.splice(at, 1);
+    } else {
+      sel = [i];
+    }
+    apply(true);
+  }
+
+  function selectGroup(test) {
+    sel = chips.filter(test).map(function (c) { return c.i; });
+    apply(true);
+  }
+
+  /* ----------------------------------------------------- operations */
+  function nudge(dx, dy) {
+    var s = selected();
+    if (!s.length) return;
+    pushUndo();
+    s.forEach(function (c) { c.bx += dx; c.by += dy; });
+    apply();
+  }
+
+  function bounds(list) {
+    var B = null;
+    list.forEach(function (c) {
+      var b = box(c);
+      if (!B) B = { l: b.l, r: b.r, t: b.t, b: b.b };
+      else {
+        B.l = Math.min(B.l, b.l); B.r = Math.max(B.r, b.r);
+        B.t = Math.min(B.t, b.t); B.b = Math.max(B.b, b.b);
+      }
+    });
+    return B;
+  }
+
+  function stageBounds() {
+    // stage-local coords: origin is the chip anchor point (left 50%, top 52%)
+    var w = stage.offsetWidth, h = stage.offsetHeight;
+    return { l: -w / 2, r: w / 2, t: -h * 0.52, b: h * 0.48 };
+  }
+
+  function align(mode) {
+    var s = selected();
+    if (!s.length) return;
+    var B = (alignToStage || s.length === 1) ? stageBounds() : bounds(s);
+    pushUndo();
+    s.forEach(function (c) {
+      if (mode === 'l') c.bx = B.l + c.w / 2;
+      if (mode === 'cx') c.bx = (B.l + B.r) / 2;
+      if (mode === 'r') c.bx = B.r - c.w / 2;
+      if (mode === 't') c.by = B.t + c.h / 2;
+      if (mode === 'cy') c.by = (B.t + B.b) / 2;
+      if (mode === 'b') c.by = B.b - c.h / 2;
+    });
+    apply();
+  }
+
+  // gap can be negative — that is the overlap control
+  function spaceOut(axis, gap) {
+    var s = selected();
+    if (s.length < 2) return;
+    pushUndo();
+    var horiz = axis === 'x';
+    s.sort(function (a, b) { return horiz ? a.bx - b.bx : a.by - b.by; });
+    var cursor = horiz ? box(s[0]).l : box(s[0]).t;
+    s.forEach(function (c) {
+      if (horiz) { c.bx = cursor + c.w / 2; cursor += c.w + gap; }
+      else { c.by = cursor + c.h / 2; cursor += c.h + gap; }
+    });
+    apply();
+  }
+
+  function distribute(axis) {
+    var s = selected();
+    if (s.length < 3) return;
+    var horiz = axis === 'x';
+    s.sort(function (a, b) { return horiz ? a.bx - b.bx : a.by - b.by; });
+    var B = bounds(s);
+    var span = horiz ? (B.r - B.l) : (B.b - B.t);
+    var used = s.reduce(function (t, c) { return t + (horiz ? c.w : c.h); }, 0);
+    spaceOut(axis, (span - used) / (s.length - 1));
+  }
+
+  // pull toward / push away from the selection centroid — "closeness"
+  function spread(factor) {
+    var s = selected();
+    if (s.length < 2) return;
+    pushUndo();
+    var cx = s.reduce(function (t, c) { return t + c.bx; }, 0) / s.length;
+    var cy = s.reduce(function (t, c) { return t + c.by; }, 0) / s.length;
+    s.forEach(function (c) {
+      c.bx = cx + (c.bx - cx) * factor;
+      c.by = cy + (c.by - cy) * factor;
+    });
+    apply();
+  }
+
+  function zOrder(mode) {
+    var s = selected();
+    if (!s.length) return;
+    pushUndo();
+    var all = chips.map(function (c) { return c.z; });
+    var lo = Math.min.apply(null, all), hi = Math.max.apply(null, all);
+    s.forEach(function (c) {
+      if (mode === 'front') c.z = hi + 1;
+      if (mode === 'back') c.z = lo - 1;
+      if (mode === 'up') c.z = c.z + 1;
+      if (mode === 'down') c.z = c.z - 1;
+    });
+    apply();
+  }
+
+  function resize(dw, dh) {
+    var s = selected();
+    if (!s.length) return;
+    pushUndo();
+    s.forEach(function (c) {
+      c.w = Math.max(12, c.w + dw);
+      c.h = Math.max(12, c.h + dh);
+    });
+    apply();
+  }
+
+  function resetSize() {
+    var s = selected();
+    if (!s.length) return;
+    pushUndo();
+    s.forEach(function (c) { c.w = c.w0; c.h = c.h0; });
+    apply();
+  }
+
+  /* --------------------------------------------------------- drag */
+  function scaleFactor() {
+    var r = host.getBoundingClientRect();
+    return host.offsetWidth ? (r.width / host.offsetWidth) : 1;
+  }
+
+  function onDown(e) {
+    var el = e.target.closest ? e.target.closest('.orbit-chip') : null;
+    if (!el || !stage.contains(el)) return;
+    var idx = chips.findIndex(function (c) { return c.el === el; });
+    if (idx === -1) return;
+    e.preventDefault();
+    if (sel.indexOf(idx) === -1) select(idx, e.shiftKey);
+    else if (e.shiftKey) { select(idx, true); return; }
+    pushUndo();
+    var k = scaleFactor();
+    drag = {
+      x: e.clientX, y: e.clientY, k: k,
+      start: selected().map(function (c) { return { c: c, bx: c.bx, by: c.by }; })
+    };
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+
+  function onMove(e) {
+    if (!drag) return;
+    var dx = (e.clientX - drag.x) / drag.k;
+    var dy = (e.clientY - drag.y) / drag.k;
+    drag.start.forEach(function (s) {
+      var bx = s.bx + dx, by = s.by + dy;
+      if (snap > 0) { bx = Math.round(bx / snap) * snap; by = Math.round(by / snap) * snap; }
+      s.c.bx = bx; s.c.by = by;
+    });
+    apply(true);
+  }
+
+  function onUp() {
+    drag = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+    save();
+  }
+
+  /* ------------------------------------------------- save / export */
+  function save() {
+    try {
+      localStorage.setItem(LSKEY, JSON.stringify(exportData()));
+    } catch (err) { /* private mode — export still works */ }
+  }
+
+  function restore() {
+    var raw;
+    try { raw = localStorage.getItem(LSKEY); } catch (err) { return; }
+    if (!raw) return;
+    var data;
+    try { data = JSON.parse(raw); } catch (err) { return; }
+    (data.chips || []).forEach(function (r) {
+      var c = chips[r.i];
+      if (!c || c.label !== r.label) return;
+      c.bx = r.bx; c.by = r.by; c.z = r.z;
+      if (r.w) c.w = r.w;
+      if (r.h) c.h = r.h;
+    });
+  }
+
+  function exportData() {
+    return {
+      target: '#showcaseOrbit .orbit-chip',
+      stage: { w: stage.offsetWidth, h: stage.offsetHeight, anchorTop: '52%' },
+      viewport: window.innerWidth,
+      saved: new Date().toISOString(),
+      chips: chips.map(function (c) {
+        var o = {
+          i: c.i, label: c.label, cls: c.cls,
+          bx: round(c.bx), by: round(c.by), z: c.z
+        };
+        if (c.w !== c.w0) o.w = round(c.w);
+        if (c.h !== c.h0) o.h = round(c.h);
+        return o;
+      })
+    };
+  }
+
+  function exportMarkup() {
+    return chips.map(function (c) {
+      var st = '--bx:' + round(c.bx) + 'px;--by:' + round(c.by) + 'px;--z:' + c.z + ';';
+      if (c.w !== c.w0) st += 'width:' + round(c.w) + 'px;';
+      if (c.h !== c.h0) st += 'height:' + round(c.h) + 'px;';
+      return '<div class="orbit-chip ' + c.cls + '" style="' + st + '">  <!-- ' + c.label + ' -->';
+    }).join('\n');
+  }
+
+  function copy(text, btn) {
+    var done = function () {
+      var t = btn.textContent;
+      btn.textContent = 'Copied';
+      setTimeout(function () { btn.textContent = t; }, 1200);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { fallback(text); done(); });
+    } else { fallback(text); done(); }
+  }
+
+  function fallback(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (err) {}
+    document.body.removeChild(ta);
+  }
+
+  function download() {
+    var blob = new Blob([JSON.stringify(exportData(), null, 2)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'hero-arrangement.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+  }
+
+  /* --------------------------------------------------------- panel */
+  var panel, listEl, outEl, readEl;
+
+  function btn(label, title, fn, cls) {
+    var b = document.createElement('button');
+    b.textContent = label;
+    if (title) b.title = title;
+    if (cls) b.className = cls;
+    b.addEventListener('click', fn);
+    return b;
+  }
+
+  function section(title) {
+    var s = document.createElement('div');
+    s.className = 'arr-sec';
+    if (title) {
+      var h = document.createElement('h4');
+      h.textContent = title;
+      s.appendChild(h);
+    }
+    return s;
+  }
+
+  function row(parent) {
+    var r = document.createElement('div');
+    r.className = 'arr-row';
+    parent.appendChild(r);
+    return r;
+  }
+
+  function buildPanel() {
+    panel = document.createElement('div');
+    panel.id = 'arrPanel';
+
+    var head = document.createElement('div');
+    head.className = 'arr-head';
+    var title = document.createElement('div');
+    title.innerHTML = '<b>Arrange</b><br><small>' + chips.length + ' products</small>';
+    head.appendChild(title);
+    var toggle = btn('Hide', 'Collapse the panel', function () {
+      panel.classList.toggle('min');
+      toggle.textContent = panel.classList.contains('min') ? 'Show' : 'Hide';
+    }, 'tiny');
+    head.appendChild(toggle);
+    panel.appendChild(head);
+
+    var body = document.createElement('div');
+    body.className = 'arr-body';
+    panel.appendChild(body);
+
+    /* -- products ------------------------------------------------- */
+    var sProd = section('Products');
+    listEl = document.createElement('div');
+    listEl.className = 'arr-list';
+    sProd.appendChild(listEl);
+    var rSel = row(sProd);
+    rSel.appendChild(btn('All', 'Select every product', function () { selectGroup(function () { return true; }); }, 'tiny'));
+    rSel.appendChild(btn('Tanks', '', function () { selectGroup(function (c) { return /chip-tank/.test(c.cls); }); }, 'tiny'));
+    rSel.appendChild(btn('Pipes', '', function () { selectGroup(function (c) { return /chip-pipe/.test(c.cls); }); }, 'tiny'));
+    rSel.appendChild(btn('Coil', '', function () { selectGroup(function (c) { return /chip-coil/.test(c.cls); }); }, 'tiny'));
+    rSel.appendChild(btn('Fittings', '', function () { selectGroup(function (c) { return /chip-round/.test(c.cls); }); }, 'tiny'));
+    rSel.appendChild(btn('None', 'Clear the selection', function () { sel = []; apply(true); }, 'tiny'));
+    body.appendChild(sProd);
+
+    /* -- move ------------------------------------------------------ */
+    var sMove = section('Move');
+    var rStep = row(sMove);
+    rStep.appendChild(document.createTextNode('Step'));
+    [1, 5, 10, 25].forEach(function (v) {
+      var b = btn(String(v), 'Nudge by ' + v + 'px', function () {
+        step = v;
+        Array.prototype.forEach.call(rStep.querySelectorAll('button'), function (x) {
+          x.classList.toggle('on', x.textContent === String(v));
+        });
+      }, 'tiny');
+      if (v === 1) b.classList.add('on');
+      rStep.appendChild(b);
+    });
+    var rPad = row(sMove);
+    rPad.appendChild(btn('←', 'Move left', function () { nudge(-step, 0); }, 'tiny'));
+    rPad.appendChild(btn('↑', 'Move up', function () { nudge(0, -step); }, 'tiny'));
+    rPad.appendChild(btn('↓', 'Move down', function () { nudge(0, step); }, 'tiny'));
+    rPad.appendChild(btn('→', 'Move right', function () { nudge(step, 0); }, 'tiny'));
+    var rSnap = row(sMove);
+    var lab = document.createElement('label');
+    lab.textContent = 'Snap to grid';
+    var inSnap = document.createElement('input');
+    inSnap.type = 'number'; inSnap.value = '0'; inSnap.min = '0'; inSnap.step = '1';
+    inSnap.addEventListener('input', function () { snap = parseFloat(inSnap.value) || 0; });
+    lab.appendChild(inSnap);
+    rSnap.appendChild(lab);
+    body.appendChild(sMove);
+
+    /* -- align ----------------------------------------------------- */
+    var sAlign = section('Align');
+    var rA1 = row(sAlign);
+    rA1.appendChild(btn('Left', 'Align left edges', function () { align('l'); }, 'tiny'));
+    rA1.appendChild(btn('Centre', 'Align horizontal centres', function () { align('cx'); }, 'tiny'));
+    rA1.appendChild(btn('Right', 'Align right edges', function () { align('r'); }, 'tiny'));
+    var rA2 = row(sAlign);
+    rA2.appendChild(btn('Top', 'Align top edges', function () { align('t'); }, 'tiny'));
+    rA2.appendChild(btn('Middle', 'Align vertical centres', function () { align('cy'); }, 'tiny'));
+    rA2.appendChild(btn('Bottom', 'Align bottom edges', function () { align('b'); }, 'tiny'));
+    var rA3 = row(sAlign);
+    var bStage = btn('Align to stage', 'Align against the hero box instead of the selection', function () {
+      alignToStage = !alignToStage;
+      bStage.classList.toggle('on', alignToStage);
+    }, 'tiny wide');
+    rA3.appendChild(bStage);
+    body.appendChild(sAlign);
+
+    /* -- spacing --------------------------------------------------- */
+    var sGap = section('Spacing and overlap');
+    var rG1 = row(sGap);
+    var labGap = document.createElement('label');
+    labGap.textContent = 'Gap';
+    var inGap = document.createElement('input');
+    inGap.type = 'number'; inGap.value = '12'; inGap.step = '1';
+    labGap.appendChild(inGap);
+    rG1.appendChild(labGap);
+    rG1.appendChild(btn('Across', 'Space the selection horizontally by this gap', function () {
+      spaceOut('x', parseFloat(inGap.value) || 0);
+    }, 'tiny'));
+    rG1.appendChild(btn('Down', 'Space the selection vertically by this gap', function () {
+      spaceOut('y', parseFloat(inGap.value) || 0);
+    }, 'tiny'));
+    var rG2 = row(sGap);
+    rG2.appendChild(btn('Even across', 'Equal gaps, outer two stay put', function () { distribute('x'); }, 'tiny'));
+    rG2.appendChild(btn('Even down', 'Equal gaps, outer two stay put', function () { distribute('y'); }, 'tiny'));
+    var rG3 = row(sGap);
+    rG3.appendChild(btn('Closer', 'Pull the selection toward its centre', function () { spread(0.92); }, 'tiny'));
+    rG3.appendChild(btn('Wider', 'Push the selection out from its centre', function () { spread(1.08); }, 'tiny'));
+    var bOv = btn('Overlaps', 'Outline products whose boxes intersect', function () {
+      showOverlap = !showOverlap;
+      bOv.classList.toggle('on', showOverlap);
+      markOverlaps();
+    }, 'tiny');
+    bOv.classList.add('on');
+    rG3.appendChild(bOv);
+    var note = document.createElement('div');
+    note.className = 'arr-note';
+    note.textContent = 'A negative gap overlaps the products on purpose. Amber outlines mark every intersecting pair.';
+    sGap.appendChild(note);
+    body.appendChild(sGap);
+
+    /* -- depth ----------------------------------------------------- */
+    var sZ = section('Depth');
+    var rZ = row(sZ);
+    rZ.appendChild(btn('Bring up', 'One layer forward', function () { zOrder('up'); }, 'tiny'));
+    rZ.appendChild(btn('Send down', 'One layer back', function () { zOrder('down'); }, 'tiny'));
+    rZ.appendChild(btn('To front', '', function () { zOrder('front'); }, 'tiny'));
+    rZ.appendChild(btn('To back', '', function () { zOrder('back'); }, 'tiny'));
+    body.appendChild(sZ);
+
+    /* -- size ------------------------------------------------------ */
+    var sSize = section('Size');
+    var rS = row(sSize);
+    rS.appendChild(btn('W −', '', function () { resize(-4, 0); }, 'tiny'));
+    rS.appendChild(btn('W +', '', function () { resize(4, 0); }, 'tiny'));
+    rS.appendChild(btn('H −', '', function () { resize(0, -4); }, 'tiny'));
+    rS.appendChild(btn('H +', '', function () { resize(0, 4); }, 'tiny'));
+    rS.appendChild(btn('Both −', '', function () { resize(-4, -5); }, 'tiny'));
+    rS.appendChild(btn('Both +', '', function () { resize(4, 5); }, 'tiny'));
+    rS.appendChild(btn('Reset', 'Back to the stylesheet size', resetSize, 'tiny'));
+    body.appendChild(sSize);
+
+    /* -- export ---------------------------------------------------- */
+    var sOut = section('Export');
+    var rO1 = row(sOut);
+    rO1.appendChild(btn('Copy JSON', 'Copy the layout data', function (e) {
+      copy(JSON.stringify(exportData(), null, 2), e.currentTarget);
+    }, 'tiny'));
+    rO1.appendChild(btn('Copy markup', 'Copy ready-to-paste opening tags', function (e) {
+      copy(exportMarkup(), e.currentTarget);
+    }, 'tiny'));
+    rO1.appendChild(btn('Download', 'Save hero-arrangement.json', download, 'tiny'));
+    outEl = document.createElement('textarea');
+    outEl.className = 'arr-out';
+    outEl.readOnly = true;
+    sOut.appendChild(outEl);
+    var rO2 = row(sOut);
+    rO2.appendChild(btn('Undo', 'Ctrl+Z', undo, 'tiny'));
+    rO2.appendChild(btn('Revert all', 'Discard saved edits and reload the original positions', function () {
+      if (!confirm('Discard every saved change and reload the original layout?')) return;
+      try { localStorage.removeItem(LSKEY); } catch (err) {}
+      location.reload();
+    }, 'tiny'));
+    body.appendChild(sOut);
+
+    readEl = document.createElement('div');
+    readEl.className = 'arr-note';
+    body.appendChild(readEl);
+
+    document.body.appendChild(panel);
+
+    var flag = document.createElement('div');
+    flag.className = 'arr-flag';
+    flag.textContent = 'ARRANGE MODE — drag products, arrows nudge, [ ] change depth';
+    document.body.appendChild(flag);
+
+    var g1 = document.createElement('div'); g1.className = 'arr-guide v';
+    var g2 = document.createElement('div'); g2.className = 'arr-guide h';
+    stage.appendChild(g1); stage.appendChild(g2);
+  }
+
+  function paintList() {
+    if (!listEl) return;
+    if (listEl.childElementCount !== chips.length) {
+      listEl.innerHTML = '';
+      chips.forEach(function (c) {
+        var it = document.createElement('div');
+        it.className = 'arr-item';
+        it.dataset.i = c.i;
+        it.innerHTML = '<i></i><span></span><em></em>';
+        it.addEventListener('click', function (e) { select(c.i, e.shiftKey || e.metaKey || e.ctrlKey); });
+        listEl.appendChild(it);
+      });
+    }
+    Array.prototype.forEach.call(listEl.children, function (it, i) {
+      var c = chips[i];
+      var on = sel.indexOf(c.i) !== -1;
+      it.classList.toggle('sel', on);
+      it.querySelector('i').textContent = on ? String(sel.indexOf(c.i) + 1) : '·';
+      it.querySelector('span').textContent = c.label;
+      it.querySelector('em').textContent = round(c.bx) + ',' + round(c.by) + ' z' + c.z;
+    });
+  }
+
+  function paintReadout() {
+    if (outEl) outEl.value = exportMarkup();
+    if (!readEl) return;
+    var s = selected();
+    if (!s.length) { readEl.textContent = 'Nothing selected. Click a product on the page or in the list. Shift-click adds to the selection.'; return; }
+    if (s.length === 1) {
+      var c = s[0];
+      readEl.textContent = c.label + ' — x ' + round(c.bx) + ', y ' + round(c.by) + ', depth ' + c.z + ', ' + round(c.w) + '×' + round(c.h);
+    } else {
+      var B = bounds(s);
+      readEl.textContent = s.length + ' selected — bounds ' + round(B.r - B.l) + '×' + round(B.b - B.t) + ' px';
+    }
+  }
+
+  /* ------------------------------------------------------ keyboard */
+  function onKey(e) {
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+    var big = e.shiftKey ? 10 : 1;
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); nudge(-step * big, 0); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); nudge(step * big, 0); }
+    if (e.key === 'ArrowUp')    { e.preventDefault(); nudge(0, -step * big); }
+    if (e.key === 'ArrowDown')  { e.preventDefault(); nudge(0, step * big); }
+    if (e.key === ']') zOrder('up');
+    if (e.key === '[') zOrder('down');
+    if (e.key === 'Escape') { sel = []; apply(true); }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); undo(); }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a') { e.preventDefault(); selectGroup(function () { return true; }); }
+  }
+
+  /* ----------------------------------------------------------- init */
+  function init() {
+    stage = document.getElementById(STAGE);
+    host = document.getElementById(HOST) || stage;
+    if (!stage) { console.warn('[arrange] #' + STAGE + ' not found'); return; }
+    injectCSS();
+    document.body.classList.add('arr-on', 'site-ready');
+    build();
+    restore();
+    buildPanel();
+    apply(true);
+    stage.addEventListener('pointerdown', onDown);
+    document.addEventListener('keydown', onKey);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<!-- ================= END ARRANGE CONTROLLER ================= -->
