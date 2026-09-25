@@ -63,7 +63,7 @@ function StatCard({ stat, active }: { stat: FutureStat; active: boolean }) {
     <div className="glass-card stat-card-future">
       <div className="num mono">
         {stat.prefix}
-        {value.toLocaleString()}
+        {String(value)}
         {stat.suffix && <span className="suffix">{stat.suffix}</span>}
       </div>
       <div className="lbl">{stat.label}</div>

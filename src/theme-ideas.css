@@ -875,3 +875,17 @@ h1, h2, h3, h4 {
     flex-direction: column;
   }
 }
+
+/* ---------- fixed chrome seam and readable stat values ---------- */
+[data-theme] .nav {
+  top: 46px;
+}
+[data-theme] .stat-card-future .num {
+  color: var(--text-hi);
+}
+[data-theme] .stat-card-future .num .suffix {
+  color: var(--red);
+}
+[data-theme] .stat-card-future .lbl {
+  color: var(--text-mid);
+}
