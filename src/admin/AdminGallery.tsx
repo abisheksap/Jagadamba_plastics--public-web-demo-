@@ -4,11 +4,12 @@ import { adminCredential } from "../data/adminAuth";
 import { useAdminOps, useSiteData } from "../data/SiteDataProvider";
 import type { GalleryItem } from "../data/types";
 
-const blank = (): GalleryItem => ({
+const blank = (sortOrder = 10): GalleryItem => ({
   id: "",
   title: "",
   kind: "photo",
   image: "",
+  sortOrder,
 });
 
 export default function AdminGallery() {
@@ -21,7 +22,8 @@ export default function AdminGallery() {
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const startNew = () => {
-    setEditing(blank());
+    const nextOrder = gallery.length ? Math.max(...gallery.map((g) => g.sortOrder ?? 0)) + 10 : 10;
+    setEditing(blank(nextOrder));
     setVideoUrl("");
   };
 
@@ -117,6 +119,18 @@ export default function AdminGallery() {
                   />
                 </div>
                 <div className="admin-field">
+                  <label htmlFor="g-order">POSITION</label>
+                  <input
+                    id="g-order"
+                    type="number"
+                    min={0}
+                    step={1}
+                    value={editing.sortOrder ?? 0}
+                    onChange={(e) => setEditing({ ...editing, sortOrder: Number(e.target.value) || 0 })}
+                  />
+                  <div className="hint">Lower numbers appear first on the public gallery.</div>
+                </div>
+                <div className="admin-field">
                   <label htmlFor="g-kind">TYPE</label>
                   <select
                     id="g-kind"
@@ -184,13 +198,16 @@ export default function AdminGallery() {
               <thead>
                 <tr>
                   <th></th>
+                  <th>POSITION</th>
                   <th>TITLE</th>
                   <th>TYPE</th>
                   <th>ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
-                {gallery.map((g) => (
+                {[...gallery]
+                  .sort((a, b) => (a.sortOrder ?? 999) - (b.sortOrder ?? 999))
+                  .map((g) => (
                   <tr key={g.id}>
                     <td>
                       <img
@@ -198,6 +215,9 @@ export default function AdminGallery() {
                         alt=""
                         style={{ width: 64, height: 44, objectFit: "cover", borderRadius: 3 }}
                       />
+                    </td>
+                    <td>
+                      <span className="mono">{g.sortOrder ?? "—"}</span>
                     </td>
                     <td>
                       <strong style={{ color: "#fff" }}>{g.title}</strong>
@@ -218,7 +238,7 @@ export default function AdminGallery() {
                       </div>
                     </td>
                   </tr>
-                ))}
+                  ))}
               </tbody>
             </table>
           </div>

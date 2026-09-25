@@ -95,6 +95,7 @@ export interface GalleryItem {
   image: string; // URL — /images/... , a data: URL (local mode) or a Convex storage URL
   imageStorageId?: string; // set when the image lives in Convex file storage
   videoUrl?: string; // optional link out for video tiles
+  sortOrder?: number; // lower numbers appear first; legacy items fall back to their array order
 }
 
 export type ReviewStatus = "pending" | "approved" | "rejected";
