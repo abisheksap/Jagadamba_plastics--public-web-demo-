@@ -375,7 +375,7 @@
   font-family: var(--font-head);
   font-size: 21px;
 }
-.catalog-family-card > span:not(.catalog-family-eyebrow) {
+.catalog-family-card > span:not(.catalog-family-eyebrow):not(.catalog-family-image) {
   position: relative;
   z-index: 1;
   color: var(--text-mid);
@@ -483,4 +483,27 @@
     animation: none !important;
     transition-duration: 0.01ms !important;
   }
+}
+.catalog-family-image {
+  position: absolute !important;
+  z-index: 0 !important;
+  top: 18px;
+  right: 18px;
+  width: 112px;
+  height: 94px;
+  pointer-events: none;
+  opacity: 0.92;
+  transform: rotate(-7deg) scale(0.96);
+  transition: transform 0.45s var(--ease), opacity 0.3s ease;
+}
+.catalog-family-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 14px rgba(0, 0, 0, 0.52));
+}
+.catalog-family-card:hover .catalog-family-image,
+.catalog-family-card.active .catalog-family-image {
+  opacity: 1;
+  transform: rotate(0deg) scale(1.04);
 }
