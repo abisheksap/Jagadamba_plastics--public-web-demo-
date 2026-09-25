@@ -1,9 +1,9 @@
 // Site theme catalog. Each theme maps to a `data-theme` attribute on <html>
 // and a matching CSS variable override block at the end of src/index.css.
 //
-// The first two lean on the Jagadamba logo colors (navy blue + red), the rest
-// are original looks chosen for range: water-green, futuristic violet,
-// industrial mono, heritage amber and bright ice.
+// The default public identity is derived directly from the Jagadamba logo:
+// deep navy, signature red and a warm cream paper base. Alternate concepts
+// remain available from Admin → Settings without changing the brand default.
 
 export interface ThemeDef {
   id: string;
@@ -13,15 +13,9 @@ export interface ThemeDef {
   swatch: { bg: string; accent: string; cta: string };
 }
 
-export const DEFAULT_THEME = "deep-ocean";
+export const DEFAULT_THEME = "heritage-cream";
 
 export const THEMES: ThemeDef[] = [
-  {
-    id: "deep-ocean",
-    name: "Deep Ocean",
-    description: "Logo navy with cyan glow — the signature look.",
-    swatch: { bg: "#04122b", accent: "#59d2e8", cta: "#e02129" },
-  },
   {
     id: "brand-crimson",
     name: "Brand Crimson",
@@ -76,6 +70,12 @@ export const THEMES: ThemeDef[] = [
     description: "Earthy charcoal, clay and saffron for a grounded industrial character.",
     swatch: { bg: "#21150f", accent: "#f0a35b", cta: "#d85d3f" },
   },
+  {
+    id: "heritage-cream",
+    name: "Heritage Cream",
+    description: "Warm paper, ink blue and the signature Jagadamba red.",
+    swatch: { bg: "#f4eddd", accent: "#064c92", cta: "#e02129" },
+  },
 ];
 
 export function isValidTheme(id: unknown): id is string {
@@ -83,5 +83,7 @@ export function isValidTheme(id: unknown): id is string {
 }
 
 export function getTheme(id: string): ThemeDef {
-  return THEMES.find((t) => t.id === id) ?? THEMES[0];
+  return THEMES.find((theme) => theme.id === id)
+    ?? THEMES.find((theme) => theme.id === DEFAULT_THEME)
+    ?? THEMES[0];
 }
