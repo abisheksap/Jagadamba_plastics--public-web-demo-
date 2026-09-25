@@ -194,6 +194,8 @@ export default function AdminArranger() {
     });
   };
 
+  const scaleBoth = (delta: number) => resize(delta, delta);
+
   const resetSize = () => {
     patchSelected(() => ({ w: undefined, h: undefined }));
   };
@@ -226,7 +228,7 @@ export default function AdminArranger() {
 
   /* ---------- drag ---------- */
   const onChipPointerDown = (e: ReactPointerEvent, chip: WorkChip) => {
-    if ((e.target as HTMLElement).closest(".disc") === null && e.button !== 0) return;
+    if (e.button !== 0) return;
     e.preventDefault();
     e.stopPropagation();
     if (!selected.includes(chip.productId)) toggleSelect(chip.productId, e.shiftKey);
@@ -424,9 +426,12 @@ export default function AdminArranger() {
                 onPointerMove={onChipPointerMove}
                 onPointerUp={onChipPointerUp}
               >
-                <div className="disc">
-                  <img src={c.product.image} alt={c.product.name} />
-                </div>
+                <img
+                  className="arrange-product-image"
+                  src={c.product.image}
+                  alt={c.product.name}
+                  draggable={false}
+                />
                 <span className="chip-name">{c.product.name}</span>
               </div>
             );
@@ -495,14 +500,20 @@ export default function AdminArranger() {
               Down
             </button>
             <button className="admin-btn small" onClick={() => zOrder("front")}>
-              Front
+              Bring front
             </button>
             <button className="admin-btn small" onClick={() => zOrder("back")}>
-              Back
+              Send back
             </button>
             <span className="pill-note" style={{ marginLeft: 8 }}>
               SIZE
             </span>
+            <button className="admin-btn small" onClick={() => scaleBoth(-6)}>
+              Scale−
+            </button>
+            <button className="admin-btn small" onClick={() => scaleBoth(6)}>
+              Scale+
+            </button>
             <button className="admin-btn small" onClick={() => resize(-6, 0)}>
               W−
             </button>
