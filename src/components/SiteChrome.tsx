@@ -26,8 +26,6 @@ export function TopBar({
   );
 }
 
-const SCROLL_LABELS = ["HOME", "PRODUCTS", "STORIES", "CONTACT"];
-
 export function ScrollTrack() {
   useEffect(() => {
     const progress = document.getElementById("scrollProgress");
@@ -60,13 +58,34 @@ export function ScrollTrack() {
     <>
       <div className="scroll-track" />
       <div className="scroll-progress" id="scrollProgress" />
-      <aside className="scroll-brand-rail" aria-label="Jagadamba scroll navigation">
-        <img className="rail-logo" src="/images/logo.png" alt="Jagadamba Plastic" />
-        <div className="rail-pipe" aria-hidden="true"><span /><i /><b /></div>
-        <div className="rail-copy"><span>JAGADAMBA</span><span>PIPE SYSTEMS</span></div>
-        <div className="rail-labels">{SCROLL_LABELS.map((label, i) => <span key={label} style={{ opacity: i === 0 ? 1 : 0.45 }}>{label}</span>)}</div>
-      </aside>
     </>
+  );
+}
+
+function messengerUrl(facebook: string): string {
+  try {
+    const page = new URL(facebook).pathname.split("/").filter(Boolean).pop();
+    return page ? `https://m.me/${page}` : "https://www.facebook.com/messenger";
+  } catch {
+    return "https://www.facebook.com/messenger";
+  }
+}
+
+export function MessageButton({ facebook }: { facebook: string }) {
+  return (
+    <a
+      className="message-button"
+      href={messengerUrl(facebook)}
+      target="_blank"
+      rel="noreferrer"
+      aria-label="Message Jagadamba Plastic on Messenger"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20 11.5a8 8 0 0 1-8 8 8.8 8.8 0 0 1-3.6-.8L4 20l1.3-3.8A7.7 7.7 0 0 1 4 11.5a8 8 0 0 1 16 0Z" />
+        <path d="M8 11.5h.01M12 11.5h.01M16 11.5h.01" />
+      </svg>
+      <span>Message us</span>
+    </a>
   );
 }
 
