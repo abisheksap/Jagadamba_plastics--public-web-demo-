@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { EnquiryForm } from "../components/EnquiryForm";
+import { useRevealOnScroll } from "../components/useRevealOnScroll";
 import { useSiteData } from "../data/SiteDataProvider";
 import type { Product, ProductCategory, ProductGroupId, ProductVariant } from "../data/types";
 import { PRODUCT_CATEGORIES, PRODUCT_GROUPS, productGroupFor } from "../data/types";
@@ -109,6 +110,9 @@ export function ProductsPage() {
     () => filterCatalogProducts(products, { group: groupFilter, category: categoryFilter, query }),
     [products, groupFilter, categoryFilter, query],
   );
+  const productGridRef = useRevealOnScroll<HTMLDivElement>([
+    filtered.map((product) => product.id).join("|"),
+  ]);
 
   return (
     <>
@@ -143,22 +147,32 @@ export function ProductsPage() {
       <section className="products-future section-pad">
         <div className="wrap">
           <div className="catalog-family-grid" aria-label="Product families">
-            {PRODUCT_GROUPS.map((group) => (
-              <button
-                key={group.id}
-                type="button"
-                className={`catalog-family-card catalog-family-${group.accent}${groupFilter === group.id ? " active" : ""}`}
-                onClick={() => {
-                  setGroupFilter(group.id);
-                  setCategoryFilter("all");
-                }}
-              >
-                <span className="catalog-family-eyebrow">{group.eyebrow}</span>
-                <strong>{group.label}</strong>
-                <span>{group.categories.join(" · ")}</span>
-                <b>{groupCounts.get(group.id) ?? 0} products</b>
-              </button>
-            ))}
+            {PRODUCT_GROUPS.map((group) => {
+              const groupProduct =
+                products.find((product) => product.featured && productGroupFor(product.category).id === group.id) ??
+                products.find((product) => productGroupFor(product.category).id === group.id);
+              return (
+                <button
+                  key={group.id}
+                  type="button"
+                  className={`catalog-family-card catalog-family-${group.accent}${groupFilter === group.id ? " active" : ""}`}
+                  onClick={() => {
+                    setGroupFilter(group.id);
+                    setCategoryFilter("all");
+                  }}
+                >
+                  {groupProduct && (
+                    <span className="catalog-family-image" aria-hidden="true">
+                      <img src={groupProduct.image} alt="" loading="lazy" />
+                    </span>
+                  )}
+                  <span className="catalog-family-eyebrow">{group.eyebrow}</span>
+                  <strong>{group.label}</strong>
+                  <span>{group.categories.join(" · ")}</span>
+                  <b>{groupCounts.get(group.id) ?? 0} products</b>
+                </button>
+              );
+            })}
           </div>
           <div className="catalog-subfilters" aria-label="Product categories">
             <button
@@ -186,7 +200,7 @@ export function ProductsPage() {
           {filtered.length === 0 ? (
             <div className="empty-state">No products match “{query || categoryFilter || groupFilter}”.</div>
           ) : (
-            <div className="product-grid-future">
+            <div className="product-grid-future" ref={productGridRef}>
               {filtered.map((p) => {
                 const fp = fromPrice(p, showPrices);
                 return (
