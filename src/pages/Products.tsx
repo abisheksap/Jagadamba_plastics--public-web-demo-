@@ -205,8 +205,6 @@ export function ProductsPage() {
                 const fp = fromPrice(p, showPrices);
                 return (
                   <Link key={p.id} to={`/products/${p.id}`} className="p-card-future">
-                    <span className="p-tag-future">{p.category.toUpperCase()}</span>
-                    {p.featured && <span className="p-feat-future">★ FEATURED</span>}
                     <div className="p-media-future">
                       <img src={p.image} alt={p.name} loading="lazy" />
                     </div>
@@ -307,9 +305,6 @@ export function ProductDetailPage() {
               <img src={product.image} alt={product.name} />
             </div>
             <div className="detail-body">
-              <span className="p-tag-future" style={{ position: "static", display: "inline-block" }}>
-                {product.category.toUpperCase()}
-              </span>
               <p style={{ marginTop: 22, fontSize: 16.5, color: "var(--text-mid)", maxWidth: 560 }}>
                 {product.description}
               </p>
@@ -397,7 +392,6 @@ export function ProductDetailPage() {
               <div className="product-grid-future">
                 {related.map((p) => (
                   <Link key={p.id} to={`/products/${p.id}`} className="p-card-future">
-                    <span className="p-tag-future">{p.category.toUpperCase()}</span>
                     <div className="p-media-future">
                       <img src={p.image} alt={p.name} loading="lazy" />
                     </div>

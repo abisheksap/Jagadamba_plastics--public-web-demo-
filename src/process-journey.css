@@ -23,6 +23,10 @@
 .process-journey-head h2 { margin: 14px 0 0; color: var(--text-hi); font-size: clamp(32px, 4.5vw, 58px); line-height: .98; }
 .process-journey-head h2 span { color: var(--cyan); }
 .process-journey-head p { max-width: 440px; margin: 0 0 4px; color: var(--text-mid); font-size: 15px; line-height: 1.75; }
+.process-journey-catalog-link { display: flex; align-items: center; gap: 18px; margin-top: 20px; color: var(--text-dim); font: 10px var(--font-mono); letter-spacing: .06em; }
+.process-journey-catalog-link b { color: var(--cyan); font-size: 16px; }
+.process-journey-catalog-link a { display: inline-flex; align-items: center; gap: 7px; color: var(--red-bright); font-weight: 600; transition: color .25s ease, transform .25s ease; }
+.process-journey-catalog-link a:hover { color: #fff; transform: translateX(3px); }
 .process-journey-track { margin-top: 72px; }
 .process-journey-line { position: absolute; top: 25px; left: 4%; right: 4%; height: 1px; overflow: hidden; background: rgba(var(--cyan-rgb), .2); }
 .process-journey-line::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, var(--cyan), var(--red), transparent); opacity: .5; }
@@ -61,6 +65,7 @@
 @media (max-width: 680px) {
   .process-journey { padding: 76px 0 82px; }
   .process-journey-head { grid-template-columns: 1fr; gap: 18px; }
+  .process-journey-catalog-link { align-items: flex-start; flex-direction: column; gap: 8px; }
   .process-journey-stages { grid-template-columns: 1fr; gap: 12px; }
   .process-stage { display: grid; grid-template-columns: 30px 1fr; column-gap: 12px; padding-top: 0; }
   .process-stage-marker { grid-row: span 2; }

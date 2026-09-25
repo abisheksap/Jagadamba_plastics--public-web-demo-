@@ -7,6 +7,7 @@ import "./public-motion.css";
 import "./theme-ideas.css";
 import "./arranger.css";
 import "./process-journey.css";
+import "./scroll-brand.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
