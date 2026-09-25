@@ -44,14 +44,6 @@
 .process-stage h3 { margin: 13px 0 9px; color: var(--text-hi); font-size: 19px; line-height: 1.1; }
 .process-stage p { margin: 0; color: var(--text-mid); font-size: 12.5px; line-height: 1.65; }
 .process-stage-tag { display: block; margin-top: 16px; color: var(--text-dim); font: 9px var(--font-mono); letter-spacing: .1em; }
-.process-stage-product { display: flex; align-items: center; gap: 10px; margin-top: 12px; padding: 8px; border: 1px solid rgba(var(--red-rgb), .22); border-radius: 12px; color: var(--text-mid); background: rgba(var(--deep-rgb), .42); transition: border-color .25s ease, transform .3s var(--ease), color .25s ease; }
-.process-stage-product:hover { transform: translateY(-3px); border-color: var(--red); color: var(--text-hi); }
-.process-stage-product-image { display: grid; place-items: center; width: 42px; height: 38px; flex: none; }
-.process-stage-product-image img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 8px 8px rgba(0,0,0,.45)); transition: transform .35s var(--ease); }
-.process-stage-product:hover img { transform: scale(1.12) rotate(-4deg); }
-.process-stage-product b, .process-stage-product small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.process-stage-product b { max-width: 125px; color: inherit; font-size: 11px; font-weight: 600; }
-.process-stage-product small { margin-top: 3px; color: var(--red-bright); font: 9px var(--font-mono); }
 @keyframes journey-scan { 0% { transform: translateX(-120%); } 55%, 100% { transform: translateX(340%); } }
 @keyframes journey-node-pulse { 0%, 100% { transform: scale(.65); opacity: .55; } 50% { transform: scale(1.25); opacity: 1; } }
 @keyframes journey-stage-in { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
@@ -70,7 +62,6 @@
   .process-stage { display: grid; grid-template-columns: 30px 1fr; column-gap: 12px; padding-top: 0; }
   .process-stage-marker { grid-row: span 2; }
   .process-stage-copy { min-height: 0; padding: 16px; }
-  .process-stage-product { grid-column: 2; margin-top: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .process-journey-line span, .process-stage-marker i, .process-stage { animation: none; }
