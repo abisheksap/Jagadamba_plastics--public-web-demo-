@@ -1,5 +1,7 @@
 /** Futuristic shared UI pieces: ticker, count-up stat cards, pipeline band. */
 import { useEffect, useId, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import type { Product } from "../data/types";
 
 const TICKER_ITEMS = [
   { pre: "MADE IN", b: "NEPAL" },
@@ -97,12 +99,59 @@ export function StatsBand({ stats }: { stats: FutureStat[] }) {
   );
 }
 
+/* ---------- CMS-driven product pulse strip ---------- */
+export function ProductPulse({ products }: { products: Product[] }) {
+  const items = products.slice(0, 8);
+  if (!items.length) return null;
+  const doubled = [...items, ...items];
+
+  return (
+    <section className="product-pulse" aria-label="Featured company products">
+      <div className="wrap product-pulse-head">
+        <div>
+          <div className="kicker-future">
+            <span className="kf-dot" />
+            PRODUCT PULSE
+          </div>
+          <h2>
+            Company products, <span className="grad">always in motion.</span>
+          </h2>
+        </div>
+        <p>Live product cards from the Jagadamba catalog, moving from our factory flow to your project.</p>
+      </div>
+      <div className="product-pulse-window">
+        <div className="product-pulse-track">
+          {doubled.map((product, i) => (
+            <Link
+              key={`${product.id}-${i}`}
+              to={`/products/${product.id}`}
+              className="product-pulse-card"
+              aria-hidden={i >= items.length}
+              tabIndex={i >= items.length ? -1 : undefined}
+            >
+              <span className="product-pulse-icon">
+                <img src={product.image} alt="" loading="lazy" />
+              </span>
+              <span className="product-pulse-copy">
+                <b>{product.name}</b>
+                <small>{product.category}</small>
+              </span>
+              <span className="product-pulse-arrow">↗</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ---------- pipeline flow band ---------- */
-export function ProcessFlow() {
+export function ProcessFlow({ products = [] }: { products?: Product[] }) {
   const nodes = ["EXTRUDE", "MOULD", "TEST", "CERTIFY", "DISPATCH"];
   const nodeId = useId();
+  const flowProducts = products.slice(0, 5);
   return (
-    <div className="flow-band" aria-hidden="true">
+    <div className="flow-band" aria-label="Manufacturing flow with featured products">
       <div className="flow-band-glow" />
       <svg viewBox="0 0 1200 120" preserveAspectRatio="xMidYMid meet">
         <defs>
@@ -144,6 +193,32 @@ export function ProcessFlow() {
                 {String(i + 1).padStart(2, "0")}
               </text>
             </g>
+          );
+        })}
+        {flowProducts.map((product, i) => {
+          const x = 240 + i * 220;
+          const y = i % 2 === 0 ? 34 : 86;
+          return (
+            <a
+              key={product.id}
+              href={`/products/${product.id}`}
+              className="flow-product-link"
+              aria-label={`View ${product.name}`}
+            >
+              <g className="flow-product-node">
+                <circle className="flow-product-ring" cx={x} cy={y} r={18} />
+                <image
+                  className="flow-product-image"
+                  href={product.image}
+                  x={x - 14}
+                  y={y - 14}
+                  width="28"
+                  height="28"
+                  preserveAspectRatio="xMidYMid meet"
+                  style={{ animationDelay: `${(i * 0.38).toFixed(2)}s` }}
+                />
+              </g>
+            </a>
           );
         })}
       </svg>
