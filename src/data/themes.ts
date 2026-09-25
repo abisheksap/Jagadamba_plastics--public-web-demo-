@@ -76,6 +76,12 @@ export const THEMES: ThemeDef[] = [
     description: "Warm paper, ink blue and the signature Jagadamba red.",
     swatch: { bg: "#f4eddd", accent: "#064c92", cta: "#e02129" },
   },
+  {
+    id: "jagadamba-dark",
+    name: "Jagadamba Dark",
+    description: "Logo navy after dark with warm red details.",
+    swatch: { bg: "#081d31", accent: "#79b6d4", cta: "#e02129" },
+  },
 ];
 
 export function isValidTheme(id: unknown): id is string {

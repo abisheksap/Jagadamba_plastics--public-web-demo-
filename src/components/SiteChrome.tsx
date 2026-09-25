@@ -1,26 +1,43 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
+import { PUBLIC_THEME_EVENT, setPublicThemePreference } from "../data/theme";
 
-export function TopBar({
-  phone,
-  email,
-  phoneAlt,
-}: {
-  phone: string;
-  email: string;
-  phoneAlt?: string;
-}) {
+export function TopBar({ phone, email, phoneAlt }: { phone: string; email: string; phoneAlt?: string }) {
+  const [darkMode, setDarkMode] = useState(() => document.documentElement.getAttribute("data-theme") === "jagadamba-dark");
+
+  useEffect(() => {
+    const syncTheme = () => setDarkMode(document.documentElement.getAttribute("data-theme") === "jagadamba-dark");
+    window.addEventListener(PUBLIC_THEME_EVENT, syncTheme);
+    return () => window.removeEventListener(PUBLIC_THEME_EVENT, syncTheme);
+  }, []);
+
+  const toggleDarkMode = () => {
+    const nextDarkMode = !darkMode;
+    setPublicThemePreference(nextDarkMode ? "jagadamba-dark" : "heritage-cream");
+    setDarkMode(nextDarkMode);
+  };
+
   return (
     <div className="topbar">
       <div className="topbar-brand">
-        <img src="/images/logo.png" alt="" />
-        <span>Jagadamba Plastic Industries Pvt. Ltd. &middot; Bharatpur-4, Chitwan</span>
+        <Link to="/" aria-label="Jagadamba Plastic home"><img src="/images/logo.png" alt="" /></Link>
+        <span><b>JAGADAMBA</b><small>PLASTIC INDUSTRIES PVT. LTD.</small></span>
+      </div>
+      <div className="topbar-status" aria-label="Company details">
+        <span>BHARATPUR-4 · CHITWAN</span>
+        <i aria-hidden="true" />
+        <span>PIPES · FITTINGS · TANKS</span>
+        <span className="scroll-readout" id="scrollReadout">SCROLL 00%</span>
       </div>
       <div className="topbar-info">
         <a href={`tel:${phone.replace(/[^+\d]/g, "")}`}>☎ {phone}</a>
         {phoneAlt && <a href={`tel:${phoneAlt.replace(/[^+\d]/g, "")}`}>☎ {phoneAlt}</a>}
         <a href={`mailto:${email}`}>{email}</a>
         <span>www.jagadambaplastic.com</span>
+        <button className="theme-toggle" type="button" onClick={toggleDarkMode} aria-pressed={darkMode} aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}>
+          <span aria-hidden="true">{darkMode ? "☼" : "◐"}</span>
+          <b>{darkMode ? "Light" : "Dark"}</b>
+        </button>
       </div>
     </div>
   );
@@ -29,29 +46,27 @@ export function TopBar({
 export function ScrollTrack() {
   useEffect(() => {
     const progress = document.getElementById("scrollProgress");
+    const readout = document.getElementById("scrollReadout");
     const nav = document.getElementById("nav");
     let ticking = false;
     const onScroll = () => {
-      const scrollTop = window.scrollY;
-      nav?.classList.toggle("scrolled", scrollTop > 30);
-      if (progress) {
-        const docH = document.documentElement.scrollHeight - window.innerHeight;
-        progress.style.width = `${docH > 0 ? (scrollTop / docH) * 100 : 0}%`;
-      }
+      const y = window.scrollY;
+      const docH = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = docH > 0 ? Math.min(1, Math.max(0, y / docH)) : 0;
+      nav?.classList.toggle("scrolled", y > 30);
+      if (progress) progress.style.width = `${ratio * 100}%`;
+      if (readout) readout.textContent = `SCROLL ${String(Math.round(ratio * 100)).padStart(2, "0")}%`;
+      document.documentElement.style.setProperty("--scroll-ratio", `${ratio}`);
       ticking = false;
     };
-    window.addEventListener(
-      "scroll",
-      () => {
-        if (!ticking) {
-          requestAnimationFrame(onScroll);
-          ticking = true;
-        }
-      },
-      { passive: true },
-    );
+    const onScrollRequest = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(onScroll);
+    };
+    window.addEventListener("scroll", onScrollRequest, { passive: true });
     onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScrollRequest);
   }, []);
 
   return (

@@ -464,20 +464,21 @@ section {
 /* ============ TOPBAR + NAV ============ */
 .topbar {
   position: fixed;
-  top: 13px;
+  top: 0;
   left: 0;
   right: 0;
   z-index: 99;
-  height: 32px;
-  background: rgba(var(--hero-3-rgb), 0.86);
-  backdrop-filter: blur(6px);
+  height: 46px;
+  background: rgba(var(--hero-3-rgb), 0.92);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line-light);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 24px;
   padding: 0 32px;
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 10.5px;
   color: var(--text-dim);
   white-space: nowrap;
   overflow: hidden;
@@ -485,11 +486,49 @@ section {
 .topbar .topbar-brand {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   color: var(--text-mid);
   white-space: nowrap;
   overflow: hidden;
-  min-width: 0;
+  min-width: 190px;
+}
+.topbar .topbar-brand b,
+.topbar .topbar-brand small {
+  display: block;
+  line-height: 1.1;
+}
+.topbar .topbar-brand b {
+  color: var(--text-hi);
+  font: 600 11px var(--font-head);
+  letter-spacing: .12em;
+}
+.topbar .topbar-brand small {
+  margin-top: 3px;
+  color: var(--text-dim);
+  font-size: 8px;
+  letter-spacing: .1em;
+}
+.topbar-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex: 1;
+  color: var(--text-dim);
+  font-size: 9px;
+  letter-spacing: .14em;
+}
+.topbar-status i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--red);
+}
+.scroll-readout {
+  padding-left: 12px;
+  border-left: 1px solid var(--line);
+  color: var(--cyan);
+  font-variant-numeric: tabular-nums;
 }
 .topbar .topbar-brand span {
   overflow: hidden;
@@ -506,7 +545,7 @@ section {
 .topbar .topbar-info {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 16px;
   flex: none;
 }
 .topbar .topbar-info a {
@@ -517,8 +556,30 @@ section {
 .topbar .topbar-info a:hover {
   color: #fff;
 }
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 4px;
+  padding: 5px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text-mid);
+  background: rgba(var(--paper-rgb), 0.08);
+  font: 600 9px var(--font-mono);
+  letter-spacing: .08em;
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease, background .2s ease;
+}
+.theme-toggle span { color: var(--red-bright); font-size: 14px; line-height: 1; }
+.theme-toggle:hover,
+.theme-toggle:focus-visible { color: var(--text-hi); border-color: var(--red); background: rgba(var(--red-rgb), .1); outline: none; }
 @media (max-width: 1000px) {
-  .topbar .topbar-brand span {
+  .topbar .topbar-brand {
+    min-width: 160px;
+  }
+  .topbar .topbar-brand small,
+  .topbar-status {
     display: none;
   }
   .topbar {
@@ -529,7 +590,7 @@ section {
 @media (max-width: 640px) {
   .topbar {
     padding: 0 14px;
-    font-size: 10.5px;
+    font-size: 9.5px;
     gap: 8px;
   }
   .topbar .topbar-info {
@@ -544,7 +605,7 @@ section {
 
 .nav {
   position: fixed;
-  top: 45px;
+  top: 49px;
   left: 0;
   right: 0;
   z-index: 100;
@@ -755,8 +816,8 @@ section {
   top: 0;
   left: 0;
   right: 0;
-  height: 13px;
-  z-index: 101;
+  height: 3px;
+  z-index: 103;
   background-color: var(--text-hi);
   background-image: linear-gradient(180deg, var(--text-hi) 0%, var(--text-hi) 72%, var(--text-hi) 100%);
   box-shadow: 0 1px 3px rgba(var(--hero-3-rgb), 0.35);
@@ -765,11 +826,11 @@ section {
   position: fixed;
   top: 0;
   left: 0;
-  height: 13px;
+  height: 3px;
   background: linear-gradient(180deg, rgba(var(--red-rgb), 0.82), rgba(var(--red-dark-rgb), 0.82));
   mix-blend-mode: multiply;
   width: 0%;
-  z-index: 102;
+  z-index: 104;
   transition: width 0.1s linear;
   pointer-events: none;
 }
