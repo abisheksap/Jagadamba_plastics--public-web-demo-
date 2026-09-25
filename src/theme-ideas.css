@@ -889,3 +889,28 @@ h1, h2, h3, h4 {
 [data-theme] .stat-card-future .lbl {
   color: var(--text-mid);
 }
+
+/* ---------- light-mode page and form contrast ---------- */
+[data-theme="heritage-cream"] .reviews-future,
+[data-theme="heritage-cream"] .contact-future {
+  padding-top: 36px;
+}
+[data-theme="heritage-cream"] .tl-item h3,
+[data-theme="heritage-cream"] .contact-card-future h3,
+[data-theme="heritage-cream"] .form-glass h3,
+[data-theme="heritage-cream"] .form-box h3,
+[data-theme="heritage-cream"] .review-form-box h3 {
+  color: var(--ink) !important;
+}
+[data-theme="heritage-cream"] .tl-item .tl-year {
+  color: var(--red);
+}
+[data-theme="heritage-cream"] .form-glass p,
+[data-theme="heritage-cream"] .form-box p,
+[data-theme="heritage-cream"] .review-form-box p {
+  color: var(--text-mid) !important;
+}
+[data-theme="heritage-cream"] .contact-row-future a:hover,
+[data-theme="heritage-cream"] .form-glass a:hover {
+  color: var(--red) !important;
+}
