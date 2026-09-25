@@ -1,6 +1,8 @@
 /** Futuristic shared UI pieces: ticker, count-up stat cards, product atlas, pipeline band. */
 import { useEffect, useId, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+
+const ArrowUpRight = ({ size = 16 }: { size?: number }) => <span aria-hidden="true" style={{ fontSize: size }}>↗</span>;
 import type { Product } from "../data/types";
 import { PRODUCT_GROUPS } from "../data/types";
 
@@ -102,10 +104,12 @@ export function StatsBand({ stats }: { stats: FutureStat[] }) {
 
 /* ---------- grouped CMS-driven product atlas ---------- */
 export function ProductPulse({ products }: { products: Product[] }) {
-  const groups = PRODUCT_GROUPS.map((group) => ({
-    ...group,
-    items: products.filter((product) => group.categories.includes(product.category)).slice(0, 4),
-  })).filter((group) => group.items.length > 0);
+  const groups = PRODUCT_GROUPS.map((group) => {
+    const matches = products.filter((product) => group.categories.includes(product.category));
+    if (group.id === "tanks") matches.sort((a, b) => Number(b.name.toLowerCase().includes("black")) - Number(a.name.toLowerCase().includes("black")));
+    if (group.id === "fittings") matches.sort((a, b) => Number(b.name.toLowerCase().includes("elbow")) - Number(a.name.toLowerCase().includes("elbow")));
+    return { ...group, items: matches.slice(0, 4) };
+  }).filter((group) => group.items.length > 0);
 
   if (!groups.length) return null;
 
@@ -159,6 +163,28 @@ function flowCategoryLabel(product: Product): string {
 }
 
 /* ---------- pipeline flow band ---------- */
+export function BrandStory({ products = [] }: { products?: Product[] }) {
+  const stories = [
+    { kicker: "OUR WORLD", title: "Made for the way Nepal builds.", copy: "From a household line to a district water network, the right product starts with the right material and a clear purpose.", image: "/images/products-v2/borewell-casing-pipe.png", tag: "WATER INFRASTRUCTURE" },
+    { kicker: "OUR MISSION", title: "Make dependable water systems ordinary.", copy: "We manufacture accessible pipe, fittings and storage that help families, farmers and builders move water with confidence.", image: "/images/products-v2/cpvc-elbow-90.png", tag: "CONNECTED BY DESIGN" },
+    { kicker: "OUR STANDARD", title: "Every joint has to earn trust.", copy: "Consistent dimensions, practical fittings and storage that is ready for the realities of installation — that is the Jagadamba promise.", image: "/images/products-v2/black-tank.png", tag: "QUALITY YOU CAN SEE" },
+  ];
+  const [active, setActive] = useState(0);
+  useEffect(() => {
+    const timer = window.setInterval(() => setActive((current) => (current + 1) % stories.length), 5200);
+    return () => window.clearInterval(timer);
+  }, []);
+  const story = stories[active];
+  const supporting = products.filter((product) => ["PVC Fittings", "CPVC Fittings", "Water Tank"].includes(product.category)).slice(0, 3);
+  return <section className="brand-story" aria-label="Our world, mission and standard">
+    <div className="wrap brand-story-grid">
+      <div className="brand-story-copy"><div className="kicker-future"><span className="kf-dot" /> {story.kicker}</div><h2>{story.title}</h2><p>{story.copy}</p><div className="brand-story-dots">{stories.map((item, i) => <button type="button" key={item.kicker} className={i === active ? "active" : ""} onClick={() => setActive(i)} aria-label={`Show ${item.kicker.toLowerCase()}`} />)}</div><span className="brand-story-tag">{story.tag}</span></div>
+      <div className="brand-story-visual"><div className="story-pipe-line" /><img key={story.image} src={story.image} alt={story.title} /><div className="story-caption"><span>JAGADAMBA / 0{active + 1}</span><b>{story.tag}</b></div></div>
+    </div>
+    <div className="wrap story-support-strip">{supporting.map((product) => <Link key={product.id} to={`/products/${product.id}`}><img src={product.image} alt="" loading="lazy" /><span>{product.category}</span><ArrowUpRight size={14} /></Link>)}</div>
+  </section>;
+}
+
 export function ProcessFlow({ products = [] }: { products?: Product[] }) {
   const nodes = ["EXTRUDE", "MOULD", "TEST", "CERTIFY", "DISPATCH"];
   const nodeId = useId();

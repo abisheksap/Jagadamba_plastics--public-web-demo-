@@ -6,7 +6,7 @@ import { signOut } from "../data/adminAuth";
 const NAV = [
   { to: "/admin", label: "Dashboard", end: true },
   { to: "/admin/products", label: "Products" },
-  { to: "/admin/arranger", label: "Home group" },
+  { to: "/admin/arranger", label: "Homepage designer" },
   { to: "/admin/content", label: "Content" },
   { to: "/admin/gallery", label: "Gallery" },
   { to: "/admin/reviews", label: "Reviews" },
@@ -34,7 +34,12 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <img src="/images/logo.png" alt="" />
           Jagadamba Admin
         </div>
-        <div className="side-label">MANAGE</div>
+        <div className="side-label">DESIGN & MANAGE</div>
+        <Link to="/admin/arranger" className="admin-side-callout">
+          <span className="admin-side-callout-kicker">HOMEPAGE DESIGNER</span>
+          <strong>Arrange the product group</strong>
+          <span>Drag, resize and place the hero products →</span>
+        </Link>
         {NAV.map((n) => (
           <NavLink key={n.to} to={n.to} end={n.end} className={({ isActive }) => (isActive ? "active" : "")}>
             {n.label}

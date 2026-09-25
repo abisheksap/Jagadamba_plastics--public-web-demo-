@@ -10,7 +10,7 @@ export const SEED_GALLERY: GalleryItem[] = [
     id: "g-reel",
     title: "Product reel",
     kind: "video",
-    image: "/images/products/hdpe-pipe-bundle.png",
+    image: "/images/products-v2/borewell-casing-pipe.png",
     videoUrl: "https://www.youtube.com/@JagadambaPipeFittings",
   },
   {
@@ -30,6 +30,18 @@ export const SEED_GALLERY: GalleryItem[] = [
     title: "Factory — Chitwan",
     kind: "photo",
     image: "/images/products-v2/ug-drainage-pipe.png",
+  },
+  {
+    id: "g-black-tank",
+    title: "Black water tank",
+    kind: "photo",
+    image: "/images/products-v2/black-tank.png",
+  },
+  {
+    id: "g-elbow-detail",
+    title: "Elbow details",
+    kind: "photo",
+    image: "/images/products-v2/cpvc-elbow-90.png",
   },
 ];
 
