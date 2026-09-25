@@ -2,7 +2,8 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { SiteDataProvider, useSiteData } from "./data/SiteDataProvider";
 import { useThemeApplier } from "./data/theme";
-import { Footer, MessageButton, Nav, ScrollTrack, TopBar } from "./components/SiteChrome";
+import { Footer, Nav, ScrollTrack, TopBar } from "./components/SiteChrome";
+import { CompanyAssistant } from "./components/CompanyAssistant";
 import { RequireAdmin } from "./admin/RequireAdmin";
 import AdminLayout from "./admin/AdminLayout";
 import AdminDashboard from "./admin/AdminDashboard";
@@ -44,7 +45,7 @@ function Chrome({ children }: { children: React.ReactNode }) {
       <Nav />
       {children}
       <Footer settings={settings} />
-      <MessageButton facebook={settings.facebook} />
+      <CompanyAssistant settings={settings} />
     </>
   );
 }

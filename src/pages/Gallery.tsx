@@ -27,6 +27,11 @@ export default function Gallery() {
   const { gallery, settings } = useSiteData();
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [video, setVideo] = useState<GalleryItem | null>(null);
+  const visibleGallery = gallery.length > 0 ? gallery : [
+    { id: "fallback-pipe", title: "Pipe system", kind: "photo" as const, image: "/images/products-v2/borewell-casing-pipe.png" },
+    { id: "fallback-elbow", title: "Elbow detail", kind: "photo" as const, image: "/images/products-v2/cpvc-elbow-90.png" },
+    { id: "fallback-tank", title: "Black water tank", kind: "photo" as const, image: "/images/products-v2/black-tank.png" },
+  ];
 
   return (
     <>
@@ -60,11 +65,8 @@ export default function Gallery() {
               Open YouTube <span aria-hidden="true">↗</span>
             </a>
           </div>
-          {gallery.length === 0 ? (
-            <div className="empty-state">No gallery items yet.</div>
-          ) : (
-            <div className="gallery-grid-future">
-              {gallery.map((g, i) => {
+          <div className="gallery-grid-future">
+              {visibleGallery.map((g, i) => {
                 const embedUrl = g.videoUrl ? youtubeEmbedUrl(g.videoUrl) : null;
                 return embedUrl ? (
                   <button key={g.id} className="g-tile-future" onClick={() => setVideo(g)} style={{ padding: 0 }}>
@@ -92,8 +94,7 @@ export default function Gallery() {
                   </button>
                 );
               })}
-            </div>
-          )}
+          </div>
           <div style={{ marginTop: 34, display: "flex", justifyContent: "flex-end" }}>
             <a href={settings.youtube} target="_blank" rel="noreferrer" className="p-link-future" style={{ display: "inline-flex" }}>
               Full gallery &amp; videos on YouTube
@@ -121,7 +122,7 @@ export default function Gallery() {
       </section>
 
       <GalleryLightbox
-        items={gallery.filter((g) => !g.videoUrl)}
+        items={visibleGallery.filter((g) => !g.videoUrl)}
         index={lightbox}
         onClose={() => setLightbox(null)}
       />
