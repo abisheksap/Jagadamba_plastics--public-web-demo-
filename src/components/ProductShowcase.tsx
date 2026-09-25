@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import type { HeroChipLayout, Product } from "../data/types";
 import { useSiteData } from "../data/SiteDataProvider";
@@ -14,6 +14,9 @@ interface OrbitItem {
   z: number;
   w?: string;
   h?: string;
+  sx?: number;
+  sy?: number;
+  srot?: number;
 }
 
 /** Visual family of a chip: tanks are large, pipes tall, fittings compact. */
@@ -98,16 +101,32 @@ function buildFromSaved(products: Product[], saved: HeroChipLayout): OrbitItem[]
   });
 }
 
+function buildScatterSlots(count: number): Array<{ sx: number; sy: number; srot: number }> {
+  return Array.from({ length: count }, (_, index) => {
+    const angle = (index / Math.max(count, 1)) * Math.PI * 2 - Math.PI / 2;
+    const ring = index % 3;
+    const radiusX = 250 + ring * 24;
+    const radiusY = 145 + (index % 2) * 24;
+    return {
+      sx: Math.round(Math.cos(angle) * radiusX),
+      sy: Math.round(Math.sin(angle) * radiusY),
+      srot: Math.round((index % 2 ? 1 : -1) * (3 + (index % 5) * 2)),
+    };
+  });
+}
+
 /** Public WYSIWYG product family. The admin layout remains intact at every breakpoint. */
 export function ProductShowcase() {
   const { products, heroLayout } = useSiteData();
   const stageRef = useRef<HTMLDivElement | null>(null);
+  const [layoutMode, setLayoutMode] = useState<"grouped" | "scattered">("grouped");
   const hasSavedLayout = Boolean(heroLayout?.chips?.length);
 
   const items = useMemo(
     () => (hasSavedLayout ? buildFromSaved(products, heroLayout!) : buildDefaultSlots(products)),
     [hasSavedLayout, heroLayout, products],
   );
+  const scatterSlots = useMemo(() => buildScatterSlots(items.length), [items.length]);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -133,38 +152,63 @@ export function ProductShowcase() {
             ? `${items.length} products · arrangement saved from the homepage designer`
             : `${items.length} products from our complete range`}
         </div>
+        <div className="showcase-mode-switch" role="group" aria-label="Product arrangement mode">
+          <button
+            type="button"
+            className={layoutMode === "grouped" ? "active" : ""}
+            aria-pressed={layoutMode === "grouped"}
+            onClick={() => setLayoutMode("grouped")}
+          >
+            Grouped
+          </button>
+          <button
+            type="button"
+            className={layoutMode === "scattered" ? "active" : ""}
+            aria-pressed={layoutMode === "scattered"}
+            onClick={() => setLayoutMode("scattered")}
+          >
+            Scattered
+          </button>
+        </div>
       </div>
       <div
         className="hero-visual"
         ref={stageRef}
         data-layout-source={hasSavedLayout ? "admin" : "default"}
+        data-layout-mode={layoutMode}
       >
-        <div className="showcase-orbit" id="showcaseOrbit">
+        <div className={`showcase-orbit ${layoutMode}`} id="showcaseOrbit">
           <div className="showcase-pool" aria-hidden="true">
             <div className="glow" />
             <div className="ripple" />
             <div className="ripple r2" />
             <div className="ripple r3" />
           </div>
-          {items.map(({ product, cls, bx, by, z, w, h }) => (
-            <Link
-              key={product.id}
-              to={`/products/${product.id}`}
-              className={`orbit-chip ${cls}`}
-              style={{
-                "--bx": `${bx}px`,
-                "--by": `${by}px`,
-                "--z": z,
-                width: w,
-                height: h,
-              } as React.CSSProperties}
-            >
-              <span className="chip-disc">
-                <img src={product.image} alt={product.name} loading="lazy" />
-              </span>
-              <span className="chip-label">{product.name}</span>
-            </Link>
-          ))}
+          {items.map(({ product, cls, bx, by, z, w, h }, index) => {
+            const scatter = scatterSlots[index];
+            return (
+              <Link
+                key={product.id}
+                to={`/products/${product.id}`}
+                className={`orbit-chip ${cls}`}
+                style={{
+                  "--bx": `${bx}px`,
+                  "--by": `${by}px`,
+                  "--sx": `${scatter.sx}px`,
+                  "--sy": `${scatter.sy}px`,
+                  "--srot": `${scatter.srot}deg`,
+                  "--z": z,
+                  width: w,
+                  height: h,
+                } as React.CSSProperties}
+              >
+                <span className="chip-disc">
+                  <img src={product.image} alt={product.name} loading="lazy" />
+                </span>
+                <span className="chip-label">{product.name}</span>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </div>
