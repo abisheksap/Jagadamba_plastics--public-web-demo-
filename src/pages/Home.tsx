@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { ProductShowcase } from "../components/ProductShowcase";
 import { EnquiryForm } from "../components/EnquiryForm";
-import { ProcessFlow, ProductPulse, StatsBand, Ticker } from "../components/FutureUI";
+import { ProductPulse, StatsBand, Ticker } from "../components/FutureUI";
+import { ProcessJourney } from "../components/ProcessJourney";
 import { useRevealOnScroll } from "../components/useRevealOnScroll";
 import { useSiteData } from "../data/SiteDataProvider";
 import { pickApproved } from "../data/backend";
@@ -178,8 +179,7 @@ export default function Home() {
       {/* PRODUCT ELEMENTS */}
       <ProductPulse products={flowProducts} />
 
-      {/* PROCESS FLOW */}
-      <ProcessFlow products={flowProducts} />
+      <ProcessJourney products={flowProducts} />
 
       {/* FEATURED PRODUCTS */}
       <section className="products-future section-pad">
