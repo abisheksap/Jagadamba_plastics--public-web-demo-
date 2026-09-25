@@ -26,6 +26,8 @@ export function TopBar({
   );
 }
 
+const SCROLL_LABELS = ["HOME", "PRODUCTS", "STORIES", "CONTACT"];
+
 export function ScrollTrack() {
   useEffect(() => {
     const progress = document.getElementById("scrollProgress");
@@ -58,6 +60,12 @@ export function ScrollTrack() {
     <>
       <div className="scroll-track" />
       <div className="scroll-progress" id="scrollProgress" />
+      <aside className="scroll-brand-rail" aria-label="Jagadamba scroll navigation">
+        <img className="rail-logo" src="/images/logo.png" alt="Jagadamba Plastic" />
+        <div className="rail-pipe" aria-hidden="true"><span /><i /><b /></div>
+        <div className="rail-copy"><span>JAGADAMBA</span><span>PIPE SYSTEMS</span></div>
+        <div className="rail-labels">{SCROLL_LABELS.map((label, i) => <span key={label} style={{ opacity: i === 0 ? 1 : 0.45 }}>{label}</span>)}</div>
+      </aside>
     </>
   );
 }

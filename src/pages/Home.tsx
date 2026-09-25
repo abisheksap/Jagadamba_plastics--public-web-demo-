@@ -179,7 +179,7 @@ export default function Home() {
       {/* PRODUCT ELEMENTS */}
       <ProductPulse products={flowProducts} />
 
-      <ProcessJourney products={flowProducts} />
+      <ProcessJourney products={products} />
 
       {/* FEATURED PRODUCTS */}
       <section className="products-future section-pad">
@@ -202,8 +202,6 @@ export default function Home() {
           <div className="product-grid-future" ref={productGridRef}>
             {featured.map((p) => (
               <Link key={p.id} to={`/products/${p.id}`} className="p-card-future">
-                <span className="p-tag-future">{p.category.toUpperCase()}</span>
-                {p.featured && <span className="p-feat-future">★ FEATURED</span>}
                 <div className="p-media-future">
                   <img src={p.image} alt={p.name} loading="lazy" />
                 </div>

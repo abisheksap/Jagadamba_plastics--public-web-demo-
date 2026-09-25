@@ -52,10 +52,16 @@ export function ProcessJourney({ products = [] }: { products?: Product[] }) {
           <div className="kicker-future"><span className="kf-dot" /> THE JAGADAMBA METHOD</div>
           <h2 id="process-journey-title">From compound <span>to confidence.</span></h2>
         </div>
-        <p>
-          A clear path from raw material to a finished water system. Follow the checkpoints that
-          make every Jagadamba product ready for real-world installation.
-        </p>
+        <div>
+          <p>
+            A clear path from raw material to a finished water system. Follow the checkpoints that
+            make every Jagadamba product ready for real-world installation.
+          </p>
+          <div className="process-journey-catalog-link">
+            <span><b>{products.length}</b> products in the complete catalog</span>
+            <Link to="/products">View all products <span aria-hidden="true">↗</span></Link>
+          </div>
+        </div>
       </div>
 
       <div className="wrap process-journey-track">
