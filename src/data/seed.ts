@@ -8,27 +8,11 @@ export { SEED_PRODUCTS };
 export const SEED_GALLERY: GalleryItem[] = [
   {
     id: "g-reel",
-    title: "Jagadamba YouTube channel",
+    title: "Official Jagadamba Plastic YouTube channel",
     kind: "video",
     image: "/images/products-v2/borewell-casing-pipe.png",
     videoUrl: "https://www.youtube.com/@JagadambaPipeFittings",
     sortOrder: 10,
-  },
-  {
-    id: "g-installation-guide",
-    title: "Installation guide",
-    kind: "video",
-    image: "/images/products-v2/pvc-p-trap.png",
-    videoUrl: "https://www.youtube.com/watch?v=2rIW5WYFHqE",
-    sortOrder: 20,
-  },
-  {
-    id: "g-product-guide",
-    title: "CPVC product guide",
-    kind: "video",
-    image: "/images/products-v2/cpvc-elbow-90.png",
-    videoUrl: "https://www.youtube.com/watch?v=utWwcfOKuq0",
-    sortOrder: 30,
   },
   {
     id: "g-site-bharatpur",

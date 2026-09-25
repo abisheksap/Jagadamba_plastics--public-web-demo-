@@ -148,7 +148,7 @@ export default function AdminGallery() {
                       id="g-url"
                       value={videoUrl}
                       onChange={(e) => setVideoUrl(e.target.value)}
-                      placeholder="https://youtube.com/…"
+                      placeholder="Paste an official Jagadamba YouTube video URL"
                     />
                   </div>
                 )}
