@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import { ProductShowcase } from "../components/ProductShowcase";
 import { EnquiryForm } from "../components/EnquiryForm";
-import { ProcessFlow, StatsBand, Ticker } from "../components/FutureUI";
+import { ProcessFlow, ProductPulse, StatsBand, Ticker } from "../components/FutureUI";
+import { useRevealOnScroll } from "../components/useRevealOnScroll";
 import { useSiteData } from "../data/SiteDataProvider";
 import { pickApproved } from "../data/backend";
+import type { Product } from "../data/types";
 
 const ArrowIcon = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
@@ -20,11 +22,37 @@ const HomeIcon = (
   </svg>
 );
 
+function selectFlowProducts(products: Product[]): Product[] {
+  const sorted = [...products].sort(
+    (a, b) => Number(b.featured) - Number(a.featured) || a.sortOrder - b.sortOrder,
+  );
+  const picked: Product[] = [];
+  const seenCategories = new Set<string>();
+
+  for (const product of sorted) {
+    if (picked.length >= 8) break;
+    if (!seenCategories.has(product.category)) {
+      picked.push(product);
+      seenCategories.add(product.category);
+    }
+  }
+  for (const product of sorted) {
+    if (picked.length >= 8) break;
+    if (!picked.some((item) => item.id === product.id)) picked.push(product);
+  }
+  return picked;
+}
+
 export default function Home() {
   const { products, gallery, reviews: allReviews, settings, content } = useSiteData();
   const featured = products.filter((p) => p.featured).slice(0, 6);
   const reviews = pickApproved(allReviews).slice(0, 3);
   const variantCount = products.reduce((n, p) => n + (p.variants?.length ?? 0), 0);
+  const flowProducts = selectFlowProducts(products);
+  const audienceRef = useRevealOnScroll<HTMLDivElement>();
+  const productGridRef = useRevealOnScroll<HTMLDivElement>([featured.map((p) => p.id).join("|")]);
+  const reviewGridRef = useRevealOnScroll<HTMLDivElement>([reviews.map((r) => r.id).join("|")]);
+  const galleryGridRef = useRevealOnScroll<HTMLDivElement>([gallery.map((g) => g.id).join("|")]);
 
   return (
     <>
@@ -112,7 +140,7 @@ export default function Home() {
               across all seven provinces — district 1 to 77.
             </p>
           </div>
-          <div className="stat-cards-future" style={{ gridTemplateColumns: "repeat(3,1fr)" }}>
+          <div className="stat-cards-future audience-cards-future" style={{ gridTemplateColumns: "repeat(3,1fr)" }} ref={audienceRef}>
             <div className="glass-card">
               {HomeIcon}
               <h3>Homes &amp; builders</h3>
@@ -147,8 +175,11 @@ export default function Home() {
         </div>
       </section>
 
+      {/* PRODUCT ELEMENTS */}
+      <ProductPulse products={flowProducts} />
+
       {/* PROCESS FLOW */}
-      <ProcessFlow />
+      <ProcessFlow products={flowProducts} />
 
       {/* FEATURED PRODUCTS */}
       <section className="products-future section-pad">
@@ -168,7 +199,7 @@ export default function Home() {
               ready for dealer stock nationwide.
             </p>
           </div>
-          <div className="product-grid-future">
+          <div className="product-grid-future" ref={productGridRef}>
             {featured.map((p) => (
               <Link key={p.id} to={`/products/${p.id}`} className="p-card-future">
                 <span className="p-tag-future">{p.category.toUpperCase()}</span>
@@ -206,7 +237,7 @@ export default function Home() {
             </div>
             <p>Real feedback from the people who stock and install our products every day.</p>
           </div>
-          <div className="review-grid-future">
+          <div className="review-grid-future" ref={reviewGridRef}>
             {reviews.map((r) => (
               <div key={r.id} className="r-card-future">
                 <div className="stars">{"★".repeat(r.rating)}</div>
@@ -241,7 +272,7 @@ export default function Home() {
             </div>
             <p>Installation photos and product videos from the field.</p>
           </div>
-          <div className="gallery-grid-future">
+          <div className="gallery-grid-future" ref={galleryGridRef}>
             {gallery.slice(0, 4).map((g) => (
               <Link key={g.id} to="/gallery" className="g-tile-future">
                 <img src={g.image} alt={g.title} loading="lazy" />
