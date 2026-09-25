@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import type { HeroChipLayout, Product } from "../data/types";
 import { useSiteData } from "../data/SiteDataProvider";
@@ -6,29 +7,15 @@ import { useSiteData } from "../data/SiteDataProvider";
 const STAGE_WIDTH = 900;
 const STAGE_HEIGHT = 560;
 
-interface OrbitItem {
-  product: Product;
-  cls: string;
-  bx: number;
-  by: number;
-  z: number;
-  w?: string;
-  h?: string;
-  sx?: number;
-  sy?: number;
-  srot?: number;
-}
+type LayoutMode = "grouped" | "scattered";
+interface OrbitItem { product: Product; cls: string; bx: number; by: number; z: number; w?: string; h?: string; }
 
-/** Visual family of a chip: tanks are large, pipes tall, fittings compact. */
 function chipClassFor(product: Product): string {
   if (product.category === "Water Tank") return "chip-tank";
-  if (product.category === "HDPE Pipe" || product.category === "PVC Pipe" || product.category === "CPVC Pipe") {
-    return "chip-pipe";
-  }
+  if (["HDPE Pipe", "PVC Pipe", "CPVC Pipe"].includes(product.category)) return "chip-pipe";
   return "chip-round";
 }
 
-/** The built-in arrangement uses the same coordinate space as Admin → Homepage designer. */
 function buildDefaultSlots(products: Product[]): OrbitItem[] {
   const byName = (needle: string) => products.find((product) => product.name.toLowerCase().includes(needle));
   const layout: Array<{ match: string; cls: string; bx: number; by: number; z: number; w?: string; h?: string }> = [
@@ -54,7 +41,6 @@ function buildDefaultSlots(products: Product[]): OrbitItem[] {
     { match: "end cap", cls: "chip-round", bx: 177, by: 46, z: 4 },
     { match: "p trap", cls: "chip-round", bx: 198, by: -8, z: 4 },
   ];
-
   const items: OrbitItem[] = [];
   const used = new Set<string>();
   for (const slot of layout) {
@@ -64,40 +50,24 @@ function buildDefaultSlots(products: Product[]): OrbitItem[] {
       items.push({ product, ...slot });
     }
   }
-
   let extra = 0;
   for (const product of products) {
     if (items.length >= 24) break;
     if (used.has(product.id) || !product.featured) continue;
     used.add(product.id);
     const angle = (extra / 10) * Math.PI * 2;
-    items.push({
-      product,
-      cls: "chip-round",
-      bx: Math.cos(angle) * 260,
-      by: Math.sin(angle) * 60,
-      z: 1,
-    });
+    items.push({ product, cls: "chip-round", bx: Math.cos(angle) * 260, by: Math.sin(angle) * 60, z: 1 });
     extra += 1;
   }
   return items;
 }
 
-/** Admin coordinates are rendered exactly; deleted products are skipped safely. */
 function buildFromSaved(products: Product[], saved: HeroChipLayout): OrbitItem[] {
   const byId = new Map(products.map((product) => [product.id, product]));
   return saved.chips.flatMap((chip) => {
     const product = byId.get(chip.productId);
     if (!product) return [];
-    return [{
-      product,
-      cls: chipClassFor(product),
-      bx: chip.bx,
-      by: chip.by,
-      z: chip.z,
-      w: chip.w != null ? `${chip.w}px` : undefined,
-      h: chip.h != null ? `${chip.h}px` : undefined,
-    }];
+    return [{ product, cls: chipClassFor(product), bx: chip.bx, by: chip.by, z: chip.z, w: chip.w != null ? `${chip.w}px` : undefined, h: chip.h != null ? `${chip.h}px` : undefined }];
   });
 }
 
@@ -105,27 +75,23 @@ function buildScatterSlots(count: number): Array<{ sx: number; sy: number; srot:
   return Array.from({ length: count }, (_, index) => {
     const angle = (index / Math.max(count, 1)) * Math.PI * 2 - Math.PI / 2;
     const ring = index % 3;
-    const radiusX = 250 + ring * 24;
-    const radiusY = 145 + (index % 2) * 24;
     return {
-      sx: Math.round(Math.cos(angle) * radiusX),
-      sy: Math.round(Math.sin(angle) * radiusY),
+      sx: Math.round(Math.cos(angle) * (250 + ring * 24)),
+      sy: Math.round(Math.sin(angle) * (145 + (index % 2) * 24)),
       srot: Math.round((index % 2 ? 1 : -1) * (3 + (index % 5) * 2)),
     };
   });
 }
 
-/** Public WYSIWYG product family. The admin layout remains intact at every breakpoint. */
 export function ProductShowcase() {
   const { products, heroLayout } = useSiteData();
   const stageRef = useRef<HTMLDivElement | null>(null);
-  const [layoutMode, setLayoutMode] = useState<"grouped" | "scattered">("grouped");
+  const progressRef = useRef(1);
+  const hasInteracted = useRef(false);
+  const [layoutMode, setLayoutMode] = useState<LayoutMode>("scattered");
+  const [motionProgress, setMotionProgress] = useState(1);
   const hasSavedLayout = Boolean(heroLayout?.chips?.length);
-
-  const items = useMemo(
-    () => (hasSavedLayout ? buildFromSaved(products, heroLayout!) : buildDefaultSlots(products)),
-    [hasSavedLayout, heroLayout, products],
-  );
+  const items = useMemo(() => (hasSavedLayout ? buildFromSaved(products, heroLayout!) : buildDefaultSlots(products)), [hasSavedLayout, heroLayout, products]);
   const scatterSlots = useMemo(() => buildScatterSlots(items.length), [items.length]);
 
   useEffect(() => {
@@ -142,72 +108,60 @@ export function ProductShowcase() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const start = progressRef.current;
+    const target = layoutMode === "scattered" ? 1 : 0;
+    if (start === target) return;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) {
+      progressRef.current = target;
+      setMotionProgress(target);
+      return;
+    }
+    const startedAt = performance.now();
+    let frame = 0;
+    const animate = (now: number) => {
+      const t = Math.min(1, (now - startedAt) / 1150);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const next = start + (target - start) * eased;
+      progressRef.current = next;
+      setMotionProgress(next);
+      if (t < 1) frame = requestAnimationFrame(animate);
+    };
+    frame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frame);
+  }, [layoutMode]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      if (!hasInteracted.current) setLayoutMode("grouped");
+    }, 2400);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   return (
     <div className="hero-visual-col">
-      <div className="showcase-heading">
+      <div className={`showcase-heading ${layoutMode === "scattered" ? "scatter-active" : ""}`}>
         <span className="showcase-heading-label">JAGADAMBA PLASTIC</span>
         <span className="showcase-heading-title">Our Range of Products</span>
-        <div className="core-note">
-          {hasSavedLayout
-            ? `${items.length} products · arrangement saved from the homepage designer`
-            : `${items.length} products from our complete range`}
-        </div>
-        <div className="showcase-mode-switch" role="group" aria-label="Product arrangement mode">
-          <button
-            type="button"
-            className={layoutMode === "grouped" ? "active" : ""}
-            aria-pressed={layoutMode === "grouped"}
-            onClick={() => setLayoutMode("grouped")}
-          >
-            Grouped
-          </button>
-          <button
-            type="button"
-            className={layoutMode === "scattered" ? "active" : ""}
-            aria-pressed={layoutMode === "scattered"}
-            onClick={() => setLayoutMode("scattered")}
-          >
-            Scattered
-          </button>
+        <div className="core-note">{hasSavedLayout ? `${items.length} products · arrangement saved from the homepage designer` : `${items.length} products from our complete range`}</div>
+        <div className="showcase-mode-switch" data-mode={layoutMode} role="group" aria-label="Product arrangement mode">
+          <button type="button" className={layoutMode === "grouped" ? "active" : ""} aria-pressed={layoutMode === "grouped"} onClick={() => { hasInteracted.current = true; setLayoutMode("grouped"); }}>Grouped</button>
+          <button type="button" className={layoutMode === "scattered" ? "active" : ""} aria-pressed={layoutMode === "scattered"} onClick={() => { hasInteracted.current = true; setLayoutMode("scattered"); }}>Scattered</button>
         </div>
       </div>
-      <div
-        className="hero-visual"
-        ref={stageRef}
-        data-layout-source={hasSavedLayout ? "admin" : "default"}
-        data-layout-mode={layoutMode}
-      >
+      <div className="hero-visual" ref={stageRef} data-layout-source={hasSavedLayout ? "admin" : "default"} data-layout-mode={layoutMode}>
         <div className={`showcase-orbit ${layoutMode}`} id="showcaseOrbit">
-          <div className="showcase-pool" aria-hidden="true">
-            <div className="glow" />
-            <div className="ripple" />
-            <div className="ripple r2" />
-            <div className="ripple r3" />
-          </div>
+          <div className="showcase-pool" aria-hidden="true"><div className="glow" /><div className="ripple" /><div className="ripple r2" /><div className="ripple r3" /></div>
           {items.map(({ product, cls, bx, by, z, w, h }, index) => {
-            const scatter = scatterSlots[index];
-            return (
-              <Link
-                key={product.id}
-                to={`/products/${product.id}`}
-                className={`orbit-chip ${cls}`}
-                style={{
-                  "--bx": `${bx}px`,
-                  "--by": `${by}px`,
-                  "--sx": `${scatter.sx}px`,
-                  "--sy": `${scatter.sy}px`,
-                  "--srot": `${scatter.srot}deg`,
-                  "--z": z,
-                  width: w,
-                  height: h,
-                } as React.CSSProperties}
-              >
-                <span className="chip-disc">
-                  <img src={product.image} alt={product.name} loading="lazy" />
-                </span>
-                <span className="chip-label">{product.name}</span>
-              </Link>
-            );
+            const scatter = scatterSlots[index] ?? { sx: 0, sy: 0, srot: 0 };
+            const x = bx + (scatter.sx - bx) * motionProgress;
+            const y = by + (scatter.sy - by) * motionProgress;
+            const rotation = scatter.srot * motionProgress;
+            const scale = 1 - motionProgress * 0.1;
+            return <Link key={product.id} to={`/products/${product.id}`} className={`orbit-chip ${cls}`} style={{ "--tx": `${x}px`, "--ty": `${y}px`, "--rot": `${rotation}deg`, "--chip-scale": scale, "--z": z, width: w, height: h } as CSSProperties}>
+              <span className="chip-disc"><img src={product.image} alt={product.name} loading="lazy" /></span><span className="chip-label">{product.name}</span>
+            </Link>;
           })}
         </div>
       </div>

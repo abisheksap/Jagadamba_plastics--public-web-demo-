@@ -8,10 +8,24 @@ export { SEED_PRODUCTS };
 export const SEED_GALLERY: GalleryItem[] = [
   {
     id: "g-reel",
-    title: "Product reel",
+    title: "Jagadamba YouTube channel",
     kind: "video",
     image: "/images/products-v2/borewell-casing-pipe.png",
     videoUrl: "https://www.youtube.com/@JagadambaPipeFittings",
+  },
+  {
+    id: "g-installation-guide",
+    title: "Installation guide",
+    kind: "video",
+    image: "/images/products-v2/pvc-p-trap.png",
+    videoUrl: "https://www.youtube.com/watch?v=2rIW5WYFHqE",
+  },
+  {
+    id: "g-product-guide",
+    title: "CPVC product guide",
+    kind: "video",
+    image: "/images/products-v2/cpvc-elbow-90.png",
+    videoUrl: "https://www.youtube.com/watch?v=utWwcfOKuq0",
   },
   {
     id: "g-site-bharatpur",
@@ -42,6 +56,30 @@ export const SEED_GALLERY: GalleryItem[] = [
     title: "Elbow details",
     kind: "photo",
     image: "/images/products-v2/cpvc-elbow-90.png",
+  },
+  {
+    id: "g-p-trap",
+    title: "P-trap finishing detail",
+    kind: "photo",
+    image: "/images/products-v2/pvc-p-trap.png",
+  },
+  {
+    id: "g-pipe-bundle",
+    title: "Pipe bundle ready for dispatch",
+    kind: "photo",
+    image: "/images/products-v2/pvc-pipe-bundle.png",
+  },
+  {
+    id: "g-square-jali",
+    title: "Square tile with jali",
+    kind: "photo",
+    image: "/images/products-v2/pvc-square-tile-jali.png",
+  },
+  {
+    id: "g-metal-clip",
+    title: "Metal pipe clip",
+    kind: "photo",
+    image: "/images/products-v2/pvc-metal-clip.png",
   },
 ];
 

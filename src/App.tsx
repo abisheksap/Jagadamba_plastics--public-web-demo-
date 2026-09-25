@@ -40,7 +40,7 @@ function Chrome({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <TopBar phone={settings.phone} email={settings.email} phoneAlt={settings.phoneAlt} />
+      <TopBar />
       <ScrollTrack />
       <Nav />
       {children}
