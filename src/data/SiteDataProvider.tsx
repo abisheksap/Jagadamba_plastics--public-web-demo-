@@ -6,6 +6,7 @@ import { convexEnabled, getConvexClient } from "./convexClient";
 import * as local from "./store";
 import { buildSeedData } from "./seed";
 import { convexAdminOps, localAdminOps, type AdminOps } from "./backend";
+import { productImageFor } from "./productImages";
 import type { HeroChipLayout, SiteContent, SiteData } from "./types";
 import { DEFAULT_CONTENT } from "./types";
 
@@ -97,7 +98,12 @@ function ConvexModel(): ReadModel {
   }, [ready, products, gallery, seedDone]);
 
   return {
-    products: products ?? [],
+    // Convex may contain legacy image paths from the first catalog seed. Resolve
+    // them at the public read boundary so every page receives a shipped asset.
+    products: (products ?? []).map((product) => ({
+      ...product,
+      image: productImageFor(product),
+    })),
     gallery: gallery ?? [],
     reviews: reviews ?? [],
     enquiries: enquiries ?? [],
