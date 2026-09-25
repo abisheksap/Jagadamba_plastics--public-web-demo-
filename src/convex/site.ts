@@ -267,7 +267,7 @@ export const getSettings = query({
       youtube: map.youtube ?? "https://www.youtube.com/@JagadambaPipeFittings",
       showPrices: map.showPrices ?? true,
       priceListDate: map.priceListDate ?? "2082/09/01",
-      theme: map.theme ?? "deep-ocean",
+      theme: map.theme ?? "heritage-cream",
     };
   },
 });

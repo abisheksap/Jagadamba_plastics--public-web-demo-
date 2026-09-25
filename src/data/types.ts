@@ -146,7 +146,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   youtube: "https://www.youtube.com/@JagadambaPipeFittings",
   showPrices: true,
   priceListDate: "2082/09/01",
-  theme: "deep-ocean",
+  theme: "heritage-cream",
 };
 
 /* ---------------- editable site content (hero + about) ---------------- */
