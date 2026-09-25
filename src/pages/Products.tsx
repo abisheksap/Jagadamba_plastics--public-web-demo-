@@ -35,6 +35,34 @@ function variantLabel(v: ProductVariant): string {
   return v.spec ? `${v.size} — ${v.spec}` : v.size;
 }
 
+export interface CatalogFilters {
+  group: ProductGroupId | "all";
+  category: ProductCategory | "all";
+  query: string;
+}
+
+/** Shared catalog filtering logic keeps family/category/search behavior testable. */
+export function filterCatalogProducts(products: Product[], filters: CatalogFilters): Product[] {
+  const query = filters.query.trim().toLowerCase();
+  return products
+    .filter((product) =>
+      filters.group === "all" || productGroupFor(product.category).id === filters.group,
+    )
+    .filter((product) => filters.category === "all" || product.category === filters.category)
+    .filter((product) => {
+      if (!query) return true;
+      const inVariants = (product.variants ?? []).some((variant) =>
+        `${variant.size} ${variant.spec ?? ""}`.toLowerCase().includes(query),
+      );
+      return (
+        `${product.name} ${product.tagline} ${product.description} ${product.category}`
+          .toLowerCase()
+          .includes(query) || inVariants
+      );
+    })
+    .sort((a, b) => a.sortOrder - b.sortOrder);
+}
+
 /* ============================== CATALOG PAGE ============================== */
 
 export function ProductsPage() {
@@ -77,18 +105,10 @@ export function ProductsPage() {
     ? PRODUCT_CATEGORIES
     : PRODUCT_GROUPS.find((group) => group.id === groupFilter)?.categories ?? PRODUCT_CATEGORIES;
 
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return products
-      .filter((p) => groupFilter === "all" || productGroupFor(p.category).id === groupFilter)
-      .filter((p) => categoryFilter === "all" || p.category === categoryFilter)
-      .filter((p) => {
-        if (!q) return true;
-        const inVariants = (p.variants ?? []).some((v) => `${v.size} ${v.spec ?? ""}`.toLowerCase().includes(q));
-        return `${p.name} ${p.tagline} ${p.description} ${p.category}`.toLowerCase().includes(q) || inVariants;
-      })
-      .sort((a, b) => a.sortOrder - b.sortOrder);
-  }, [products, groupFilter, categoryFilter, query]);
+  const filtered = useMemo(
+    () => filterCatalogProducts(products, { group: groupFilter, category: categoryFilter, query }),
+    [products, groupFilter, categoryFilter, query],
+  );
 
   return (
     <>
@@ -143,10 +163,13 @@ export function ProductsPage() {
           <div className="catalog-subfilters" aria-label="Product categories">
             <button
               type="button"
-              className={`filter-pill${categoryFilter === "all" ? " active" : ""}`}
-              onClick={() => setCategoryFilter("all")}
+              className={`filter-pill${categoryFilter === "all" && groupFilter === "all" ? " active" : ""}`}
+              onClick={() => {
+                setGroupFilter("all");
+                setCategoryFilter("all");
+              }}
             >
-              All {groupFilter === "all" ? "products" : visibleCategories.join(" · ")}
+              {groupFilter === "all" ? "All products" : "All families"}
             </button>
             {visibleCategories.map((c) => (
               <button
