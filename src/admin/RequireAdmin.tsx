@@ -8,13 +8,27 @@ export function RequireAdmin({ children }: { children: ReactNode }) {
   const [authed, setAuthed] = useState(false);
 
   useEffect(() => {
-    ensurePasscodeSeeded().then(() => {
-      setAuthed(isAdmin());
-      setChecked(true);
-    });
+    let active = true;
+    ensurePasscodeSeeded()
+      .catch(() => undefined)
+      .finally(() => {
+        if (!active) return;
+        setAuthed(isAdmin());
+        setChecked(true);
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
-  if (!checked) return null;
+  if (!checked) {
+    return (
+      <div className="admin-loading" role="status">
+        <span className="admin-loading-mark" />
+        <span>Opening the Jagadamba admin panel…</span>
+      </div>
+    );
+  }
   if (!authed) return <AdminLogin />;
   return <>{children}</>;
 }

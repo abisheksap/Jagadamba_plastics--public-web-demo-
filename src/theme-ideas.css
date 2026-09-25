@@ -1,0 +1,108 @@
+/* Additional theme concepts layered onto the existing token system. */
+[data-theme="himalayan-dawn"] {
+  --ink: #2a1730;
+  --ink-rgb: 42, 23, 48;
+  --ink-2: #452544;
+  --ink-2-rgb: 69, 37, 68;
+  --accent: #9c4f68;
+  --accent-rgb: 156, 79, 104;
+  --accent-light: #d795a7;
+  --accent-light-rgb: 215, 149, 167;
+  --deep: #160d1b;
+  --deep-rgb: 22, 13, 27;
+  --deep-2: #27152a;
+  --deep-2-rgb: 39, 21, 42;
+  --hero-1: #4a203c;
+  --hero-2: #2b1329;
+  --hero-3: #160b1a;
+  --hero-3-rgb: 22, 11, 26;
+  --panel-rgb: 40, 22, 39;
+  --glass: rgba(61, 31, 53, 0.62);
+  --line: rgba(244, 182, 109, 0.18);
+  --line-glow: rgba(244, 182, 109, 0.36);
+  --grid-line: rgba(244, 182, 109, 0.08);
+  --cyan: #f2b66d;
+  --cyan-rgb: 242, 182, 109;
+  --cyan-2: #ffe0a8;
+  --cyan-soft: rgba(242, 182, 109, 0.14);
+  --red: #ef6b57;
+  --red-rgb: 239, 107, 87;
+  --red-bright: #ff9a78;
+  --red-dark: #b84448;
+  --red-dark-rgb: 184, 68, 72;
+  --red-glow: rgba(239, 107, 87, 0.45);
+  --text-mid: #dbc6c6;
+  --text-dim: #b99da6;
+}
+
+[data-theme="blueprint-grid"] {
+  --ink: #08234b;
+  --ink-rgb: 8, 35, 75;
+  --ink-2: #0c3270;
+  --ink-2-rgb: 12, 50, 112;
+  --accent: #2667bd;
+  --accent-rgb: 38, 103, 189;
+  --accent-light: #7aaee8;
+  --accent-light-rgb: 122, 174, 232;
+  --deep: #06162e;
+  --deep-rgb: 6, 22, 46;
+  --deep-2: #0a2245;
+  --deep-2-rgb: 10, 34, 69;
+  --hero-1: #0d3268;
+  --hero-2: #092554;
+  --hero-3: #06162f;
+  --hero-3-rgb: 6, 22, 47;
+  --panel-rgb: 10, 36, 72;
+  --glass: rgba(10, 43, 86, 0.62);
+  --line: rgba(99, 179, 255, 0.2);
+  --line-glow: rgba(99, 179, 255, 0.42);
+  --grid-line: rgba(99, 179, 255, 0.1);
+  --cyan: #63b3ff;
+  --cyan-rgb: 99, 179, 255;
+  --cyan-2: #b9e1ff;
+  --cyan-soft: rgba(99, 179, 255, 0.14);
+  --red: #ff8a3d;
+  --red-rgb: 255, 138, 61;
+  --red-bright: #ffb16e;
+  --red-dark: #c85c28;
+  --red-dark-rgb: 200, 92, 40;
+  --red-glow: rgba(255, 138, 61, 0.45);
+  --text-mid: #b4cbe5;
+  --text-dim: #8da8c5;
+}
+
+[data-theme="terracotta-workshop"] {
+  --ink: #352117;
+  --ink-rgb: 53, 33, 23;
+  --ink-2: #513022;
+  --ink-2-rgb: 81, 48, 34;
+  --accent: #a45132;
+  --accent-rgb: 164, 81, 50;
+  --accent-light: #d99a74;
+  --accent-light-rgb: 217, 154, 116;
+  --deep: #1c100b;
+  --deep-rgb: 28, 16, 11;
+  --deep-2: #2b1810;
+  --deep-2-rgb: 43, 24, 16;
+  --hero-1: #5b3020;
+  --hero-2: #3a1d14;
+  --hero-3: #1c0f0b;
+  --hero-3-rgb: 28, 15, 11;
+  --panel-rgb: 46, 25, 17;
+  --glass: rgba(62, 34, 22, 0.62);
+  --line: rgba(240, 163, 91, 0.18);
+  --line-glow: rgba(240, 163, 91, 0.38);
+  --grid-line: rgba(240, 163, 91, 0.08);
+  --cyan: #f0a35b;
+  --cyan-rgb: 240, 163, 91;
+  --cyan-2: #ffd39c;
+  --cyan-soft: rgba(240, 163, 91, 0.14);
+  --red: #d85d3f;
+  --red-rgb: 216, 93, 63;
+  --red-bright: #ff9163;
+  --red-dark: #963d32;
+  --red-dark-rgb: 150, 61, 50;
+  --red-glow: rgba(216, 93, 63, 0.45);
+  --text-mid: #dbc2af;
+  --text-dim: #b99d89;
+}

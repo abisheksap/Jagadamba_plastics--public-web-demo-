@@ -1,9 +1,9 @@
-import { useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { EnquiryForm } from "../components/EnquiryForm";
 import { useSiteData } from "../data/SiteDataProvider";
-import type { Product, ProductVariant } from "../data/types";
-import { PRODUCT_CATEGORIES } from "../data/types";
+import type { Product, ProductCategory, ProductGroupId, ProductVariant } from "../data/types";
+import { PRODUCT_CATEGORIES, PRODUCT_GROUPS, productGroupFor } from "../data/types";
 
 const ArrowIcon = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
@@ -39,9 +39,24 @@ function variantLabel(v: ProductVariant): string {
 
 export function ProductsPage() {
   const { products, settings } = useSiteData();
-  const [filter, setFilter] = useState<string>("All");
+  const [searchParams] = useSearchParams();
+  const requestedGroup = searchParams.get("group") as ProductGroupId | null;
+  const requestedCategory = searchParams.get("category") as ProductCategory | null;
+  const [groupFilter, setGroupFilter] = useState<ProductGroupId | "all">(
+    requestedGroup && PRODUCT_GROUPS.some((group) => group.id === requestedGroup) ? requestedGroup : "all",
+  );
+  const [categoryFilter, setCategoryFilter] = useState<ProductCategory | "all">(
+    requestedCategory && PRODUCT_CATEGORIES.includes(requestedCategory) ? requestedCategory : "all",
+  );
   const [query, setQuery] = useState("");
   const showPrices = settings.showPrices !== false;
+
+  useEffect(() => {
+    const group = searchParams.get("group") as ProductGroupId | null;
+    const category = searchParams.get("category") as ProductCategory | null;
+    setGroupFilter(group && PRODUCT_GROUPS.some((item) => item.id === group) ? group : "all");
+    setCategoryFilter(category && PRODUCT_CATEGORIES.includes(category) ? category : "all");
+  }, [searchParams]);
 
   const counts = useMemo(() => {
     const m = new Map<string, number>();
@@ -49,17 +64,31 @@ export function ProductsPage() {
     return m;
   }, [products]);
 
+  const groupCounts = useMemo(() => {
+    const m = new Map<ProductGroupId, number>();
+    for (const p of products) {
+      const id = productGroupFor(p.category).id;
+      m.set(id, (m.get(id) ?? 0) + 1);
+    }
+    return m;
+  }, [products]);
+
+  const visibleCategories = groupFilter === "all"
+    ? PRODUCT_CATEGORIES
+    : PRODUCT_GROUPS.find((group) => group.id === groupFilter)?.categories ?? PRODUCT_CATEGORIES;
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return products
-      .filter((p) => filter === "All" || p.category === filter)
+      .filter((p) => groupFilter === "all" || productGroupFor(p.category).id === groupFilter)
+      .filter((p) => categoryFilter === "all" || p.category === categoryFilter)
       .filter((p) => {
         if (!q) return true;
         const inVariants = (p.variants ?? []).some((v) => `${v.size} ${v.spec ?? ""}`.toLowerCase().includes(q));
         return `${p.name} ${p.tagline} ${p.description} ${p.category}`.toLowerCase().includes(q) || inVariants;
       })
       .sort((a, b) => a.sortOrder - b.sortOrder);
-  }, [products, filter, query]);
+  }, [products, groupFilter, categoryFilter, query]);
 
   return (
     <>
@@ -75,7 +104,7 @@ export function ProductsPage() {
             Every line, <span className="grad">one standard.</span>
           </h1>
           <p className="sub">
-            {products.length} products across pipes, fittings, tanks and tools — manufactured in
+            {products.length} products across pipes, fittings and water tanks — manufactured in
             Chitwan to national standard.
           </p>
           <div className="catalog-search" style={{ maxWidth: 460, marginTop: 30 }}>
@@ -93,16 +122,46 @@ export function ProductsPage() {
 
       <section className="products-future section-pad">
         <div className="wrap">
-          <div className="product-filter" style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 34 }}>
-            {["All", ...PRODUCT_CATEGORIES].map((c) => (
-              <button key={c} className={`filter-pill${filter === c ? " active" : ""}`} onClick={() => setFilter(c)}>
+          <div className="catalog-family-grid" aria-label="Product families">
+            {PRODUCT_GROUPS.map((group) => (
+              <button
+                key={group.id}
+                type="button"
+                className={`catalog-family-card catalog-family-${group.accent}${groupFilter === group.id ? " active" : ""}`}
+                onClick={() => {
+                  setGroupFilter(group.id);
+                  setCategoryFilter("all");
+                }}
+              >
+                <span className="catalog-family-eyebrow">{group.eyebrow}</span>
+                <strong>{group.label}</strong>
+                <span>{group.categories.join(" · ")}</span>
+                <b>{groupCounts.get(group.id) ?? 0} products</b>
+              </button>
+            ))}
+          </div>
+          <div className="catalog-subfilters" aria-label="Product categories">
+            <button
+              type="button"
+              className={`filter-pill${categoryFilter === "all" ? " active" : ""}`}
+              onClick={() => setCategoryFilter("all")}
+            >
+              All {groupFilter === "all" ? "products" : visibleCategories.join(" · ")}
+            </button>
+            {visibleCategories.map((c) => (
+              <button
+                key={c}
+                type="button"
+                className={`filter-pill${categoryFilter === c ? " active" : ""}`}
+                onClick={() => setCategoryFilter(c)}
+              >
                 {c}
-                {c !== "All" && counts.get(c) ? <span className="pill-count">{counts.get(c)}</span> : null}
+                {counts.get(c) ? <span className="pill-count">{counts.get(c)}</span> : null}
               </button>
             ))}
           </div>
           {filtered.length === 0 ? (
-            <div className="empty-state">No products match “{query || filter}”.</div>
+            <div className="empty-state">No products match “{query || categoryFilter || groupFilter}”.</div>
           ) : (
             <div className="product-grid-future">
               {filtered.map((p) => {
@@ -175,6 +234,7 @@ export function ProductDetailPage() {
     );
   }
 
+  const group = productGroupFor(product.category);
   const related = products
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, 3);
@@ -191,6 +251,8 @@ export function ProductDetailPage() {
             <Link to="/">HOME</Link>
             <span>/</span>
             <Link to="/products">PRODUCTS</Link>
+            <span>/</span>
+            <span>{group.label.toUpperCase()}</span>
             <span>/</span>
             <span>{product.category.toUpperCase()}</span>
           </div>
@@ -293,7 +355,7 @@ export function ProductDetailPage() {
           {related.length > 0 && (
             <>
               <h3 style={{ margin: "80px 0 28px", fontSize: 24, color: "#fff" }}>
-                More in {product.category}
+                More in {product.category} · {group.label}
               </h3>
               <div className="product-grid-future">
                 {related.map((p) => (

@@ -46,6 +46,48 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
   "Water Tank",
 ];
 
+export type ProductGroupId = "pipes" | "fittings" | "tanks";
+
+export interface ProductGroup {
+  id: ProductGroupId;
+  label: string;
+  eyebrow: string;
+  description: string;
+  categories: ProductCategory[];
+  accent: string;
+}
+
+export const PRODUCT_GROUPS: ProductGroup[] = [
+  {
+    id: "pipes",
+    label: "Pipes",
+    eyebrow: "PRESSURE + DRAINAGE",
+    description: "HDPE, PVC and CPVC pipe for water networks, borewells and site infrastructure.",
+    categories: ["HDPE Pipe", "PVC Pipe", "CPVC Pipe"],
+    accent: "cyan",
+  },
+  {
+    id: "fittings",
+    label: "Fittings",
+    eyebrow: "CONNECT + CONTROL",
+    description: "Precision-molded elbows, tees, valves, traps and transitions that keep every line connected.",
+    categories: ["PVC Fittings", "CPVC Fittings"],
+    accent: "red",
+  },
+  {
+    id: "tanks",
+    label: "Water tanks",
+    eyebrow: "STORE + SUPPLY",
+    description: "Reliable storage for homes, institutions and dealer inventory across Nepal.",
+    categories: ["Water Tank"],
+    accent: "gold",
+  },
+];
+
+export function productGroupFor(category: ProductCategory): ProductGroup {
+  return PRODUCT_GROUPS.find((group) => group.categories.includes(category)) ?? PRODUCT_GROUPS[0];
+}
+
 export interface GalleryItem {
   id: string;
   title: string;

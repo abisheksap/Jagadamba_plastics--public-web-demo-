@@ -1,7 +1,8 @@
-/** Futuristic shared UI pieces: ticker, count-up stat cards, pipeline band. */
+/** Futuristic shared UI pieces: ticker, count-up stat cards, product atlas, pipeline band. */
 import { useEffect, useId, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import type { Product } from "../data/types";
+import { PRODUCT_GROUPS } from "../data/types";
 
 const TICKER_ITEMS = [
   { pre: "MADE IN", b: "NEPAL" },
@@ -38,7 +39,7 @@ function useCountUp(target: number, active: boolean, duration = 1400) {
     const start = performance.now();
     const tick = (now: number) => {
       const t = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(2, -10 * t); // easeOutExpo
+      const eased = 1 - Math.pow(2, -10 * t);
       setValue(Math.round(eased * target));
       if (t < 1) raf = requestAnimationFrame(tick);
       else setValue(target);
@@ -99,57 +100,69 @@ export function StatsBand({ stats }: { stats: FutureStat[] }) {
   );
 }
 
-/* ---------- CMS-driven product pulse strip ---------- */
+/* ---------- grouped CMS-driven product atlas ---------- */
 export function ProductPulse({ products }: { products: Product[] }) {
-  const items = products.slice(0, 8);
-  if (!items.length) return null;
-  const doubled = [...items, ...items];
+  const groups = PRODUCT_GROUPS.map((group) => ({
+    ...group,
+    items: products.filter((product) => group.categories.includes(product.category)).slice(0, 4),
+  })).filter((group) => group.items.length > 0);
+
+  if (!groups.length) return null;
 
   return (
-    <section className="product-pulse" aria-label="Featured company products">
-      <div className="wrap product-pulse-head">
+    <section className="product-atlas" aria-label="Jagadamba product families">
+      <div className="wrap product-atlas-head">
         <div>
           <div className="kicker-future">
             <span className="kf-dot" />
-            PRODUCT PULSE
+            PRODUCT ATLAS
           </div>
           <h2>
-            Company products, <span className="grad">always in motion.</span>
+            Find the right <span className="grad">waterway.</span>
           </h2>
         </div>
-        <p>Live product cards from the Jagadamba catalog, moving from our factory flow to your project.</p>
+        <p>
+          Three product families, one organized catalog. Explore pipes, fittings and tanks by how
+          they work together on site.
+        </p>
       </div>
-      <div className="product-pulse-window">
-        <div className="product-pulse-track">
-          {doubled.map((product, i) => (
-            <Link
-              key={`${product.id}-${i}`}
-              to={`/products/${product.id}`}
-              className="product-pulse-card"
-              aria-hidden={i >= items.length}
-              tabIndex={i >= items.length ? -1 : undefined}
-            >
-              <span className="product-pulse-icon">
-                <img src={product.image} alt="" loading="lazy" />
-              </span>
-              <span className="product-pulse-copy">
-                <b>{product.name}</b>
-                <small>{product.category}</small>
-              </span>
-              <span className="product-pulse-arrow">↗</span>
-            </Link>
-          ))}
-        </div>
+      <div className="wrap product-atlas-grid">
+        {groups.map((group) => (
+          <Link key={group.id} to={`/products?group=${group.id}`} className={`atlas-card atlas-${group.accent}`}>
+            <div className="atlas-card-top">
+              <span className="atlas-eyebrow">{group.eyebrow}</span>
+              <span className="atlas-arrow">↗</span>
+            </div>
+            <div className="atlas-visual" aria-hidden="true">
+              <span className="atlas-ring atlas-ring-a" />
+              <span className="atlas-ring atlas-ring-b" />
+              {group.items.slice(0, 3).map((product, index) => (
+                <span key={product.id} className={`atlas-product atlas-product-${index + 1}`}>
+                  <img src={product.image} alt="" loading="lazy" />
+                </span>
+              ))}
+            </div>
+            <div className="atlas-copy">
+              <h3>{group.label}</h3>
+              <p>{group.description}</p>
+              <div className="atlas-categories">{group.categories.join(" · ")}</div>
+            </div>
+          </Link>
+        ))}
       </div>
     </section>
   );
+}
+
+function flowCategoryLabel(product: Product): string {
+  return product.category.replace(" Pipe", "").replace(" Fittings", "").toUpperCase();
 }
 
 /* ---------- pipeline flow band ---------- */
 export function ProcessFlow({ products = [] }: { products?: Product[] }) {
   const nodes = ["EXTRUDE", "MOULD", "TEST", "CERTIFY", "DISPATCH"];
   const nodeId = useId();
-  const flowProducts = products.slice(0, 5);
+  const flowProducts = products.slice(0, nodes.length);
   return (
     <div className="flow-band" aria-label="Manufacturing flow with featured products">
       <div className="flow-band-glow" />
@@ -196,8 +209,7 @@ export function ProcessFlow({ products = [] }: { products?: Product[] }) {
           );
         })}
         {flowProducts.map((product, i) => {
-          const x = 240 + i * 220;
-          const y = i % 2 === 0 ? 34 : 86;
+          const x = 130 + i * 220;
           return (
             <a
               key={product.id}
@@ -206,17 +218,19 @@ export function ProcessFlow({ products = [] }: { products?: Product[] }) {
               aria-label={`View ${product.name}`}
             >
               <g className="flow-product-node">
-                <circle className="flow-product-ring" cx={x} cy={y} r={18} />
+                <circle className="flow-product-ring" cx={x} cy={60} r={21} />
                 <image
                   className="flow-product-image"
                   href={product.image}
-                  x={x - 14}
-                  y={y - 14}
-                  width="28"
-                  height="28"
+                  x={x - 16}
+                  y={44}
+                  width="32"
+                  height="32"
                   preserveAspectRatio="xMidYMid meet"
-                  style={{ animationDelay: `${(i * 0.38).toFixed(2)}s` }}
                 />
+                <text className="flow-product-category" x={x} y={17} textAnchor="middle">
+                  {flowCategoryLabel(product)}
+                </text>
               </g>
             </a>
           );

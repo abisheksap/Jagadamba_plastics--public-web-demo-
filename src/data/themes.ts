@@ -58,6 +58,24 @@ export const THEMES: ThemeDef[] = [
     description: "Bright icy blues — crisp and light.",
     swatch: { bg: "#10283c", accent: "#7fe4ff", cta: "#e02129" },
   },
+  {
+    id: "himalayan-dawn",
+    name: "Himalayan Dawn",
+    description: "Warm plum, copper and sunrise gold for a distinctive editorial feel.",
+    swatch: { bg: "#211526", accent: "#f2b66d", cta: "#ef6b57" },
+  },
+  {
+    id: "blueprint-grid",
+    name: "Blueprint Grid",
+    description: "Technical navy with electric blue lines and a safety-orange accent.",
+    swatch: { bg: "#071a33", accent: "#63b3ff", cta: "#ff8a3d" },
+  },
+  {
+    id: "terracotta-workshop",
+    name: "Terracotta Workshop",
+    description: "Earthy charcoal, clay and saffron for a grounded industrial character.",
+    swatch: { bg: "#21150f", accent: "#f0a35b", cta: "#d85d3f" },
+  },
 ];
 
 export function isValidTheme(id: unknown): id is string {

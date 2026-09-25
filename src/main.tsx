@@ -4,6 +4,7 @@ import App from "./App";
 import "./index.css";
 import "./catalog.css";
 import "./public-motion.css";
+import "./theme-ideas.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
