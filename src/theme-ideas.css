@@ -448,3 +448,114 @@
   --text-mid: #dbc2af;
   --text-dim: #b99d89;
 }
+
+/* ---------- shared public refinements ---------- */
+body {
+  font-size: 16px;
+  letter-spacing: -0.012em;
+}
+h1, h2, h3, h4 {
+  text-wrap: balance;
+  letter-spacing: -0.035em;
+}
+.atlas-card {
+  min-height: 466px;
+}
+.atlas-visual {
+  height: 246px;
+  margin: 14px 0 0;
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.atlas-product {
+  max-width: 100%;
+  max-height: 100%;
+  filter: drop-shadow(0 14px 12px rgba(6, 76, 146, 0.18));
+}
+.atlas-product img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.atlas-product-1 { left: 32%; top: 10%; width: 138px; height: 174px; }
+.atlas-product-2 { left: 53%; top: 29%; width: 108px; height: 126px; }
+.atlas-product-3 { left: 17%; top: 49%; width: 92px; height: 104px; }
+.atlas-copy h3 { font-size: 26px; letter-spacing: -0.04em; }
+.atlas-copy p { max-width: 31ch; min-height: 62px; font-size: 14px; line-height: 1.65; }
+.atlas-categories { letter-spacing: .1em; }
+
+/* ---------- dark mode: the same brand after-hours ---------- */
+[data-theme="jagadamba-dark"] {
+  color-scheme: dark;
+  --ink: #d9e8f0;
+  --ink-rgb: 217, 232, 240;
+  --ink-2: #b4d3e2;
+  --ink-2-rgb: 180, 211, 226;
+  --paper: #10283e;
+  --paper-rgb: 16, 40, 62;
+  --paper-2: #0b2134;
+  --accent: #79b6d4;
+  --accent-rgb: 121, 182, 212;
+  --accent-light: #9acce0;
+  --accent-light-rgb: 154, 204, 224;
+  --red: #e02129;
+  --red-rgb: 224, 33, 41;
+  --red-bright: #ff5960;
+  --red-dark: #a8141b;
+  --red-dark-rgb: 168, 20, 27;
+  --deep: #081d31;
+  --deep-rgb: 8, 29, 49;
+  --deep-2: #0d2942;
+  --deep-2-rgb: 13, 41, 66;
+  --hero-1: #123957;
+  --hero-2: #0b2740;
+  --hero-3: #061726;
+  --hero-3-rgb: 6, 23, 38;
+  --panel-rgb: 15, 43, 67;
+  --glass: rgba(15, 43, 67, 0.86);
+  --line: rgba(154, 204, 224, 0.16);
+  --line-light: rgba(154, 204, 224, 0.13);
+  --line-glow: rgba(121, 182, 212, 0.28);
+  --grid-line: rgba(121, 182, 212, 0.08);
+  --cyan: #79b6d4;
+  --cyan-rgb: 121, 182, 212;
+  --cyan-2: #b7e2f1;
+  --cyan-soft: rgba(121, 182, 212, 0.12);
+  --text-hi: #edf6f8;
+  --text-mid: #b2cbd6;
+  --text-dim: #7f9cab;
+  --text-faint: #6d8997;
+  --topbar-bg: rgba(6, 23, 38, 0.95);
+  --overlay-bg: rgba(2, 11, 20, 0.94);
+  --admin-bg: #081d31;
+  --admin-side: #061726;
+  --admin-card: #0d2942;
+}
+[data-theme="jagadamba-dark"] body { background-color: var(--deep); }
+[data-theme="jagadamba-dark"] .topbar { color: var(--text-mid); background: var(--topbar-bg); border-color: var(--line); }
+[data-theme="jagadamba-dark"] .topbar .topbar-brand b { color: var(--text-hi); }
+[data-theme="jagadamba-dark"] .nav { color: var(--text-hi); background: rgba(6, 23, 38, 0.88); border-color: var(--line); }
+[data-theme="jagadamba-dark"] .nav.scrolled { background: rgba(6, 23, 38, 0.97); }
+[data-theme="jagadamba-dark"] .nav-logo,
+[data-theme="jagadamba-dark"] .nav-links a,
+[data-theme="jagadamba-dark"] .nav-search,
+[data-theme="jagadamba-dark"] .nav-toggle { color: var(--text-hi); }
+[data-theme="jagadamba-dark"] .hero { background: radial-gradient(circle at 84% 16%, rgba(224, 33, 41, .13), transparent 30%), linear-gradient(135deg, #123957, #081d31 65%); }
+[data-theme="jagadamba-dark"] .grid-overlay { opacity: .2; }
+[data-theme="jagadamba-dark"] .atlas-card,
+[data-theme="jagadamba-dark"] .glass-card,
+[data-theme="jagadamba-dark"] .p-card-future,
+[data-theme="jagadamba-dark"] .r-card-future,
+[data-theme="jagadamba-dark"] .leader-card,
+[data-theme="jagadamba-dark"] .catalog-family-card { background: rgba(15, 43, 67, .9); border-color: var(--line); }
+[data-theme="jagadamba-dark"] .atlas-copy h3,
+[data-theme="jagadamba-dark"] .glass-card h3,
+[data-theme="jagadamba-dark"] .p-card-future h3,
+[data-theme="jagadamba-dark"] .r-card-future .who .name { color: var(--text-hi); }
+[data-theme="jagadamba-dark"] .atlas-product { filter: drop-shadow(0 16px 14px rgba(0, 0, 0, .46)); }
+[data-theme="jagadamba-dark"] .page-hero { background: linear-gradient(135deg, #123957, #081d31); border-bottom-color: var(--red); }
+[data-theme="jagadamba-dark"] .page-hero h1,
+[data-theme="jagadamba-dark"] .hero h1 { color: var(--text-hi); }
+[data-theme="jagadamba-dark"] .footer-grid .brand,
+[data-theme="jagadamba-dark"] .footer-grid h4 { color: var(--text-hi); }
