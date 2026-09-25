@@ -64,7 +64,7 @@ export default function AdminLogin() {
               onChange={(e) => setPasscode(e.target.value)}
             />
           </div>
-          <button className="admin-btn primary" style={{ width: "100%", padding: 13 }} disabled={busy}>
+          <button type="submit" className="admin-btn primary" style={{ width: "100%", padding: 13 }} disabled={busy}>
             {busy ? "Checking…" : "Sign in"}
           </button>
           <div className="login-error">{error || recoveryMsg}</div>

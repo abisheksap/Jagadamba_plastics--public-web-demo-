@@ -87,14 +87,23 @@ export default function AdminDashboard() {
         </div>
       )}
 
+      <div className="admin-card admin-designer-callout">
+        <div>
+          <span className="admin-side-callout-kicker">HOMEPAGE DESIGNER</span>
+          <h3>Shape the first product impression</h3>
+          <p>Open the visual arranger to place, resize and layer the products in the homepage hero group.</p>
+        </div>
+        <Link to="/admin/arranger" className="admin-btn primary">Open designer →</Link>
+      </div>
+
       <div className="admin-card">
         <h3>Quick actions</h3>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           <Link to="/admin/products" className="admin-btn primary">
             Add a product
           </Link>
-          <Link to="/admin/arranger" className="admin-btn">
-            Arrange home product group
+          <Link to="/admin/arranger" className="admin-btn primary">
+            Open homepage designer
           </Link>
           <Link to="/admin/content" className="admin-btn">
             Edit hero &amp; leadership content

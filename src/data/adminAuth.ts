@@ -1,12 +1,25 @@
 // Lightweight client-side admin gate. This is a convenience lock for a static
 // site — it keeps the panel out of casual reach but is not server-grade
-// security. When the data layer moves to a hosted backend, replace this with
-// that backend's real auth.
+// security. When Convex is configured, sign-in is also verified by the backend
+// before the local session is opened.
+
+import { api } from "../convex/_generated/api";
+import { convexEnabled, getConvexClient } from "./convexClient";
 
 const SESSION_KEY = "jagadamba-admin-session";
 const PASSCODE_KEY = "jagadamba-admin-passcode";
 const CRED_KEY = "jagadamba-admin-cred";
+const AUTH_EVENT = "jagadamba-admin-auth-change";
 const DEFAULT_PASSCODE = "jagadamba2077";
+
+function announceAuthChange() {
+  window.dispatchEvent(new Event(AUTH_EVENT));
+}
+
+export function subscribeToAdminAuth(listener: () => void): () => void {
+  window.addEventListener(AUTH_EVENT, listener);
+  return () => window.removeEventListener(AUTH_EVENT, listener);
+}
 
 const memoryLocal = new Map<string, string>();
 const memorySession = new Map<string, string>();
@@ -135,16 +148,28 @@ export async function ensurePasscodeSeeded() {
 export async function signIn(passcode: string): Promise<boolean> {
   await ensurePasscodeSeeded();
   if ((await sha256(passcode)) !== storedPasscodeHash()) return false;
+
+  // The local hash keeps the static/local-storage mode usable. In Convex mode,
+  // never grant the UI session until the server confirms the same credential.
+  if (convexEnabled) {
+    const client = getConvexClient();
+    if (!client) return false;
+    const serverAccepted = await client.mutation(api.site.adminSignIn, { passcode });
+    if (!serverAccepted) return false;
+  }
+
   sessionSet(SESSION_KEY, "1");
   // Remember the plaintext credential for this tab so backend operations can
   // use the passcode server-side in Convex mode.
   sessionSet(CRED_KEY, passcode);
+  announceAuthChange();
   return true;
 }
 
 export function signOut() {
   sessionRemove(SESSION_KEY);
   sessionRemove(CRED_KEY);
+  announceAuthChange();
 }
 
 export function adminCredential(): string {

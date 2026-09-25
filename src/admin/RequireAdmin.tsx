@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import { ensurePasscodeSeeded, isAdmin } from "../data/adminAuth";
+import { ensurePasscodeSeeded, isAdmin, subscribeToAdminAuth } from "../data/adminAuth";
 import AdminLogin from "./AdminLogin";
 
 export function RequireAdmin({ children }: { children: ReactNode }) {
@@ -16,8 +16,12 @@ export function RequireAdmin({ children }: { children: ReactNode }) {
         setAuthed(isAdmin());
         setChecked(true);
       });
+    const unsubscribe = subscribeToAdminAuth(() => {
+      if (active) setAuthed(isAdmin());
+    });
     return () => {
       active = false;
+      unsubscribe();
     };
   }, []);
 

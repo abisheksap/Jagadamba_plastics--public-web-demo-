@@ -96,7 +96,8 @@ function migrateImages(d: SiteData): SiteData {
   const exists = new Set<string>();
   const fileExists = (path: string) => {
     if (exists.has(path)) return true;
-    const ok = IMAGE_SET.has(path);
+    const normalized = path.replace(/^\/public\//, "/").replace(/^\//, "");
+    const ok = IMAGE_SET.has(normalized);
     if (ok) exists.add(path);
     return ok;
   };
@@ -115,11 +116,18 @@ function migrateImages(d: SiteData): SiteData {
   };
   d.products = d.products.map((p) => ({ ...p, image: fix(p.image) }));
   d.gallery = d.gallery.map((g) => ({ ...g, image: fix(g.image) }));
+  // Older preview sessions stored an empty gallery or paths that no longer
+  // exist. Keep valid admin uploads, but repair a completely empty gallery
+  // with the shipped editorial set so the public page is never blank.
+  const galleryIsUsable = d.gallery.some((g) => g.image && (g.image.startsWith("data:") || g.image.startsWith("http") || fileExists(g.image)));
+  if (!galleryIsUsable) d.gallery = buildSeedData().gallery.map((g) => ({ ...g }));
   return d;
 }
 
 /** Paths (without the leading "/") of every image shipped in /public. */
-const IMAGE_SET = new Set(IMAGE_MANIFEST.map((p) => p.replace(/^\//, "")));
+const IMAGE_SET = new Set(
+  IMAGE_MANIFEST.map((p) => p.replace(/^\/public\//, "/").replace(/^\//, "")),
+);
 
 function persist() {
   try {
@@ -283,6 +291,12 @@ export function updateSettings(settings: SiteData["settings"]) {
   const themeChanged = settings.theme !== data.settings.theme;
   data.settings = { ...settings };
   log("settings", "Contact & settings updated", themeChanged ? `Theme → ${settings.theme}` : undefined);
+  persist();
+}
+
+/** Public theme picker: intentionally does not create an admin activity entry. */
+export function setPublicTheme(theme: string) {
+  data.settings = { ...data.settings, theme };
   persist();
 }
 
