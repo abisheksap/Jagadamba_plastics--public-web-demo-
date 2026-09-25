@@ -1,0 +1,23 @@
+/* Home product-group arranger: render transparent catalog PNGs directly. */
+.arrange-chip {
+  border-radius: 0;
+}
+
+.arrange-chip .arrange-product-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  filter: drop-shadow(0 12px 12px rgba(0, 0, 0, 0.48));
+  pointer-events: none;
+  user-select: none;
+}
+
+.arrange-chip.selected .arrange-product-image {
+  outline: 2px solid var(--red);
+  outline-offset: 5px;
+}

@@ -5,6 +5,7 @@ import "./index.css";
 import "./catalog.css";
 import "./public-motion.css";
 import "./theme-ideas.css";
+import "./arranger.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
