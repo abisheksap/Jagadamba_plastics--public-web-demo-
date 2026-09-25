@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-const Icon = ({ children, size = 15 }: { children: React.ReactNode; size?: number }) => <span aria-hidden="true" style={{ fontSize: size, lineHeight: 1 }}>{children}</span>;
-const ArrowUpRight = ({ size = 15 }: { size?: number }) => <Icon size={size}>↗</Icon>;
-const ChevronDown = ({ size = 13 }: { size?: number }) => <Icon size={size}>⌄</Icon>;
-const Palette = ({ size = 15 }: { size?: number }) => <Icon size={size}>◈</Icon>;
-const Search = ({ size = 17 }: { size?: number }) => <Icon size={size}>⌕</Icon>;
 import { useSiteData } from "../data/SiteDataProvider";
 import { PUBLIC_THEME_EVENT, setPublicThemePreference } from "../data/theme";
 import { THEMES } from "../data/themes";
 import { PRODUCT_GROUPS } from "../data/types";
 
-export function TopBar({ phone, email, phoneAlt }: { phone: string; email: string; phoneAlt?: string }) {
+const Icon = ({ children, size = 15 }: { children: React.ReactNode; size?: number }) => <span aria-hidden="true" style={{ fontSize: size, lineHeight: 1 }}>{children}</span>;
+const ArrowUpRight = ({ size = 15 }: { size?: number }) => <Icon size={size}>↗</Icon>;
+const ChevronDown = ({ size = 13 }: { size?: number }) => <Icon size={size}>⌄</Icon>;
+const Palette = ({ size = 15 }: { size?: number }) => <Icon size={size}>◈</Icon>;
+const Search = ({ size = 17 }: { size?: number }) => <Icon size={size}>⌕</Icon>;
+
+export function TopBar() {
   const [darkMode, setDarkMode] = useState(() => document.documentElement.getAttribute("data-theme") === "jagadamba-dark");
 
   useEffect(() => {
@@ -31,22 +32,11 @@ export function TopBar({ phone, email, phoneAlt }: { phone: string; email: strin
         <Link to="/" aria-label="Jagadamba Plastic home"><img src="/images/logo.png" alt="" /></Link>
         <span><b>JAGADAMBA</b><small>PLASTIC INDUSTRIES PVT. LTD.</small></span>
       </div>
-      <div className="topbar-status" aria-label="Company details">
-        <span>BHARATPUR-4 · CHITWAN</span>
-        <i aria-hidden="true" />
-        <span>PIPES · FITTINGS · TANKS</span>
-        <span className="scroll-readout" id="scrollReadout">SCROLL 00%</span>
-      </div>
-      <div className="topbar-info">
-        <a href={`tel:${phone.replace(/[^+\d]/g, "")}`}>☎ {phone}</a>
-        {phoneAlt && <a href={`tel:${phoneAlt.replace(/[^+\d]/g, "")}`}>☎ {phoneAlt}</a>}
-        <a href={`mailto:${email}`}>{email}</a>
-        <span>www.jagadambaplastic.com</span>
-        <button className="theme-toggle" type="button" onClick={toggleDarkMode} aria-pressed={darkMode} aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}>
-          <span aria-hidden="true">{darkMode ? "☼" : "◐"}</span>
-          <b>{darkMode ? "Light" : "Dark"}</b>
-        </button>
-      </div>
+      <div className="topbar-compact-note">NEPAL-MADE WATER SYSTEMS <span aria-hidden="true">·</span> EST. 2063 B.S.</div>
+      <button className="theme-toggle" type="button" onClick={toggleDarkMode} aria-pressed={darkMode} aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}>
+        <span aria-hidden="true">{darkMode ? "☼" : "◐"}</span>
+        <b>{darkMode ? "Light" : "Dark"}</b>
+      </button>
     </div>
   );
 }
@@ -54,7 +44,6 @@ export function TopBar({ phone, email, phoneAlt }: { phone: string; email: strin
 export function ScrollTrack() {
   useEffect(() => {
     const progress = document.getElementById("scrollProgress");
-    const readout = document.getElementById("scrollReadout");
     const nav = document.getElementById("nav");
     let ticking = false;
     const onScroll = () => {
@@ -63,7 +52,6 @@ export function ScrollTrack() {
       const ratio = docH > 0 ? Math.min(1, Math.max(0, y / docH)) : 0;
       nav?.classList.toggle("scrolled", y > 30);
       if (progress) progress.style.width = `${ratio * 100}%`;
-      if (readout) readout.textContent = `SCROLL ${String(Math.round(ratio * 100)).padStart(2, "0")}%`;
       document.documentElement.style.setProperty("--scroll-ratio", `${ratio}`);
       ticking = false;
     };
@@ -77,12 +65,7 @@ export function ScrollTrack() {
     return () => window.removeEventListener("scroll", onScrollRequest);
   }, []);
 
-  return (
-    <>
-      <div className="scroll-track" />
-      <div className="scroll-progress" id="scrollProgress" />
-    </>
-  );
+  return <><div className="scroll-track" /><div className="scroll-progress" id="scrollProgress" /></>;
 }
 
 function messengerUrl(facebook: string): string {
@@ -96,17 +79,8 @@ function messengerUrl(facebook: string): string {
 
 export function MessageButton({ facebook }: { facebook: string }) {
   return (
-    <a
-      className="message-button"
-      href={messengerUrl(facebook)}
-      target="_blank"
-      rel="noreferrer"
-      aria-label="Message Jagadamba Plastic on Messenger"
-    >
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M20 11.5a8 8 0 0 1-8 8 8.8 8.8 0 0 1-3.6-.8L4 20l1.3-3.8A7.7 7.7 0 0 1 4 11.5a8 8 0 0 1 16 0Z" />
-        <path d="M8 11.5h.01M12 11.5h.01M16 11.5h.01" />
-      </svg>
+    <a className="message-button" href={messengerUrl(facebook)} target="_blank" rel="noreferrer" aria-label="Message Jagadamba Plastic on Messenger">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-8 8 8.8 8.8 0 0 1-3.6-.8L4 20l1.3-3.8A7.7 7.7 0 0 1 4 11.5a8 8 0 0 1 16 0Z" /><path d="M8 11.5h.01M12 11.5h.01M16 11.5h.01" /></svg>
       <span>Message us</span>
     </a>
   );
@@ -133,31 +107,45 @@ export function Nav() {
 
   return (
     <nav className="nav" id="nav" onMouseLeave={() => setFlyout(null)}>
-      <Link to="/" className="nav-logo" onClick={() => setOpen(false)} aria-label="Jagadamba Plastic home">
-        <span className="mark-wrap"><img className="mark" src="/images/logo-legacy.png" alt="" /></span>
-        <span className="nav-logo-text"><span className="nav-logo-name">Jagadamba Plastic</span><span className="nav-logo-sub">Pipes · Fittings · Tanks</span></span>
-      </Link>
-      <div className={`nav-links${open ? " open" : ""}`} id="navLinks">
-        {LINKS.map((l) => <NavLink key={l.to} to={l.to} className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>{l.label}</NavLink>)}
-        <div className="nav-flyout-anchor" onMouseEnter={() => setFlyout("products")}>
-          <NavLink to="/products" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>Products <ChevronDown size={13} /></NavLink>
-          {flyout === "products" && <div className="nav-flyout product-flyout">
-            <div className="flyout-kicker">SHOP BY SYSTEM</div>
-            {PRODUCT_GROUPS.map((group) => <Link key={group.id} to={`/products?group=${group.id}`} className="flyout-family"><span><b>{group.label}</b><small>{group.description}</small></span><ArrowUpRight size={15} /></Link>)}
-            <Link to="/products" className="flyout-all">View all 61 products <ArrowUpRight size={14} /></Link>
-          </div>}
+      <div className="nav-inner">
+        <Link to="/" className="nav-logo" onClick={() => setOpen(false)} aria-label="Jagadamba Plastic home">
+          <span className="mark-wrap"><img className="mark" src="/images/logo-legacy.png" alt="" /></span>
+          <span className="nav-logo-text"><span className="nav-logo-name">Jagadamba Plastic</span><span className="nav-logo-sub">Pipes · Fittings · Tanks</span></span>
+        </Link>
+        <div className={`nav-links${open ? " open" : ""}`} id="navLinks">
+          {LINKS.map((l) => <NavLink key={l.to} to={l.to} className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>{l.label}</NavLink>)}
+          <div className="nav-flyout-anchor" onMouseEnter={() => setFlyout("products")}>
+            <NavLink to="/products" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>Products <ChevronDown size={13} /></NavLink>
+            {flyout === "products" && <div className="nav-flyout product-flyout">
+              <div className="flyout-kicker">SHOP BY SYSTEM</div>
+              {PRODUCT_GROUPS.map((group) => <Link key={group.id} to={`/products?group=${group.id}`} className="flyout-family"><span><b>{group.label}</b><small>{group.description}</small></span><ArrowUpRight size={15} /></Link>)}
+              <Link to="/products" className="flyout-all">View all 61 products <ArrowUpRight size={14} /></Link>
+            </div>}
+          </div>
+          <div className="nav-flyout-anchor" onMouseEnter={() => setFlyout("themes")}>
+            <button className="nav-link nav-theme-button" type="button" onClick={() => setFlyout(flyout === "themes" ? null : "themes")} aria-expanded={flyout === "themes"}><Palette size={14} /> View modes <ChevronDown size={13} /></button>
+            {flyout === "themes" && <div className="nav-flyout theme-flyout">
+              <div className="flyout-kicker">PUBLIC VIEW MODES</div>
+              <div className="theme-flyout-grid">{THEMES.map((theme) => <button type="button" key={theme.id} className={`public-theme-option${settings.theme === theme.id ? " active" : ""}`} onClick={() => { setPublicThemePreference(theme.id); setFlyout(null); }}><i style={{ background: theme.swatch.bg }} /><i style={{ background: theme.swatch.accent }} /><i style={{ background: theme.swatch.cta }} /><span>{theme.name}</span></button>)}</div>
+            </div>}
+          </div>
+          <NavLink to="/contact" className="nav-link nav-cta">Get a quote <ArrowUpRight size={14} /></NavLink>
         </div>
-        <div className="nav-flyout-anchor" onMouseEnter={() => setFlyout("themes")}>
-          <button className="nav-link nav-theme-button" type="button" onClick={() => setFlyout(flyout === "themes" ? null : "themes")} aria-expanded={flyout === "themes"}><Palette size={14} /> View modes <ChevronDown size={13} /></button>
-          {flyout === "themes" && <div className="nav-flyout theme-flyout">
-            <div className="flyout-kicker">PUBLIC VIEW MODES</div>
-            <div className="theme-flyout-grid">{THEMES.map((theme) => <button type="button" key={theme.id} className={`public-theme-option${settings.theme === theme.id ? " active" : ""}`} onClick={() => { setPublicThemePreference(theme.id); setFlyout(null); }}><i style={{ background: theme.swatch.bg }} /><i style={{ background: theme.swatch.accent }} /><i style={{ background: theme.swatch.cta }} /><span>{theme.name}</span></button>)}</div>
-          </div>}
+        <div className="nav-actions">
+          <button className="nav-search" type="button" aria-label="Search products"><Search size={17} /></button>
+          <button className="nav-toggle" aria-label="Menu" onClick={() => setOpen((v) => !v)}><span /><span /><span /></button>
         </div>
-        <NavLink to="/contact" className="nav-link nav-cta">Get a quote <ArrowUpRight size={14} /></NavLink>
       </div>
-      <button className="nav-search" type="button" aria-label="Search products"><Search size={17} /></button>
-      <button className="nav-toggle" aria-label="Menu" onClick={() => setOpen((v) => !v)}><span /><span /><span /></button>
+      <div className="nav-utility" aria-label="Contact and location details">
+        <span className="nav-utility-location"><i aria-hidden="true">⌖</i>{settings.address}</span>
+        <span className="nav-utility-divider" aria-hidden="true" />
+        <a href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`}>☎ {settings.phone}</a>
+        {settings.phoneAlt && <a href={`tel:${settings.phoneAlt.replace(/[^+\d]/g, "")}`}>☎ {settings.phoneAlt}</a>}
+        <a href={`mailto:${settings.email}`}>{settings.email}</a>
+        <span className="nav-utility-spacer" />
+        <a href={settings.facebook} target="_blank" rel="noreferrer">Facebook ↗</a>
+        <a href={settings.youtube} target="_blank" rel="noreferrer">YouTube ↗</a>
+      </div>
     </nav>
   );
 }

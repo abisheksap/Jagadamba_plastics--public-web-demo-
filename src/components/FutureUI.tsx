@@ -165,9 +165,10 @@ function flowCategoryLabel(product: Product): string {
 /* ---------- pipeline flow band ---------- */
 export function BrandStory({ products = [] }: { products?: Product[] }) {
   const stories = [
-    { kicker: "OUR WORLD", title: "Made for the way Nepal builds.", copy: "From a household line to a district water network, the right product starts with the right material and a clear purpose.", image: "/images/products-v2/borewell-casing-pipe.png", tag: "WATER INFRASTRUCTURE" },
-    { kicker: "OUR MISSION", title: "Make dependable water systems ordinary.", copy: "We manufacture accessible pipe, fittings and storage that help families, farmers and builders move water with confidence.", image: "/images/products-v2/cpvc-elbow-90.png", tag: "CONNECTED BY DESIGN" },
-    { kicker: "OUR STANDARD", title: "Every joint has to earn trust.", copy: "Consistent dimensions, practical fittings and storage that is ready for the realities of installation — that is the Jagadamba promise.", image: "/images/products-v2/black-tank.png", tag: "QUALITY YOU CAN SEE" },
+    { kicker: "OUR WORLD", title: "Water moves differently in every place.", copy: "From a family kitchen tap to a district borewell, Nepal's builders need systems that are practical, repairable and ready for real working conditions.", image: "/images/products-v2/borewell-casing-pipe.png", tag: "BUILT FOR NEPAL" },
+    { kicker: "OUR STANDARD", title: "Every joint has to earn trust.", copy: "Dimensions, pressure checks and material consistency are checked before a batch leaves our Bharatpur line — because a small detail protects a whole network.", image: "/images/products-v2/cpvc-elbow-90.png", tag: "QUALITY YOU CAN SEE" },
+    { kicker: "OUR CRAFT", title: "Made close to the work.", copy: "Our team combines extrusion, moulding and testing in one Chitwan manufacturing community, turning feedback from the field into better products.", image: "/images/products-v2/pvc-pipe-bundle.png", tag: "BHARATPUR, CHITWAN" },
+    { kicker: "OUR REACH", title: "One network, many local partners.", copy: "From Province 1 to Province 7, dealers and contractors carry Jagadamba products because availability and after-sales support matter as much as the pipe itself.", image: "/images/products-v2/black-tank.png", tag: "NATIONWIDE PARTNERS" },
   ];
   const [active, setActive] = useState(0);
   useEffect(() => {
@@ -176,7 +177,7 @@ export function BrandStory({ products = [] }: { products?: Product[] }) {
   }, []);
   const story = stories[active];
   const supporting = products.filter((product) => ["PVC Fittings", "CPVC Fittings", "Water Tank"].includes(product.category)).slice(0, 3);
-  return <section className="brand-story" aria-label="Our world, mission and standard">
+  return <section className="brand-story" aria-label="Our world, standard, craft and reach">
     <div className="wrap brand-story-grid">
       <div className="brand-story-copy"><div className="kicker-future"><span className="kf-dot" /> {story.kicker}</div><h2>{story.title}</h2><p>{story.copy}</p><div className="brand-story-dots">{stories.map((item, i) => <button type="button" key={item.kicker} className={i === active ? "active" : ""} onClick={() => setActive(i)} aria-label={`Show ${item.kicker.toLowerCase()}`} />)}</div><span className="brand-story-tag">{story.tag}</span></div>
       <div className="brand-story-visual"><div className="story-pipe-line" /><img key={story.image} src={story.image} alt={story.title} /><div className="story-caption"><span>JAGADAMBA / 0{active + 1}</span><b>{story.tag}</b></div></div>
