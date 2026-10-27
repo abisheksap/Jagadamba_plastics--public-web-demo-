@@ -30,13 +30,13 @@ export default function Gallery() {
   const { gallery, settings } = useSiteData();
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [video, setVideo] = useState<GalleryItem | null>(null);
-  const visibleGallery = gallery.length > 0 ? gallery : [
+  const visibleGallery = (gallery.length > 0 ? gallery : [
     { id: "fallback-pipe", title: "Pipe system", kind: "photo" as const, image: "/images/products-v2/borewell-casing-pipe.png" },
     { id: "fallback-elbow", title: "Elbow detail", kind: "photo" as const, image: "/images/products-v2/cpvc-elbow-90.png" },
     { id: "fallback-tank", title: "Black water tank", kind: "photo" as const, image: "/images/products-v2/black-tank.png" },
     { id: "fallback-bundle", title: "Pipe bundle", kind: "photo" as const, image: "/images/products-v2/pvc-pipe-bundle.png" },
     { id: "fallback-trap", title: "P-trap detail", kind: "photo" as const, image: "/images/products-v2/pvc-p-trap.png" },
-  ];
+  ]).sort((a, b) => (a.sortOrder ?? 999) - (b.sortOrder ?? 999));
 
   return (
     <>

@@ -157,7 +157,7 @@ export const listGallery = query({
             ? (await ctx.storage.getUrl(r.imageStorageId)) ?? r.image
             : r.image,
       })),
-    );
+    ).then((items) => items.sort((a: any, b: any) => (a.sortOrder ?? 999) - (b.sortOrder ?? 999)));
   },
 });
 
@@ -422,6 +422,7 @@ export const upsertGalleryItem = mutation({
     image: v.string(),
     imageStorageId: v.optional(v.id("_storage")),
     videoUrl: v.optional(v.string()),
+    sortOrder: v.optional(v.number()),
     passcode: v.string(),
   },
   handler: async (ctx, args) => {

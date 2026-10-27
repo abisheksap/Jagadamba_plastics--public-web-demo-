@@ -205,9 +205,10 @@ export function upsertGalleryItem(item: GalleryItem) {
     data.gallery[idx] = item;
     log("gallery", `Gallery item updated — ${item.title}`);
   } else {
-    data.gallery.unshift(item);
+    data.gallery.push(item);
     log("gallery", `Gallery item added — ${item.title}`, item.kind);
   }
+  data.gallery.sort((a, b) => (a.sortOrder ?? 999) - (b.sortOrder ?? 999));
   persist();
 }
 

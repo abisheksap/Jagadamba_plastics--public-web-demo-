@@ -179,6 +179,7 @@ export function convexAdminOps(passcode: string): AdminOps {
         image: g.image,
         imageStorageId: g.imageStorageId,
         videoUrl: g.videoUrl,
+        sortOrder: g.sortOrder,
         passcode,
       });
     },

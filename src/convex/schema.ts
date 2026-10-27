@@ -30,6 +30,7 @@ export default defineSchema({
     image: v.string(),
     imageStorageId: v.optional(v.id("_storage")),
     videoUrl: v.optional(v.string()),
+    sortOrder: v.optional(v.number()),
   }),
   reviews: defineTable({
     name: v.string(),
