@@ -3,39 +3,61 @@ import { useEffect, useId, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 const ArrowUpRight = ({ size = 16 }: { size?: number }) => <span aria-hidden="true" style={{ fontSize: size }}>↗</span>;
-import type { Product } from "../data/types";
-import { PRODUCT_GROUPS } from "../data/types";
+import type { Product, SiteTickerItem } from "../data/types";
+import { DEFAULT_CONTENT, PRODUCT_GROUPS } from "../data/types";
 
-const TICKER_ITEMS = [
-  { pre: "MADE IN", b: "NEPAL" },
-  { pre: "DEALER NETWORK —", b: "PROVINCE 1 → 7" },
-  { pre: "CERTIFIED", b: "NS · ISO" },
-  { pre: "EST.", b: "2063 B.S." },
-  { pre: "HDPE · PVC · CPVC ·", b: "TANKS" },
-  { pre: "MANAKAMANA", b: "GROUP" },
-  { pre: "CHITWAN,", b: "BHARATPUR" },
-];
+const FALLBACK_TICKER_ITEMS = DEFAULT_CONTENT.tickerItems ?? [];
 
-export function Ticker() {
-  const doubled = [...TICKER_ITEMS, ...TICKER_ITEMS];
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(() => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false);
+  useEffect(() => {
+    const query = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+    if (!query) return;
+    const update = () => setReduced(query.matches);
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  return reduced;
+}
+
+export function Ticker({ items = FALLBACK_TICKER_ITEMS }: { items?: SiteTickerItem[] }) {
+  const reducedMotion = usePrefersReducedMotion();
+  const [paused, setPaused] = useState(false);
+  const safeItems = items.length ? items : FALLBACK_TICKER_ITEMS;
+  const doubled = [...safeItems, ...safeItems];
+  const motionPaused = paused || reducedMotion;
   return (
-    <div className="ticker" aria-hidden="true">
-      <div className="ticker-track">
+    <section className={`ticker${motionPaused ? " is-paused" : ""}`} aria-label="Company highlights">
+      <div className="ticker-track" role="list">
         {doubled.map((item, i) => (
-          <span key={i} className="ticker-item">
-            <span className="dot" />
-            {item.pre} <b>{item.b}</b>
+          <span key={`${item.label}-${item.highlight}-${i}`} className="ticker-item" role="listitem" aria-hidden={i >= safeItems.length}>
+            <span className="dot" aria-hidden="true" />
+            {item.label} <b>{item.highlight}</b>
           </span>
         ))}
       </div>
-    </div>
+      <button
+        className="ticker-pause"
+        type="button"
+        onClick={() => setPaused((value) => !value)}
+        aria-pressed={motionPaused}
+        disabled={reducedMotion}
+      >
+        <span aria-hidden="true">{motionPaused ? "▶" : "Ⅱ"}</span>
+        {reducedMotion ? "Motion reduced" : paused ? "Play highlights" : "Pause highlights"}
+      </button>
+    </section>
   );
 }
 
 /* ---------- count-up hook ---------- */
-function useCountUp(target: number, active: boolean, duration = 1400) {
+function useCountUp(target: number, active: boolean, reducedMotion: boolean, duration = 1400) {
   const [value, setValue] = useState(0);
   useEffect(() => {
+    if (reducedMotion) {
+      setValue(target);
+      return;
+    }
     if (!active) return;
     let raf = 0;
     const start = performance.now();
@@ -48,7 +70,7 @@ function useCountUp(target: number, active: boolean, duration = 1400) {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [target, active, duration]);
+  }, [target, active, reducedMotion, duration]);
   return value;
 }
 
@@ -59,8 +81,8 @@ export interface FutureStat {
   label: string;
 }
 
-function StatCard({ stat, active }: { stat: FutureStat; active: boolean }) {
-  const value = useCountUp(stat.target, active);
+function StatCard({ stat, active, reducedMotion }: { stat: FutureStat; active: boolean; reducedMotion: boolean }) {
+  const value = useCountUp(stat.target, active, reducedMotion);
   return (
     <div className="glass-card stat-card-future">
       <div className="num mono">
@@ -76,8 +98,13 @@ function StatCard({ stat, active }: { stat: FutureStat; active: boolean }) {
 export function StatsBand({ stats }: { stats: FutureStat[] }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [active, setActive] = useState(false);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
+    if (reducedMotion || !("IntersectionObserver" in window)) {
+      setActive(true);
+      return;
+    }
     const el = ref.current;
     if (!el) return;
     const io = new IntersectionObserver(
@@ -91,12 +118,12 @@ export function StatsBand({ stats }: { stats: FutureStat[] }) {
     );
     io.observe(el);
     return () => io.disconnect();
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <div className="stat-cards-future" ref={ref}>
       {stats.map((s) => (
-        <StatCard key={s.label} stat={s} active={active} />
+        <StatCard key={s.label} stat={s} active={active} reducedMotion={reducedMotion} />
       ))}
     </div>
   );
@@ -163,7 +190,7 @@ function flowCategoryLabel(product: Product): string {
 }
 
 /* ---------- pipeline flow band ---------- */
-export function BrandStory({ products = [] }: { products?: Product[] }) {
+export function BrandStory({ products = [], brandLabel = DEFAULT_CONTENT.brandStoryLabel ?? "JAGADAMBA" }: { products?: Product[]; brandLabel?: string }) {
   const stories = [
     { kicker: "OUR WORLD", title: "Water moves differently in every place.", copy: "From a family kitchen tap to a district borewell, Nepal's builders need systems that are practical, repairable and ready for real working conditions.", image: "/images/products-v2/borewell-casing-pipe.png", tag: "BUILT FOR NEPAL" },
     { kicker: "OUR STANDARD", title: "Every joint has to earn trust.", copy: "Dimensions, pressure checks and material consistency are checked before a batch leaves our Bharatpur line — because a small detail protects a whole network.", image: "/images/products-v2/cpvc-elbow-90.png", tag: "QUALITY YOU CAN SEE" },
@@ -171,16 +198,20 @@ export function BrandStory({ products = [] }: { products?: Product[] }) {
     { kicker: "OUR REACH", title: "One network, many local partners.", copy: "From Province 1 to Province 7, dealers and contractors carry Jagadamba products because availability and after-sales support matter as much as the pipe itself.", image: "/images/products-v2/black-tank.png", tag: "NATIONWIDE PARTNERS" },
   ];
   const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [interacting, setInteracting] = useState(false);
+  const reducedMotion = usePrefersReducedMotion();
   useEffect(() => {
+    if (paused || interacting || reducedMotion) return;
     const timer = window.setInterval(() => setActive((current) => (current + 1) % stories.length), 5200);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [paused, interacting, reducedMotion, stories.length]);
   const story = stories[active];
   const supporting = products.filter((product) => ["PVC Fittings", "CPVC Fittings", "Water Tank"].includes(product.category)).slice(0, 3);
-  return <section className="brand-story" aria-label="Our world, standard, craft and reach">
+  return <section className="brand-story" aria-label="Our world, standard, craft and reach" onMouseEnter={() => setInteracting(true)} onMouseLeave={() => setInteracting(false)} onFocusCapture={() => setInteracting(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setInteracting(false); }}>
     <div className="wrap brand-story-grid">
-      <div className="brand-story-copy"><div className="kicker-future"><span className="kf-dot" /> {story.kicker}</div><h2>{story.title}</h2><p>{story.copy}</p><div className="brand-story-dots">{stories.map((item, i) => <button type="button" key={item.kicker} className={i === active ? "active" : ""} onClick={() => setActive(i)} aria-label={`Show ${item.kicker.toLowerCase()}`} />)}</div><span className="brand-story-tag">{story.tag}</span></div>
-      <div className="brand-story-visual"><div className="story-pipe-line" /><img key={story.image} src={story.image} alt={story.title} /><div className="story-caption"><span>JAGADAMBA / 0{active + 1}</span><b>{story.tag}</b></div></div>
+      <div className="brand-story-copy"><div className="kicker-future"><span className="kf-dot" /> {story.kicker}</div><h2>{story.title}</h2><p>{story.copy}</p><div className="brand-story-controls"><div className="brand-story-dots">{stories.map((item, i) => <button type="button" key={item.kicker} className={i === active ? "active" : ""} onClick={() => setActive(i)} aria-label={`Show ${item.kicker.toLowerCase()}`} aria-current={i === active ? "step" : undefined} />)}</div><button className="story-pause" type="button" onClick={() => setPaused((value) => !value)} aria-pressed={paused || reducedMotion} disabled={reducedMotion}>{reducedMotion ? "Motion reduced" : paused ? "Play story" : "Pause story"}</button></div><span className="brand-story-tag">{story.tag}</span></div>
+      <div className="brand-story-visual"><div className="story-pipe-line" /><img key={story.image} src={story.image} alt={story.title} /><div className="story-caption"><span>{brandLabel.toUpperCase()} / 0{active + 1}</span><b>{story.tag}</b></div></div>
     </div>
     <div className="wrap story-support-strip">{supporting.map((product) => <Link key={product.id} to={`/products/${product.id}`}><img src={product.image} alt="" loading="lazy" /><span>{product.category}</span><ArrowUpRight size={14} /></Link>)}</div>
   </section>;

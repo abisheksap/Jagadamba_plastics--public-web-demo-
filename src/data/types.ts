@@ -166,6 +166,27 @@ export interface Leader {
   imageStorageId?: string;
 }
 
+export interface SiteTickerItem {
+  /** Supporting copy shown before the emphasized label. */
+  label: string;
+  /** Short brand or proof point emphasized at the end of the item. */
+  highlight: string;
+}
+
+export interface HomeSectionVisibility {
+  ticker?: boolean;
+  stats?: boolean;
+  audience?: boolean;
+  productAtlas?: boolean;
+  process?: boolean;
+  brandStory?: boolean;
+  featuredProducts?: boolean;
+  reviews?: boolean;
+  gallery?: boolean;
+  cta?: boolean;
+  contact?: boolean;
+}
+
 /** Every word on the site the admin can edit from Admin → Content. */
 export interface SiteContent {
   /** Home hero */
@@ -173,6 +194,18 @@ export interface SiteContent {
   heroTitleLine1: string;
   heroTitleLine2: string;
   heroSub: string;
+  /** Optional brand/chrome copy. Defaults keep legacy records compatible. */
+  brandDisplayName?: string;
+  companyDisplayName?: string;
+  brandTagline?: string;
+  topbarNote?: string;
+  tickerItems?: SiteTickerItem[];
+  brandStoryLabel?: string;
+  /** Home call-to-action copy and per-section visibility. */
+  homeCtaTitle?: string;
+  homeCtaBody?: string;
+  homeCtaButton?: string;
+  homeSections?: HomeSectionVisibility;
   /** Home stats band labels stay fixed; the about story below is editable. */
   aboutStory1: string;
   aboutStory2: string;
@@ -189,6 +222,37 @@ export const DEFAULT_CONTENT: SiteContent = {
   heroTitleLine2: "growth, since the ground up.",
   heroSub:
     "HDPE, PVC and CPVC pipes, fittings and water tanks manufactured in Chitwan and trusted on sites across Nepal — from household plumbing to national infrastructure.",
+  brandDisplayName: "Jagadamba Plastic",
+  companyDisplayName: "Jagadamba Plastic Industries Pvt. Ltd.",
+  brandTagline: "Pipes · Fittings · Tanks",
+  topbarNote: "NEPAL-MADE WATER SYSTEMS · EST. 2063 B.S.",
+  tickerItems: [
+    { label: "MADE IN", highlight: "NEPAL" },
+    { label: "DEALER NETWORK", highlight: "PROVINCE 1 → 7" },
+    { label: "CERTIFIED", highlight: "NS · ISO" },
+    { label: "EST.", highlight: "2063 B.S." },
+    { label: "HDPE · PVC · CPVC", highlight: "TANKS" },
+    { label: "MANAKAMANA", highlight: "GROUP" },
+    { label: "CHITWAN", highlight: "BHARATPUR" },
+  ],
+  brandStoryLabel: "JAGADAMBA",
+  homeCtaTitle: "Build Nepal's plastic industry with us.",
+  homeCtaBody:
+    "Dealer enquiries, bulk orders and careers — our Bharatpur office answers within one working day.",
+  homeCtaButton: "Get in touch",
+  homeSections: {
+    ticker: true,
+    stats: true,
+    audience: true,
+    productAtlas: true,
+    process: true,
+    brandStory: true,
+    featuredProducts: true,
+    reviews: true,
+    gallery: true,
+    cta: true,
+    contact: true,
+  },
   aboutStory1:
     "Jagadamba Plastic Industries has manufactured HDPE, PVC and CPVC pipe, fittings and water tanks in Bharatpur, Chitwan since 2063 B.S. What began as a single extrusion line now spans six product families feeding a dealer network that stretches from Province 1 to Province 7. Every batch is pressure-tested and dimension-checked against Nepal Standard — that discipline is why contractors ask for Jagadamba pipe by name, and why our dealers restock with confidence.",
   aboutStory2:
@@ -234,9 +298,21 @@ export interface HeroChip {
   h?: number;
 }
 
+/** Optional public scatter animation tuning. Missing values use the current
+ * defaults, so layouts saved before motion controls existed remain valid. */
+export interface HeroChipMotion {
+  /** Multiplier applied to the scatter radius (0.65..1.35). */
+  scatterSpread?: number;
+  /** Group/scatter transition duration in milliseconds (200..2000). */
+  durationMs?: number;
+  /** Maximum random chip rotation in degrees (0..55). */
+  tiltDeg?: number;
+}
+
 export interface HeroChipLayout {
   version: 1;
   chips: HeroChip[];
+  motion?: HeroChipMotion;
   updatedAt?: number;
   updatedBy?: string;
 }

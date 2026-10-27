@@ -1,0 +1,103 @@
+/* Scoped overrides for the responsive, fixed-coordinate product stage. */
+.showcase-component .showcase-mode-switch {
+  display: inline-flex;
+  gap: 3px;
+  margin-top: 11px;
+  padding: 3px;
+  border: 1px solid rgba(var(--paper-rgb), 0.18);
+  border-radius: 999px;
+  background: rgba(var(--hero-3-rgb), 0.34);
+}
+
+.showcase-component .showcase-mode-switch button {
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 11px;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.showcase-component .showcase-mode-switch button:hover,
+.showcase-component .showcase-mode-switch button:focus-visible {
+  color: #fff;
+  outline: 2px solid rgba(var(--cyan-rgb), 0.7);
+  outline-offset: 1px;
+}
+
+.showcase-component .showcase-mode-switch button.active {
+  background: var(--red);
+  color: #fff;
+}
+
+.hero-visual.showcase-viewport {
+  width: 100%;
+  height: var(--showcase-height, 560px) !important;
+  min-height: 0;
+  transform: none !important;
+  transform-origin: initial !important;
+  overflow: visible;
+}
+
+.showcase-viewport .showcase-stage {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 900px;
+  height: 560px;
+  transform: translateX(-50%) scale(var(--showcase-scale, 1));
+  transform-origin: top center;
+}
+
+.showcase-viewport .showcase-orbit {
+  animation-delay: 0.15s;
+}
+
+.showcase-viewport .orbit-chip {
+  transform: translate(-50%, -50%) translate(var(--tx, 0px), var(--ty, 0px)) rotate(var(--rot, 0deg)) scale(var(--chip-scale, 1));
+  transition: none;
+  will-change: transform;
+}
+
+.showcase-viewport .showcase-orbit.scattered .orbit-chip,
+.showcase-viewport .showcase-orbit.scattered .orbit-chip:nth-child(odd) {
+  transform: translate(-50%, -50%) translate(var(--tx, 0px), var(--ty, 0px)) rotate(var(--rot, 0deg)) scale(var(--chip-scale, 1));
+  transition: none;
+}
+
+.showcase-viewport .orbit-chip:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 5px;
+  border-radius: 4px;
+}
+
+.showcase-viewport .orbit-chip:hover .chip-disc,
+.showcase-viewport .orbit-chip:focus-visible .chip-disc {
+  transform: scale(1.08);
+}
+
+.showcase-viewport .orbit-chip:focus-visible .chip-label {
+  opacity: 1;
+}
+
+@media (max-width: 880px) {
+  .showcase-component .showcase-heading { text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .showcase-viewport .showcase-orbit,
+  .showcase-viewport .showcase-pool .glow,
+  .showcase-viewport .showcase-pool .ripple {
+    animation: none !important;
+    opacity: 1;
+  }
+  .showcase-viewport .orbit-chip,
+  .showcase-viewport .orbit-chip .chip-disc,
+  .showcase-viewport .orbit-chip img,
+  .showcase-component .core-note {
+    transition: none !important;
+  }
+}

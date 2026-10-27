@@ -2,12 +2,31 @@ import { useRef, useState } from "react";
 import type { ChangeEvent, DragEvent } from "react";
 import { adminCredential } from "../data/adminAuth";
 import { useAdminOps, useSiteData } from "../data/SiteDataProvider";
-import type { Leader, SiteContent } from "../data/types";
+import type { HomeSectionVisibility, Leader, SiteContent, SiteTickerItem } from "../data/types";
+import { DEFAULT_CONTENT } from "../data/types";
+
+const HOME_SECTION_LABELS: Array<[keyof HomeSectionVisibility, string]> = [
+  ["ticker", "Company ticker"],
+  ["stats", "Stats band"],
+  ["audience", "Who we serve"],
+  ["productAtlas", "Product atlas"],
+  ["process", "Manufacturing process"],
+  ["brandStory", "Brand story"],
+  ["featuredProducts", "Featured products"],
+  ["reviews", "Dealer reviews"],
+  ["gallery", "Gallery"],
+  ["cta", "Call to action"],
+  ["contact", "Contact form"],
+];
 
 export default function AdminContent() {
   const { content, mode } = useSiteData();
   const ops = useAdminOps(adminCredential());
-  const [form, setForm] = useState<SiteContent>(() => JSON.parse(JSON.stringify(content)) as SiteContent);
+  const [form, setForm] = useState<SiteContent>(() => ({
+    ...JSON.parse(JSON.stringify(DEFAULT_CONTENT)) as SiteContent,
+    ...JSON.parse(JSON.stringify(content)) as SiteContent,
+    homeSections: { ...DEFAULT_CONTENT.homeSections, ...content.homeSections },
+  }));
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
   const [error, setError] = useState("");
@@ -19,6 +38,16 @@ export default function AdminContent() {
     setForm((f) => ({
       ...f,
       leaders: f.leaders.map((l, i) => (i === idx ? { ...l, ...patch } : l)),
+    }));
+  const setTickerItem = (idx: number, patch: Partial<SiteTickerItem>) =>
+    setForm((f) => ({
+      ...f,
+      tickerItems: (f.tickerItems ?? []).map((item, i) => (i === idx ? { ...item, ...patch } : item)),
+    }));
+  const setSection = (key: keyof HomeSectionVisibility, visible: boolean) =>
+    setForm((f) => ({
+      ...f,
+      homeSections: { ...DEFAULT_CONTENT.homeSections, ...f.homeSections, [key]: visible },
     }));
 
   const addLeader = () =>
@@ -84,7 +113,7 @@ export default function AdminContent() {
         <div>
           <h1>Site content</h1>
           <div className="sub">
-            Hero, about story and leadership messages —{" "}
+            Brand, homepage, about story and leadership messages —{" "}
             {mode === "convex" ? "synced live via Convex" : "saved in this browser"}.
           </div>
         </div>
@@ -123,6 +152,80 @@ export default function AdminContent() {
         <div className="admin-field">
           <label htmlFor="c-sub">SUB-HEADLINE</label>
           <textarea id="c-sub" rows={3} value={form.heroSub} onChange={(e) => set({ heroSub: e.target.value })} />
+        </div>
+      </div>
+
+      <div className="admin-card">
+        <h3>Brand &amp; site chrome</h3>
+        <div className="admin-grid-2">
+          <div className="admin-field">
+            <label htmlFor="c-brand-name">BRAND DISPLAY NAME</label>
+            <input id="c-brand-name" value={form.brandDisplayName ?? ""} onChange={(e) => set({ brandDisplayName: e.target.value })} />
+          </div>
+          <div className="admin-field">
+            <label htmlFor="c-company-name">LEGAL / COMPANY DISPLAY NAME</label>
+            <input id="c-company-name" value={form.companyDisplayName ?? ""} onChange={(e) => set({ companyDisplayName: e.target.value })} />
+          </div>
+        </div>
+        <div className="admin-grid-2">
+          <div className="admin-field">
+            <label htmlFor="c-brand-tagline">NAVIGATION TAGLINE</label>
+            <input id="c-brand-tagline" value={form.brandTagline ?? ""} onChange={(e) => set({ brandTagline: e.target.value })} />
+          </div>
+          <div className="admin-field">
+            <label htmlFor="c-story-label">STORY LOOP COMPANY LABEL</label>
+            <input id="c-story-label" value={form.brandStoryLabel ?? ""} onChange={(e) => set({ brandStoryLabel: e.target.value })} />
+          </div>
+        </div>
+        <div className="admin-field">
+          <label htmlFor="c-topbar-note">TOP BAR NOTE</label>
+          <input id="c-topbar-note" value={form.topbarNote ?? ""} onChange={(e) => set({ topbarNote: e.target.value })} />
+        </div>
+
+        <h4 className="admin-content-subhead">Ticker items</h4>
+        <p className="admin-content-hint">Keep the highlighted part short so the loop remains readable on small screens.</p>
+        {(form.tickerItems ?? []).map((item, idx) => (
+          <div className="admin-ticker-row" key={`${idx}-${item.label}`}>
+            <div className="admin-field">
+              <label htmlFor={`ticker-label-${idx}`}>LABEL</label>
+              <input id={`ticker-label-${idx}`} value={item.label} onChange={(e) => setTickerItem(idx, { label: e.target.value })} />
+            </div>
+            <div className="admin-field">
+              <label htmlFor={`ticker-highlight-${idx}`}>HIGHLIGHT</label>
+              <input id={`ticker-highlight-${idx}`} value={item.highlight} onChange={(e) => setTickerItem(idx, { highlight: e.target.value })} />
+            </div>
+            <button className="admin-btn small danger" type="button" onClick={() => set({ tickerItems: (form.tickerItems ?? []).filter((_, i) => i !== idx) })} aria-label={`Remove ticker item ${idx + 1}`}>Remove</button>
+          </div>
+        ))}
+        <button className="admin-btn small" type="button" onClick={() => set({ tickerItems: [...(form.tickerItems ?? []), { label: "", highlight: "" }] })}>+ Add ticker item</button>
+      </div>
+
+      <div className="admin-card">
+        <h3>Homepage call to action</h3>
+        <div className="admin-field">
+          <label htmlFor="c-cta-title">TITLE</label>
+          <input id="c-cta-title" value={form.homeCtaTitle ?? ""} onChange={(e) => set({ homeCtaTitle: e.target.value })} />
+        </div>
+        <div className="admin-field">
+          <label htmlFor="c-cta-body">BODY</label>
+          <textarea id="c-cta-body" rows={3} value={form.homeCtaBody ?? ""} onChange={(e) => set({ homeCtaBody: e.target.value })} />
+        </div>
+        <div className="admin-field">
+          <label htmlFor="c-cta-button">BUTTON LABEL</label>
+          <input id="c-cta-button" value={form.homeCtaButton ?? ""} onChange={(e) => set({ homeCtaButton: e.target.value })} />
+        </div>
+      </div>
+
+      <div className="admin-card">
+        <h3>Homepage sections</h3>
+        <p className="admin-content-hint">Choose which sections are published on the homepage. Hidden content remains saved.</p>
+        <div className="admin-visibility-grid">
+          {HOME_SECTION_LABELS.map(([key, label]) => (
+            <label className="admin-visibility-option" key={key}>
+              <input type="checkbox" checked={form.homeSections?.[key] !== false} onChange={(e) => setSection(key, e.target.checked)} />
+              <span>{label}</span>
+            </label>
+          ))}
         </div>
       </div>
 

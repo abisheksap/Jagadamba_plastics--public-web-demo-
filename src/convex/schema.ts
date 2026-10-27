@@ -9,45 +9,6 @@ const variant = v.object({
   packing: v.optional(v.string()),
 });
 
-const leader = v.object({
-  id: v.string(),
-  role: v.string(),
-  name: v.string(),
-  nepaliRole: v.string(),
-  message: v.string(),
-  initials: v.string(),
-  image: v.optional(v.string()),
-  imageStorageId: v.optional(v.id("_storage")),
-});
-
-const siteContent = v.object({
-  heroEyebrow: v.string(),
-  heroTitleLine1: v.string(),
-  heroTitleLine2: v.string(),
-  heroSub: v.string(),
-  aboutStory1: v.string(),
-  aboutStory2: v.string(),
-  aboutTitle: v.string(),
-  aboutSub: v.string(),
-  leaders: v.array(leader),
-});
-
-const heroChip = v.object({
-  productId: v.string(),
-  bx: v.number(),
-  by: v.number(),
-  z: v.number(),
-  w: v.optional(v.number()),
-  h: v.optional(v.number()),
-});
-
-const heroChipLayout = v.object({
-  version: v.number(),
-  chips: v.array(heroChip),
-  updatedAt: v.optional(v.number()),
-  updatedBy: v.optional(v.string()),
-});
-
 export default defineSchema({
   products: defineTable({
     name: v.string(),
@@ -77,7 +38,14 @@ export default defineSchema({
     quote: v.string(),
     status: v.union(v.literal("pending"), v.literal("approved"), v.literal("rejected")),
     createdAt: v.number(),
-  }).index("by_status", ["status"]),
+    submissionKey: v.optional(v.string()),
+    duplicateKey: v.optional(v.string()),
+    clientStartedAt: v.optional(v.number()),
+  })
+    .index("by_status", ["status", "createdAt"])
+    .index("by_created", ["createdAt"])
+    .index("by_submission_key", ["submissionKey", "createdAt"])
+    .index("by_duplicate_key", ["duplicateKey", "createdAt"]),
   enquiries: defineTable({
     name: v.string(),
     phone: v.string(),
@@ -85,23 +53,34 @@ export default defineSchema({
     message: v.string(),
     status: v.union(v.literal("new"), v.literal("read"), v.literal("archived")),
     createdAt: v.number(),
-  }).index("by_status", ["status"]),
+    submissionKey: v.optional(v.string()),
+    duplicateKey: v.optional(v.string()),
+    clientStartedAt: v.optional(v.number()),
+  })
+    .index("by_status", ["status", "createdAt"])
+    .index("by_created", ["createdAt"])
+    .index("by_submission_key", ["submissionKey", "createdAt"])
+    .index("by_duplicate_key", ["duplicateKey", "createdAt"]),
   settings: defineTable({
     key: v.string(),
     value: v.any(),
-  }),
+  }).index("by_key", ["key"]),
   admin: defineTable({
     key: v.string(),
     passcodeHash: v.string(),
-  }),
+    credentialVersion: v.optional(v.number()),
+    changedAt: v.optional(v.number()),
+  }).index("by_key", ["key"]),
   siteContent: defineTable({
     key: v.literal("main"),
-    content: siteContent,
-  }),
+    // Content/layout intentionally accept optional forward-compatible fields.
+    // Mutations perform bounded validation of the required shape.
+    content: v.any(),
+  }).index("by_key", ["key"]),
   heroLayout: defineTable({
     key: v.literal("main"),
-    layout: heroChipLayout,
-  }),
+    layout: v.any(),
+  }).index("by_key", ["key"]),
   activity: defineTable({
     kind: v.string(),
     summary: v.string(),

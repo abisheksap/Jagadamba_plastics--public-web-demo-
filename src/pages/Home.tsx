@@ -54,9 +54,11 @@ export default function Home() {
   const productGridRef = useRevealOnScroll<HTMLDivElement>([featured.map((p) => p.id).join("|")]);
   const reviewGridRef = useRevealOnScroll<HTMLDivElement>([reviews.map((r) => r.id).join("|")]);
   const galleryGridRef = useRevealOnScroll<HTMLDivElement>([gallery.map((g) => g.id).join("|")]);
+  const sections = content.homeSections;
+  const isVisible = (section: keyof NonNullable<typeof sections>) => sections?.[section] !== false;
 
   return (
-    <>
+    <main className="home-page">
       {/* HERO */}
       <section className="hero">
         <div className="aurora" />
@@ -107,10 +109,10 @@ export default function Home() {
       </section>
 
       {/* TICKER */}
-      <Ticker />
+      {isVisible("ticker") && <Ticker items={content.tickerItems} />}
 
       {/* STATS */}
-      <section className="stats-future">
+      {isVisible("stats") && <section className="stats-future">
         <div className="wrap">
           <StatsBand
             stats={[
@@ -121,10 +123,10 @@ export default function Home() {
             ]}
           />
         </div>
-      </section>
+      </section>}
 
       {/* AUDIENCE GLASS CARDS */}
-      <section className="about section-pad">
+      {isVisible("audience") && <section className="about section-pad">
         <div className="wrap">
           <div className="section-head-future">
             <div>
@@ -174,18 +176,18 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* PRODUCT ELEMENTS */}
-      <ProductPulse products={flowProducts} />
+      {isVisible("productAtlas") && <ProductPulse products={flowProducts} />}
 
-      <ProcessJourney products={products} />
+      {isVisible("process") && <ProcessJourney products={products} />}
 
       {/* BRAND STORY / SCHEMES */}
-      <BrandStory products={flowProducts} />
+      {isVisible("brandStory") && <BrandStory products={flowProducts} brandLabel={content.brandStoryLabel} />}
 
       {/* FEATURED PRODUCTS */}
-      <section className="products-future section-pad">
+      {isVisible("featuredProducts") && <section className="products-future section-pad">
         <div className="wrap">
           <div className="section-head-future">
             <div>
@@ -221,10 +223,10 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* REVIEWS TEASER */}
-      <section className="reviews-future section-pad" style={{ paddingTop: 0 }}>
+      {isVisible("reviews") && <section className="reviews-future section-pad" style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="section-head-future">
             <div>
@@ -256,10 +258,10 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* GALLERY TEASER */}
-      <section className="gallery-future section-pad" style={{ paddingTop: 0 }}>
+      {isVisible("gallery") && <section className="gallery-future section-pad" style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="section-head-future">
             <div>
@@ -283,28 +285,25 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* CTA BAND */}
-      <section style={{ padding: "0 0 96px" }}>
+      {isVisible("cta") && <section className="home-cta-section">
         <div className="wrap">
           <div className="cta-band">
             <div>
-              <h2>Build Nepal's plastic industry with us.</h2>
-              <p>
-                Dealer enquiries, bulk orders and careers — our Bharatpur office answers within one
-                working day.
-              </p>
+              <h2>{content.homeCtaTitle}</h2>
+              <p>{content.homeCtaBody}</p>
             </div>
             <Link to="/contact" className="btn btn-primary">
-              Get in touch
+              {content.homeCtaButton}
             </Link>
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* CONTACT */}
-      <section className="contact-future section-pad" style={{ paddingTop: 0 }}>
+      {isVisible("contact") && <section className="contact-future section-pad" style={{ paddingTop: 0 }}>
         <div className="wrap contact-grid">
           <div>
             <div className="kicker-future">
@@ -365,7 +364,7 @@ export default function Home() {
             <EnquiryForm bare />
           </div>
         </div>
-      </section>
-    </>
+      </section>}
+    </main>
   );
 }

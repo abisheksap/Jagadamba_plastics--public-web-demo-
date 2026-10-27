@@ -13,6 +13,9 @@ const Search = ({ size = 17 }: { size?: number }) => <Icon size={size}>⌕</Icon
 
 export function TopBar() {
   const [darkMode, setDarkMode] = useState(() => document.documentElement.getAttribute("data-theme") === "jagadamba-dark");
+  const { content } = useSiteData();
+  const brandName = content.brandDisplayName ?? "Jagadamba Plastic";
+  const companyName = content.companyDisplayName ?? "Jagadamba Plastic Industries Pvt. Ltd.";
 
   useEffect(() => {
     const syncTheme = () => setDarkMode(document.documentElement.getAttribute("data-theme") === "jagadamba-dark");
@@ -29,10 +32,10 @@ export function TopBar() {
   return (
     <div className="topbar">
       <div className="topbar-brand">
-        <Link to="/" aria-label="Jagadamba Plastic home"><img src="/images/logo.png" alt="" /></Link>
-        <span><b>JAGADAMBA</b><small>PLASTIC INDUSTRIES PVT. LTD.</small></span>
+        <Link to="/" aria-label={`${brandName} home`}><img src="/images/logo.png" alt="" /></Link>
+        <span><b>{brandName}</b><small>{companyName}</small></span>
       </div>
-      <div className="topbar-compact-note">NEPAL-MADE WATER SYSTEMS <span aria-hidden="true">·</span> EST. 2063 B.S.</div>
+      <div className="topbar-compact-note">{content.topbarNote ?? "NEPAL-MADE WATER SYSTEMS · EST. 2063 B.S."}</div>
       <button className="theme-toggle" type="button" onClick={toggleDarkMode} aria-pressed={darkMode} aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}>
         <span aria-hidden="true">{darkMode ? "☼" : "◐"}</span>
         <b>{darkMode ? "Light" : "Dark"}</b>
@@ -96,7 +99,8 @@ export function Nav() {
   const [open, setOpen] = useState(false);
   const [flyout, setFlyout] = useState<"products" | "themes" | null>(null);
   const location = useLocation();
-  const { settings } = useSiteData();
+  const { settings, content, products } = useSiteData();
+  const brandName = content.brandDisplayName ?? "Jagadamba Plastic";
 
   useEffect(() => { setOpen(false); setFlyout(null); }, [location.pathname]);
   useEffect(() => {
@@ -108,18 +112,18 @@ export function Nav() {
   return (
     <nav className="nav" id="nav" onMouseLeave={() => setFlyout(null)}>
       <div className="nav-inner">
-        <Link to="/" className="nav-logo" onClick={() => setOpen(false)} aria-label="Jagadamba Plastic home">
+        <Link to="/" className="nav-logo" onClick={() => setOpen(false)} aria-label={`${brandName} home`}>
           <span className="mark-wrap"><img className="mark" src="/images/logo-legacy.png" alt="" /></span>
-          <span className="nav-logo-text"><span className="nav-logo-name">Jagadamba Plastic</span><span className="nav-logo-sub">Pipes · Fittings · Tanks</span></span>
+          <span className="nav-logo-text"><span className="nav-logo-name">{brandName}</span><span className="nav-logo-sub">{content.brandTagline ?? "Pipes · Fittings · Tanks"}</span></span>
         </Link>
         <div className={`nav-links${open ? " open" : ""}`} id="navLinks">
           {LINKS.map((l) => <NavLink key={l.to} to={l.to} className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>{l.label}</NavLink>)}
-          <div className="nav-flyout-anchor" onMouseEnter={() => setFlyout("products")}>
+          <div className="nav-flyout-anchor" onMouseEnter={() => setFlyout("products")} onFocus={() => setFlyout("products")}>
             <NavLink to="/products" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>Products <ChevronDown size={13} /></NavLink>
             {flyout === "products" && <div className="nav-flyout product-flyout">
               <div className="flyout-kicker">SHOP BY SYSTEM</div>
               {PRODUCT_GROUPS.map((group) => <Link key={group.id} to={`/products?group=${group.id}`} className="flyout-family"><span><b>{group.label}</b><small>{group.description}</small></span><ArrowUpRight size={15} /></Link>)}
-              <Link to="/products" className="flyout-all">View all 61 products <ArrowUpRight size={14} /></Link>
+              <Link to="/products" className="flyout-all">View all {products.length} products <ArrowUpRight size={14} /></Link>
             </div>}
           </div>
           <div className="nav-flyout-anchor" onMouseEnter={() => setFlyout("themes")}>
@@ -132,8 +136,8 @@ export function Nav() {
           <NavLink to="/contact" className="nav-link nav-cta">Get a quote <ArrowUpRight size={14} /></NavLink>
         </div>
         <div className="nav-actions">
-          <button className="nav-search" type="button" aria-label="Search products"><Search size={17} /></button>
-          <button className="nav-toggle" aria-label="Menu" onClick={() => setOpen((v) => !v)}><span /><span /><span /></button>
+          <Link className="nav-search" to="/products" aria-label="Search products"><Search size={17} /></Link>
+          <button className="nav-toggle" type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="navLinks" onClick={() => setOpen((v) => !v)}><span /><span /><span /></button>
         </div>
       </div>
       <div className="nav-utility" aria-label="Contact and location details">
@@ -151,5 +155,8 @@ export function Nav() {
 }
 
 export function Footer({ settings }: { settings: { phone: string; phoneAlt?: string; email: string; address: string; facebook: string; youtube: string } }) {
-  return <footer><div className="wrap"><div className="footer-grid"><div><div className="brand"><Link to="/" aria-label="Jagadamba Plastic home"><img src="/images/logo.png" alt="" /></Link><Link to="/">Jagadamba Plastic</Link></div><p className="f-moto">HDPE, PVC and CPVC pipes, fittings and water tanks — manufactured in Chitwan and certified to national standard. नेपालमा बनेको।</p></div><div><h4>EXPLORE</h4><Link to="/about">About us</Link><Link to="/products">Product catalog</Link><Link to="/gallery">Gallery</Link><Link to="/reviews">Customer reviews</Link><Link to="/admin/settings">Design studio</Link></div><div><h4>REACH US</h4><a href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`}>{settings.phone}</a>{settings.phoneAlt && <a href={`tel:${settings.phoneAlt.replace(/[^+\d]/g, "")}`}>{settings.phoneAlt}</a>}<a href={`mailto:${settings.email}`}>{settings.email}</a><a href={settings.facebook} target="_blank" rel="noreferrer">Facebook</a><a href={settings.youtube} target="_blank" rel="noreferrer">YouTube</a><span style={{ display: "block", color: "var(--text-dim)", fontSize: 13.5, padding: "5px 0" }}>{settings.address}</span></div></div><div className="footer-bottom"><span>www.jagadambaplastic.com · नेपालमा बनेको</span><span>© 2026 Jagadamba Plastic Industries Pvt. Ltd. · <Link to="/admin">Admin</Link></span></div></div></footer>;
+  const { content } = useSiteData();
+  const brandName = content.brandDisplayName ?? "Jagadamba Plastic";
+  const companyName = content.companyDisplayName ?? "Jagadamba Plastic Industries Pvt. Ltd.";
+  return <footer><div className="wrap"><div className="footer-grid"><div><div className="brand"><Link to="/" aria-label={`${brandName} home`}><img src="/images/logo.png" alt="" /></Link><Link to="/">{brandName}</Link></div><p className="f-moto">HDPE, PVC and CPVC pipes, fittings and water tanks — manufactured in Chitwan and certified to national standard. नेपालमा बनेको।</p></div><div><h4>EXPLORE</h4><Link to="/about">About us</Link><Link to="/products">Product catalog</Link><Link to="/gallery">Gallery</Link><Link to="/reviews">Customer reviews</Link><Link to="/admin/settings">Design studio</Link></div><div><h4>REACH US</h4><a href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`}>{settings.phone}</a>{settings.phoneAlt && <a href={`tel:${settings.phoneAlt.replace(/[^+\d]/g, "")}`}>{settings.phoneAlt}</a>}<a href={`mailto:${settings.email}`}>{settings.email}</a><a href={settings.facebook} target="_blank" rel="noreferrer">Facebook</a><a href={settings.youtube} target="_blank" rel="noreferrer">YouTube</a><span style={{ display: "block", color: "var(--text-dim)", fontSize: 13.5, padding: "5px 0" }}>{settings.address}</span></div></div><div className="footer-bottom"><span>www.jagadambaplastic.com · नेपालमा बनेको</span><span>© 2026 {companyName} · <Link to="/admin">Admin</Link></span></div></div></footer>;
 }
