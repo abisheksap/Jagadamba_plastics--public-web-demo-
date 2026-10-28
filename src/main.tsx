@@ -8,6 +8,7 @@ import "./arranger.css";
 import "./process-journey.css";
 import "./message-action.css";
 import "./theme-ideas.css";
+import "./styles/animations.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

@@ -51,16 +51,12 @@ export default function Home() {
   const variantCount = products.reduce((n, p) => n + (p.variants?.length ?? 0), 0);
   const flowProducts = selectFlowProducts(products);
   const audienceRef = useRevealOnScroll<HTMLDivElement>();
-  const productGridRef = useRevealOnScroll<HTMLDivElement>([featured.map((p) => p.id).join("|")]);
-  const reviewGridRef = useRevealOnScroll<HTMLDivElement>([reviews.map((r) => r.id).join("|")]);
-  const galleryGridRef = useRevealOnScroll<HTMLDivElement>([gallery.map((g) => g.id).join("|")]);
   const sections = content.homeSections;
   const isVisible = (section: keyof NonNullable<typeof sections>) => sections?.[section] !== false;
 
   return (
     <main className="home-page">
-      {/* HERO */}
-      <section className="hero">
+      <section className="hero hero-wavy">
         <div className="aurora" />
         <div className="grid-overlay" />
         <div className="noise-overlay" />
@@ -108,11 +104,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TICKER */}
-      {isVisible("ticker") && <Ticker items={content.tickerItems} />}
+      <section className="ticker section-reveal">{isVisible("ticker") && <Ticker items={content.tickerItems} />}</section>
 
-      {/* STATS */}
-      {isVisible("stats") && <section className="stats-future">
+      <section className="stats-future">{isVisible("stats") && (
         <div className="wrap">
           <StatsBand
             stats={[
@@ -123,30 +117,26 @@ export default function Home() {
             ]}
           />
         </div>
-      </section>}
+      )}</section>
 
-      {/* AUDIENCE GLASS CARDS */}
-      {isVisible("audience") && <section className="about section-pad">
+      <section className="about section-pad section-stagger">{isVisible("audience") && (
         <div className="wrap">
           <div className="section-head-future">
             <div>
               <div className="kicker-future">
-                <span className="kf-dot" />
-                WHO WE SERVE
+                <span className="kf-dot" /> WHO WE SERVE
               </div>
-              <h2>
-                Built for <span className="grad">every water need</span> in Nepal.
-              </h2>
+              <h2>Built for <span className="grad">every water need</span> in Nepal.</h2>
             </div>
             <p>
               Government-certified plastic pipe and water storage manufacturing, supplying dealers
               across all seven provinces — district 1 to 77.
             </p>
           </div>
-          <div className="stat-cards-future audience-cards-future" style={{ gridTemplateColumns: "repeat(3,1fr)" }} ref={audienceRef}>
+          <div className="glass-card" style={{ gridTemplateColumns: "repeat(3,1fr)" }} ref={audienceRef}>
             <div className="glass-card">
               {HomeIcon}
-              <h3>Homes &amp; builders</h3>
+              <h3>Homes & builders</h3>
               <p>Water tanks, PVC and CPVC fittings for household plumbing, hot-water lines and rooftop storage.</p>
               <div className="g-tag">WATER TANK · PVC · CPVC FITTINGS</div>
             </div>
@@ -155,7 +145,7 @@ export default function Home() {
                 <circle cx="24" cy="14" r="6" />
                 <path d="M24 20v24M14 30h20M16 38h16" />
               </svg>
-              <h3>Farms &amp; irrigation</h3>
+              <h3>Farms & irrigation</h3>
               <p>Borewell casing and flexible HDPE pipe built for groundwater extraction and field irrigation.</p>
               <div className="g-tag">BOREWELL PIPES · HDPE PIPE</div>
             </div>
@@ -165,7 +155,7 @@ export default function Home() {
                 <path d="M6 18 2 24l4 6" />
                 <path d="M42 18l4 6-4 6" />
               </svg>
-              <h3>Industry &amp; infrastructure</h3>
+              <h3>Industry & infrastructure</h3>
               <p>Underground drainage systems built to handle structural load on municipal and industrial sites.</p>
               <div className="g-tag">UG DRAINAGE PIPES</div>
             </div>
@@ -176,139 +166,137 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </section>}
+      )}</section>
 
-      {/* PRODUCT ELEMENTS */}
-      {isVisible("productAtlas") && <ProductPulse products={flowProducts} />}
+      <section className="product-atlas section-reveal">{isVisible("productAtlas") && <ProductPulse products={flowProducts} />}</section>
 
       {isVisible("process") && <ProcessJourney products={products} />}
 
-      {/* BRAND STORY / SCHEMES */}
-      {isVisible("brandStory") && <BrandStory products={flowProducts} brandLabel={content.brandStoryLabel} />}
+      <section className="brand-story section-reveal">{isVisible("brandStory") && <BrandStory products={flowProducts} brandLabel={content.brandStoryLabel} />}</section>
 
-      {/* FEATURED PRODUCTS */}
-      {isVisible("featuredProducts") && <section className="products-future section-pad">
+      <section className="products-future section-pad section-stagger">{isVisible("featuredProducts") && (
         <div className="wrap">
           <div className="section-head-future">
             <div>
               <div className="kicker-future">
-                <span className="kf-dot" />
-                OUR PRODUCTS
+                <span className="kf-dot" /> OUR PRODUCTS
               </div>
-              <h2>
-                Six lines, <span className="grad">one standard.</span>
-              </h2>
+              <h2>Six lines, <span className="grad">one standard.</span></h2>
             </div>
             <p>
               From underground drainage to rooftop storage — manufactured to national standard and
               ready for dealer stock nationwide.
             </p>
           </div>
-          <div className="product-grid-future" ref={productGridRef}>
-            {featured.map((p) => (
-              <Link key={p.id} to={`/products/${p.id}`} className="p-card-future">
-                <div className="p-media-future">
-                  <img src={p.image} alt={p.name} loading="lazy" />
-                </div>
-                <h3>{p.name}</h3>
-                <div className="tagline">{p.tagline}</div>
-                <p className="desc">{p.description}</p>
-                <div className="p-link-future">View specification {ArrowIcon}</div>
-              </Link>
-            ))}
-          </div>
-          <div style={{ marginTop: 40, display: "flex", justifyContent: "center" }}>
-            <Link to="/products" className="btn btn-outline">
-              Browse the full catalog
+          <div className="product-grid-future">{featured.map((p) => (
+            <Link
+              key={p.id}
+              to={`/products/${p.id}`}
+              className="p-card-future"
+              style={{ transition: "transform 0.45s var(--ease), box-shadow 0.4s var(--ease)" }}
+            >
+              <div className="p-media-future">
+                <img
+                  src={p.image}
+                  alt={p.name}
+                  loading="lazy"
+                  style={{ transition: "transform 0.45s var(--ease)", borderRadius: "14px", objectFit: "contain" }}
+                />
+              </div>
+              <h3>{p.name}</h3>
+              <div className="tagline">{p.tagline}</div>
+              <p className="desc">{p.description}</p>
+              <div className="p-link-future">View specification {ArrowIcon}</div>
             </Link>
+          ))}</div>
+          <div style={{ marginTop: 40, display: "flex", justifyContent: "center" }}>
+            <Link to="/products" className="btn btn-outline">Browse the full catalog</Link>
           </div>
         </div>
-      </section>}
+      )}</section>
 
-      {/* REVIEWS TEASER */}
-      {isVisible("reviews") && <section className="reviews-future section-pad" style={{ paddingTop: 0 }}>
+      <section className="reviews-future section-pad" style={{ paddingTop: 0 }}>{isVisible("reviews") && (
         <div className="wrap">
           <div className="section-head-future">
             <div>
               <div className="kicker-future">
-                <span className="kf-dot" />
-                DEALER NETWORK
+                <span className="kf-dot" /> DEALER NETWORK
               </div>
-              <h2>
-                What our <span className="grad">dealers say.</span>
-              </h2>
+              <h2>What our <span className="grad">dealers say.</span></h2>
             </div>
             <p>Real feedback from the people who stock and install our products every day.</p>
           </div>
-          <div className="review-grid-future" ref={reviewGridRef}>
-            {reviews.map((r) => (
-              <div key={r.id} className="r-card-future">
-                <div className="stars">{"★".repeat(r.rating)}</div>
-                <p className="quote">“{r.quote}”</p>
-                <div className="who">
-                  <div className="name">{r.name}</div>
-                  <div className="biz">{r.business}</div>
-                </div>
+          <div className="review-grid-future">{reviews.map((r) => (
+            <div
+              key={r.id}
+              className="r-card-future"
+              style={{ transition: "transform 0.5s var(--ease), border-color 0.3s ease, box-shadow 0.4s ease" }}
+            >
+              <div className="stars">{"★".repeat(r.rating)}</div>
+              <p className="quote">"{r.quote}"</p>
+              <div className="who">
+                <div className="name">{r.name}</div>
+                <div className="biz">{r.business}</div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}</div>
           <div style={{ marginTop: 30 }}>
             <Link to="/reviews" className="p-link-future" style={{ display: "inline-flex" }}>
-              Read all reviews &amp; share yours {ArrowIcon}
+              Read all reviews & share yours {ArrowIcon}
             </Link>
           </div>
         </div>
-      </section>}
+      )}</section>
 
-      {/* GALLERY TEASER */}
-      {isVisible("gallery") && <section className="gallery-future section-pad" style={{ paddingTop: 0 }}>
+      <section className="gallery-future section-pad" style={{ paddingTop: 0 }}>{isVisible("gallery") && (
         <div className="wrap">
           <div className="section-head-future">
             <div>
               <div className="kicker-future">
-                <span className="kf-dot" />
-                GALLERY
+                <span className="kf-dot" /> GALLERY
               </div>
-              <h2>
-                On site, <span className="grad">across Nepal.</span>
-              </h2>
+              <h2>On site, <span className="grad">across Nepal.</span></h2>
             </div>
             <p>Installation photos and product videos from the field.</p>
           </div>
-          <div className="gallery-grid-future" ref={galleryGridRef}>
-            {gallery.slice(0, 4).map((g) => (
-              <Link key={g.id} to="/gallery" className="g-tile-future">
-                <img src={g.image} alt={g.title} loading="lazy" />
-                <div className="g-shade" />
-                <span className="g-label">{g.title.toUpperCase()}</span>
-              </Link>
-            ))}
-          </div>
+          <div className="gallery-grid-future">{gallery.slice(0, 4).map((g) => (
+            <Link
+              key={g.id}
+              to="/gallery"
+              className="g-tile-future"
+              style={{ transition: "transform 0.5s var(--ease), border-color 0.3s ease, box-shadow 0.4s ease" }}
+            >
+              <img
+                src={g.image}
+                alt={g.title}
+                loading="lazy"
+                style={{ borderRadius: "14px", transition: "transform 0.6s var(--ease), opacity 0.3s ease" }}
+              />
+              <div className="g-shade" />
+              <span className="g-label">{g.title.toUpperCase()}</span>
+            </Link>
+          ))}</div>
         </div>
-      </section>}
+      )}</section>
 
-      {/* CTA BAND */}
-      {isVisible("cta") && <section className="home-cta-section">
+      <section className="home-cta-section section-reveal">{isVisible("cta") && (
         <div className="wrap">
           <div className="cta-band">
             <div>
               <h2>{content.homeCtaTitle}</h2>
               <p>{content.homeCtaBody}</p>
             </div>
-            <Link to="/contact" className="btn btn-primary">
+            <Link to="/contact" className="btn btn-primary" style={{ transition: "transform 0.3s var(--ease), box-shadow 0.3s var(--ease)" }}>
               {content.homeCtaButton}
             </Link>
           </div>
         </div>
-      </section>}
+      )}</section>
 
-      {/* CONTACT */}
-      {isVisible("contact") && <section className="contact-future section-pad" style={{ paddingTop: 0 }}>
-        <div className="wrap contact-grid">
+      <section className="contact-future section-pad section-reveal" style={{ paddingTop: 0 }}>{isVisible("contact") && (        <div className="wrap contact-grid">
           <div>
             <div className="kicker-future">
-              <span className="kf-dot" />
-              GET IN TOUCH
+              <span className="kf-dot" /> GET IN TOUCH
             </div>
             <h2 style={{ color: "#fff", fontSize: "clamp(26px,3vw,36px)" }}>
               Become a dealer, or place an order.
@@ -317,54 +305,57 @@ export default function Home() {
               Reach our Bharatpur office directly, or send details through the form and our sales
               team will follow up.
             </p>
-            <div style={{ marginTop: 30 }}>
-              <div className="contact-row-future">
-                <span className="c-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                    <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0Z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                </span>
-                <div>
-                  <div className="c-lbl">ADDRESS</div>
-                  {settings.address}
-                </div>
-              </div>
-              <div className="contact-row-future">
-                <span className="c-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                    <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1.1.4 2.2.8 3.2a2 2 0 0 1-.4 2.2L8.1 10.5a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.2-.4c1 .4 2.1.7 3.2.8a2 2 0 0 1 1.1 2.4Z" />
-                  </svg>
-                </span>
-                <div>
-                  <div className="c-lbl">PHONE</div>
-                  <a href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`}>{settings.phone}</a>
-                  {settings.phoneAlt && (
-                    <a href={`tel:${settings.phoneAlt.replace(/[^+\d]/g, "")}`} style={{ marginLeft: 14 }}>
-                      {settings.phoneAlt}
-                    </a>
-                  )}
-                </div>
-              </div>
-              <div className="contact-row-future">
-                <span className="c-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                    <rect x="3" y="5" width="18" height="14" rx="2" />
-                    <path d="M3 7l9 6 9-6" />
-                  </svg>
-                </span>
-                <div>
-                  <div className="c-lbl">EMAIL</div>
-                  <a href={`mailto:${settings.email}`}>{settings.email}</a>
-                </div>
+          </div>
+          <div style={{ marginTop: 30 }}>
+            <div className="contact-row-future">
+              <span className="c-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                  <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0Z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </span>
+              <div>
+                <div className="c-lbl">ADDRESS</div>
+                {settings.address}
               </div>
             </div>
-          </div>
-          <div className="form-glass">
-            <EnquiryForm bare />
+            <div className="contact-row-future">
+              <span className="c-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                  <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1.1.4 2.2.8 3.2a2 2 0 0 1-.4 2.2L8.1 10.5a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.2-.4c1 .4 2.1.7 3.2.8a2 2 0 0 1 1.1 2.4Z" />
+                </svg>
+              </span>
+              <div>
+                <div className="c-lbl">PHONE</div>
+                <a href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`}>{settings.phone}</a>
+                {settings.phoneAlt && (
+                  <a
+                    href={`tel:${settings.phoneAlt.replace(/[^+\d]/g, "")}`}
+                    style={{ marginLeft: 14 }}
+                  >
+                    {settings.phoneAlt}
+                  </a>
+                )}
+              </div>
+            </div>
+            <div className="contact-row-future">
+              <span className="c-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <path d="M3 7l9 6 9-6" />
+                </svg>
+              </span>
+              <div>
+                <div className="c-lbl">EMAIL</div>
+                <a href={`mailto:${settings.email}`}>{settings.email}</a>
+              </div>
+            </div>
+            <div className="form-glass">
+              <EnquiryForm bare />
+            </div>
           </div>
         </div>
-      </section>}
+      )}</section>
     </main>
   );
 }

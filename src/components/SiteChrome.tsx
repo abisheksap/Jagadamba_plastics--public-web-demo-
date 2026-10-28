@@ -16,6 +16,7 @@ export function TopBar() {
   const { content } = useSiteData();
   const brandName = content.brandDisplayName ?? "Jagadamba Plastic";
   const companyName = content.companyDisplayName ?? "Jagadamba Plastic Industries Pvt. Ltd.";
+  const quoteCount = useSiteData().enquiries?.length ?? 0;
 
   useEffect(() => {
     const syncTheme = () => setDarkMode(document.documentElement.getAttribute("data-theme") === "jagadamba-dark");
@@ -36,6 +37,15 @@ export function TopBar() {
         <span><b>{brandName}</b><small>{companyName}</small></span>
       </div>
       <div className="topbar-compact-note">{content.topbarNote ?? "NEPAL-MADE WATER SYSTEMS · EST. 2063 B.S."}</div>
+      <div className="topbar-utility">
+        <button className="theme-toggle" type="button" onClick={toggleDarkMode} aria-pressed={darkMode} aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}>
+          <span aria-hidden="true">{darkMode ? "☼" : "◐"}</span>
+          <b>{darkMode ? "Light" : "Dark"}</b>
+        </button>
+        <span className="topbar-quote-badge" title="Quote cart" onClick={(e) => { e.stopPropagation(); window.location.href = "/quote" }}>
+          {quoteCount > 0 ? <b className="badge">{quoteCount}</b> : null}
+        </span>
+      </div>
       <button className="theme-toggle" type="button" onClick={toggleDarkMode} aria-pressed={darkMode} aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}>
         <span aria-hidden="true">{darkMode ? "☼" : "◐"}</span>
         <b>{darkMode ? "Light" : "Dark"}</b>
@@ -93,6 +103,7 @@ const LINKS = [
   { to: "/about", label: "About" },
   { to: "/gallery", label: "Gallery" },
   { to: "/reviews", label: "Reviews" },
+  { to: "/quote", label: "Quote cart", onClick: (e: React.MouseEvent) => e.preventDefault() },
 ];
 
 export function Nav() {
@@ -146,6 +157,9 @@ export function Nav() {
         <a href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`}>☎ {settings.phone}</a>
         {settings.phoneAlt && <a href={`tel:${settings.phoneAlt.replace(/[^+\d]/g, "")}`}>☎ {settings.phoneAlt}</a>}
         <a href={`mailto:${settings.email}`}>{settings.email}</a>
+        <span className="nav-utility-badge" title="Quote cart" onClick={(e) => { e.stopPropagation(); window.location.href = "/quote" }}>
+          {useSiteData().enquiries?.length > 0 ? <b className="badge">{useSiteData().enquiries.length}</b> : null}
+        </span>
         <span className="nav-utility-spacer" />
         <a href={settings.facebook} target="_blank" rel="noreferrer">Facebook ↗</a>
         <a href={settings.youtube} target="_blank" rel="noreferrer">YouTube ↗</a>

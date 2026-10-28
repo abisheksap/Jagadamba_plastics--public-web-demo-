@@ -1,0 +1,247 @@
+/* ============ SHARED ANIMATION KEYFRAMES ============ */
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Wavy background gradient animation */
+@keyframes waveShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Pulse for CTA buttons */
+@keyframes pulseRipple {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+/* Stagger fade-up entrance */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stagger delay function */
+.fade-up-1 { animation: fadeUp 0.8s var(--ease) 0.1s forwards; }
+.fade-up-2 { animation: fadeUp 0.8s var(--ease) 0.2s forwards; }
+.fade-up-3 { animation: fadeUp 0.8s var(--ease) 0.3s forwards; }
+.fade-up-4 { animation: fadeUp 0.8s var(--ease) 0.4s forwards; }
+.fade-up-5 { animation: fadeUp 0.8s var(--ease) 0.5s forwards; }
+.fade-up-6 { animation: fadeUp 0.8s var(--ease) 0.6s forwards; }
+
+/* Product card hover lift */
+@keyframes cardLift {
+  from { transform: translateY(0); }
+  to { transform: translateY(-8px); }
+}
+
+/* Variant chip pulse */
+@keyframes chipPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+/* Nav link underline animation */
+@keyframes underlineGrow {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* Page transition overlay */
+@keyframes overlayIn {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+.overlay-out { animation: overlayIn 0.4s ease forwards; }
+
+/* Scroll progress animate */
+@keyframes progressAnimate {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+/* Logo shine */
+@keyframes logoShine {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(var(--cyan-rgb), 0.25)); }
+  50% { filter: drop-shadow(0 0 20px rgba(var(--cyan-rgb), 0.75)); }
+}
+
+/* Floating decoration */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+/* Table row hover */
+.table-row-hover:hover {
+  background: rgba(var(--cyan-rgb), 0.08);
+}
+
+/* ============ APPLIED CLASSES ============ */
+
+/* Wavy hero background */
+.hero-wavy {
+  background: radial-gradient(120% 110% at 78% 0%, #0a2c5e 0%, #062246 45%, var(--deep) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-wavy::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(135deg, rgba(var(--cyan-rgb), 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--cyan-rgb), 0.03) 1px, transparent 1px);
+  background-size: 50px 50px, 50px 50px;
+  animation: waveShift 20s linear infinite;
+  pointer-events: none;
+}
+
+/* CTA button ripple */
+.btn-primary:active {
+  animation: pulseRipple 0.4s ease;
+}
+
+/* Staggered reveals for home sections */
+.section-stagger > *:nth-child(1) { animation: fadeUp 0.8s var(--ease) 0.1s forwards; }
+.section-stagger > *:nth-child(2) { animation: fadeUp 0.8s var(--ease) 0.2s forwards; }
+.section-stagger > *:nth-child(3) { animation: fadeUp 0.8s var(--ease) 0.3s forwards; }
+.section-stagger > *:nth-child(4) { animation: fadeUp 0.8s var(--ease) 0.4s forwards; }
+.section-stagger > *:nth-child(5) { animation: fadeUp 0.8s var(--ease) 0.5s forwards; }
+.section-stagger > *:nth-child(6) { animation: fadeUp 0.8s var(--ease) 0.6s forwards; }
+
+/* Product card hover lift */
+.p-card-future:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.4);
+  transition: transform 0.45s var(--ease), box-shadow 0.4s var(--ease);
+}
+
+/* Variant chip pulse on hover */
+.variant-chip:hover {
+  animation: chipPulse 0.6s ease;
+  border-color: var(--cyan) !important;
+}
+
+/* Nav link active underline */
+.nav-links a.active::after {
+  animation: underlineGrow 0.3s ease forwards;
+}
+
+/* Table row hover effect */
+.price-table tbody tr {
+  transition: background 0.2s ease;
+}
+.price-table tbody tr:hover {
+  background: rgba(var(--cyan-rgb), 0.05);
+}
+
+/* Form input focus glow */
+.form-glass .form-row input:focus,
+.form-glass .form-row select:focus,
+.form-glass .form-row textarea:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(var(--cyan-rgb), 0.15);
+}
+
+/* Theme toggle smooth transition */
+.theme-toggle {
+  transition: all 0.3s var(--ease);
+}
+.theme-toggle:hover {
+  border-color: var(--red);
+  background: rgba(var(--red-rgb), 0.1);
+}
+
+/* Activity log row hover */
+.act-row:hover {
+  background: rgba(var(--paper-rgb), 0.04);
+  transition: background 0.2s ease;
+}
+
+/* Lightbox entrance */
+.lightbox {
+  animation: lbIn 0.25s ease;
+}
+
+/* Scroll progress */
+.scroll-progress {
+  animation: progressAnimate 0.1s linear forwards;
+}
+
+/* ============ ADMIN ANIMATIONS ============ */
+
+.arrange-chip {
+  transition: outline 0.2s ease, transform 0.2s ease;
+}
+.arrange-chip:active {
+  cursor: grabbing;
+  transform: scale(1.02);
+}
+.arrange-chip.selected {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+}
+
+/* Admin card hover */
+.admin-card:hover {
+  transform: translateY(-2px);
+  transition: transform 0.3s var(--ease);
+}
+
+/* Passcode input focus */
+.admin-input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(var(--cyan-rgb), 0.15);
+}
+
+/* ============ RESPONSIVE ANIMATIONS ============ */
+
+@media (max-width: 640px) {
+  .fade-up-1,
+  .fade-up-2,
+  .fade-up-3,
+  .fade-up-4,
+  .fade-up-5,
+  .fade-up-6 {
+    animation: fadeUp 0.6s var(--ease) 0s forwards;
+  }
+  
+  .p-card-future:hover {
+    transform: translateY(-2px) scale(1.02);
+  }
+}
+
+/* Reduced motion - disable all non-essential animations */
+@media (prefers-reduced-motion: reduce) {
+  .hero-wavy::before {
+    animation: none;
+  }
+  
+  .scroll-progress {
+    animation: none;
+    width: 100% !important;
+  }
+  
+  .p-card-future:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .variant-chip:hover {
+    animation: none;
+  }
+}
