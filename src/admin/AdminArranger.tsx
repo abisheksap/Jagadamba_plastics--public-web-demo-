@@ -16,10 +16,15 @@ const CANVAS_H = 560;
 const ANCHOR = { x: CANVAS_W / 2, y: CANVAS_H * 0.52 };
 
 function defaultSize(chip: WorkChip): { w: number; h: number } {
-  const c = chip.product.category;
-  if (c === "Water Tank") return { w: 120, h: 150 };
-  if (c === "HDPE Pipe" || c === "PVC Pipe" || c === "CPVC Pipe") return { w: 84, h: 150 };
-  return { w: 88, h: 88 };
+  const name = chip.product.name.toLowerCase();
+  const category = chip.product.category;
+  if (category === "Water Tank") {
+    return name.includes("black") ? { w: 104, h: 142 } : { w: 122, h: 158 };
+  }
+  if (category === "HDPE Pipe" || category === "PVC Pipe" || category === "CPVC Pipe") {
+    return name.includes("ns upvc") ? { w: 76, h: 190 } : { w: 56, h: 150 };
+  }
+  return { w: 76, h: 76 };
 }
 
 function seedLayout(products: Product[]): WorkChip[] {
@@ -357,7 +362,7 @@ export default function AdminArranger() {
               const added = chips.some((c) => c.productId === p.id);
               return (
                 <button key={p.id} className={`add-chip${added ? " added" : ""}`} onClick={() => addProduct(p)}>
-                  <img src={p.image} alt="" />
+                  <img loading="lazy" decoding="async" src={p.image} alt="" />
                   <span>
                     {p.name}
                     <span className="ac-cat">{p.category}</span>
@@ -426,12 +431,14 @@ export default function AdminArranger() {
                 onPointerMove={onChipPointerMove}
                 onPointerUp={onChipPointerUp}
               >
-                <img
-                  className="arrange-product-image"
-                  src={c.product.image}
-                  alt={c.product.name}
-                  draggable={false}
-                />
+                <span className="disc">
+                  <img
+                    className="arrange-product-image"
+                    src={c.product.image}
+                    alt={c.product.name}
+                    draggable={false}
+                  />
+                </span>
                 <span className="chip-name">{c.product.name}</span>
               </div>
             );
