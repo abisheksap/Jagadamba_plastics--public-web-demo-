@@ -108,7 +108,7 @@ export default function Contact() {
           <div className="location-map-heading">
             <div>
               <div className="kicker-future">Visit our location</div>
-              <h2 id="location-map-title">Find us in <span className="grad">Bharatpur, Chitwan.</span></h2>
+              <h2 id="location-map-title">Find us in Bharatpur, Chitwan.</h2>
             </div>
             <a
               className="btn btn-outline"
@@ -122,7 +122,7 @@ export default function Contact() {
           <div className="location-map-frame">
             <iframe
               title={`Map showing ${settings.address}`}
-              src={`https://www.google.com/maps?q=${encodeURIComponent(settings.address)}&z=15&output=embed`}
+              src="https://www.openstreetmap.org/export/embed.html?bbox=84.415%2C27.673%2C84.442%2C27.699&amp;layer=mapnik&amp;marker=27.686%2C84.428"
               loading="lazy"
               referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen
