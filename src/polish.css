@@ -23,17 +23,14 @@
   border-radius: 6px;
 }
 .kicker-future .kf-dot { display: none; }
-/* A pipe joint, not a generic pill or glowing dot. */
+/* Modern dual-brand rail used as a section marker, not an arrow or pipe illustration. */
 .kicker-future::before,
 :root .hero-eyebrow .rule {
-  content: ""; display: block; flex: none; width: 68px; height: 20px; border-radius: 2px; box-shadow: 0 1px 0 rgba(8, 42, 68, 0.12);
+  content: ""; display: block; flex: none; width: 54px; height: 10px; border-radius: 999px;
   background:
-    linear-gradient(180deg, rgba(255,255,255,.62) 0 18%, rgba(255,255,255,0) 19% 72%, rgba(4,45,83,.16) 73% 100%) left 5px center / 42px 12px no-repeat,
-    linear-gradient(90deg, transparent 0 5px, var(--lbl-body, #9dcfee) 5px 47px, transparent 47px) left center / 68px 12px no-repeat,
-    linear-gradient(90deg, transparent 0 44px, #fff 44px 47px, transparent 47px) left center / 68px 18px no-repeat,
-    linear-gradient(90deg, transparent 0 47px, var(--red, #e23c2f) 47px 58px, transparent 58px) left center / 68px 20px no-repeat,
-    linear-gradient(90deg, transparent 0 58px, var(--lbl-body, #9dcfee) 58px 68px) left center / 68px 12px no-repeat;
-  clip-path: polygon(0 31%, 7% 31%, 7% 20%, 48% 20%, 48% 31%, 58% 31%, 58% 10%, 68% 10%, 68% 31%, 100% 31%, 100% 69%, 68% 69%, 68% 90%, 58% 90%, 58% 69%, 48% 69%, 48% 80%, 7% 80%, 7% 69%, 0 69%);
+    linear-gradient(90deg, var(--lbl-body, #1778bd) 0 34%, transparent 34% 40%, var(--red, #df3538) 40% 68%, transparent 68%),
+    linear-gradient(90deg, rgba(255,255,255,.2), rgba(255,255,255,.2));
+  box-shadow: inset 0 0 0 1px rgba(20, 55, 91, .12), 0 3px 10px rgba(20, 55, 91, .08);
 }
 :root .hero-eyebrow {
   display: inline-flex; align-items: center; gap: 12px; margin-bottom: 24px; padding: 0;
