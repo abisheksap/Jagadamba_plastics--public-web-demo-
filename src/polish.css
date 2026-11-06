@@ -26,13 +26,14 @@
 /* A pipe joint, not a generic pill or glowing dot. */
 .kicker-future::before,
 :root .hero-eyebrow .rule {
-  content: ""; display: block; flex: none; width: 52px; height: 18px; border-radius: 0; box-shadow: none;
-  border-top: 1px solid rgba(var(--accent-rgb, 28, 94, 160), 0.16);
-  border-bottom: 1px solid rgba(var(--accent-rgb, 28, 94, 160), 0.16);
+  content: ""; display: block; flex: none; width: 68px; height: 20px; border-radius: 2px; box-shadow: 0 1px 0 rgba(8, 42, 68, 0.12);
   background:
-    linear-gradient(90deg, rgba(255,255,255,.8), rgba(255,255,255,0) 18%) left 1px center / 34px 8px no-repeat,
-    linear-gradient(var(--lbl-body), var(--lbl-body)) left center / 38px 8px no-repeat,
-    linear-gradient(var(--lbl-band), var(--lbl-band)) right center / 9px 18px no-repeat;
+    linear-gradient(180deg, rgba(255,255,255,.62) 0 18%, rgba(255,255,255,0) 19% 72%, rgba(4,45,83,.16) 73% 100%) left 5px center / 42px 12px no-repeat,
+    linear-gradient(90deg, transparent 0 5px, var(--lbl-body, #9dcfee) 5px 47px, transparent 47px) left center / 68px 12px no-repeat,
+    linear-gradient(90deg, transparent 0 44px, #fff 44px 47px, transparent 47px) left center / 68px 18px no-repeat,
+    linear-gradient(90deg, transparent 0 47px, var(--red, #e23c2f) 47px 58px, transparent 58px) left center / 68px 20px no-repeat,
+    linear-gradient(90deg, transparent 0 58px, var(--lbl-body, #9dcfee) 58px 68px) left center / 68px 12px no-repeat;
+  clip-path: polygon(0 31%, 7% 31%, 7% 20%, 48% 20%, 48% 31%, 58% 31%, 58% 10%, 68% 10%, 68% 31%, 100% 31%, 100% 69%, 68% 69%, 68% 90%, 58% 90%, 58% 69%, 48% 69%, 48% 80%, 7% 80%, 7% 69%, 0 69%);
 }
 :root .hero-eyebrow {
   display: inline-flex; align-items: center; gap: 12px; margin-bottom: 24px; padding: 0;
@@ -77,26 +78,27 @@
 .serve-story-link { display: inline-flex; align-items: center; gap: 10px; font-weight: 650; color: var(--red); transition: gap 0.25s var(--ease); }
 .serve-story-link:hover { gap: 16px; }
 .serve-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); counter-reset: serve; }
-.serve-row { position: relative; display: grid; grid-template-columns: 64px minmax(0, 1fr) 46px; gap: 22px; align-items: start; padding: 30px 12px 30px 0; border-bottom: 1px solid var(--line); transition: padding 0.3s var(--ease), background 0.3s; }
+.serve-row { position: relative; display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 22px; align-items: start; padding: 30px 12px 30px 0; border-bottom: 1px solid var(--line); transition: padding 0.3s var(--ease), background 0.3s; }
 .serve-row:hover { padding-left: 16px; background: linear-gradient(90deg, rgba(var(--accent-rgb), 0.06), transparent 80%); }
-.serve-icon { display: block; width: 64px; height: 64px; overflow: hidden; border-radius: 8px; background: #dfe9ef; box-shadow: 0 0 0 1px rgba(var(--accent-rgb), 0.16); }
+.serve-row-hit { position: absolute; inset: 0; z-index: 1; }
+.serve-row-hit:focus-visible { outline: 3px solid rgba(var(--accent-rgb), .38); outline-offset: -3px; }
+.serve-icon { position: relative; z-index: 2; pointer-events: none; display: block; width: 64px; height: 64px; overflow: hidden; border-radius: 8px; background: #dfe9ef; box-shadow: 0 0 0 1px rgba(var(--accent-rgb), 0.16); }
 .serve-icon img { width: 100%; height: 100%; display: block; object-fit: cover; filter: saturate(.82) contrast(1.04); }
 .serve-red .serve-icon { background: rgba(var(--red-rgb), 0.1); color: var(--red); }
 .serve-gold .serve-icon { background: rgba(242, 181, 68, 0.22); color: #a8710d; }
 .serve-icon .g-icon { width: 34px; height: 34px; margin: 0; }
+.serve-copy { position: relative; z-index: 2; pointer-events: none; }
 .serve-copy h3 { margin: 2px 0 8px; font: 700 clamp(19px, 1.8vw, 23px) var(--font-head); letter-spacing: -0.02em; color: var(--text-hi); }
 .serve-copy p { max-width: 54ch; margin: 0; line-height: 1.7; color: var(--text-mid); }
 .serve-links { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 16px; }
-.serve-links a { padding-bottom: 1px; border-bottom: 1.5px solid rgba(var(--accent-rgb), 0.3); font-size: 14px; font-weight: 600; color: var(--cyan); transition: border-color 0.2s, color 0.2s; }
+.serve-links { pointer-events: auto; }
+.serve-links a { pointer-events: auto; position: relative; z-index: 3; padding-bottom: 1px; border-bottom: 1.5px solid rgba(var(--accent-rgb), 0.3); font-size: 14px; font-weight: 600; color: var(--cyan); transition: border-color 0.2s, color 0.2s; }
 .serve-links a:hover { border-color: var(--red); color: var(--red); }
-.serve-go { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 4px; border-left: 5px solid var(--cyan); border-right: 5px solid var(--red); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--text-hi); background: rgba(255,255,255,.78); transition: border-color 0.25s, color 0.25s, transform 0.25s var(--ease); }
-.serve-row:hover .serve-go { border-left-color: var(--red); border-right-color: var(--cyan); color: var(--red); transform: translateX(4px); }
 @media (max-width: 960px) { .serve-layout { grid-template-columns: 1fr; } .serve-intro { position: static; } }
 @media (max-width: 560px) {
   .serve-row { grid-template-columns: 52px minmax(0, 1fr); gap: 16px; padding-block: 24px; }
   .serve-icon { width: 52px; height: 52px; border-radius: 16px; }
   .serve-icon .g-icon { width: 28px; height: 28px; }
-  .serve-go { display: none; }
 }
 
 /* ---------- product showcase heading: centred over the products ---------- */

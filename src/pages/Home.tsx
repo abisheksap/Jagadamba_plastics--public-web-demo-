@@ -121,6 +121,39 @@ export default function Home() {
         </div>
       )}</section>
 
+      {isVisible("leadership") && content.leaders.length > 0 && (
+        <section className="home-leadership section-pad section-reveal">
+          <div className="wrap">
+            <div className="section-head-future">
+              <div>
+                <div className="kicker-future">A message from our leadership</div>
+                <h2>Built with purpose. <span className="grad">Led with vision.</span></h2>
+              </div>
+            </div>
+            <div className="leader-grid home-leader-grid">
+              {content.leaders.map((leader) => (
+                <figure className="leader-card" key={leader.id}>
+                  <span className="leader-quote-mark" aria-hidden="true">“</span>
+                  <blockquote>{leader.message}</blockquote>
+                  <figcaption>
+                    <span className="leader-avatar" aria-hidden="true">
+                      {leader.image
+                        ? <img loading="lazy" decoding="async" src={leader.image} alt="" />
+                        : leader.initials}
+                    </span>
+                    <span className="leader-meta">
+                      <span className="leader-role">{leader.role}</span>
+                      <span className="leader-name">{leader.name}</span>
+                      {leader.nepaliRole && <span className="leader-nepali">{leader.nepaliRole}</span>}
+                    </span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className="product-atlas section-reveal">{isVisible("productAtlas") && <ProductPulse products={flowProducts} />}</section>
 
       {isVisible("process") && (

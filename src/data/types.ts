@@ -203,6 +203,7 @@ export interface HomeSectionVisibility {
   ticker?: boolean;
   stats?: boolean;
   audience?: boolean;
+  leadership?: boolean;
   productAtlas?: boolean;
   process?: boolean;
   brandStory?: boolean;

@@ -47,6 +47,11 @@ export function ServeSection({ heading, text, showStoryLink = true }: { heading:
       <ol className="serve-list">
         {AUDIENCES.map((a) => (
           <li key={a.title} className={`serve-row serve-${a.tone}`}>
+            <Link
+              to={a.links[0].to}
+              className="serve-row-hit"
+              aria-label={`View ${a.title} products`}
+            />
             <span className="serve-icon">
               <img src={a.image} alt="" loading="lazy" decoding="async" />
             </span>
@@ -59,9 +64,6 @@ export function ServeSection({ heading, text, showStoryLink = true }: { heading:
                 ))}
               </div>
             </div>
-            <Link to={a.links[0].to} className="serve-go" aria-label={`Browse products for ${a.title}`}>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-            </Link>
           </li>
         ))}
       </ol>

@@ -9,6 +9,7 @@ const HOME_SECTION_LABELS: Array<[keyof HomeSectionVisibility, string]> = [
   ["ticker", "Company ticker"],
   ["stats", "Stats band"],
   ["audience", "Who we serve"],
+  ["leadership", "Director & MD message"],
   ["productAtlas", "Product atlas"],
   ["process", "Manufacturing process"],
   ["brandStory", "Brand story"],
