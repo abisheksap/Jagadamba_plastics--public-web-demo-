@@ -6,25 +6,32 @@ export default function AdminReviews() {
   const { reviews } = useSiteData();
   const ops = useAdminOps(adminCredential());
   const [error, setError] = useState("");
+  const [busyId, setBusyId] = useState("");
   const pending = reviews.filter((r) => r.status === "pending");
   const decided = reviews.filter((r) => r.status !== "pending");
 
-  const run = (fn: () => Promise<void>) => {
-    fn().catch((err) => setError(err instanceof Error ? err.message : "Action failed"));
+  const run = (id: string, fn: () => Promise<void>) => {
+    if (busyId) return;
+    setBusyId(id);
+    setError("");
+    fn()
+      .catch((err) => setError(err instanceof Error ? err.message : "Action failed"))
+      .finally(() => setBusyId(""));
   };
 
   const Actions = ({ id, status }: { id: string; status: string }) => (
     <div className="row-actions">
-      <button className="admin-btn small primary" onClick={() => run(() => ops.setReviewStatus(id, "approved"))}>
+      <button disabled={busyId === id} className="admin-btn small primary" onClick={() => run(id, () => ops.setReviewStatus(id, "approved"))}>
         Approve
       </button>
-      <button className="admin-btn small" onClick={() => run(() => ops.setReviewStatus(id, "rejected"))}>
+      <button disabled={busyId === id} className="admin-btn small" onClick={() => run(id, () => ops.setReviewStatus(id, "rejected"))}>
         Reject
       </button>
       <button
         className="admin-btn small danger"
+        disabled={busyId === id}
         onClick={() => {
-          if (confirm("Delete this review permanently?")) run(() => ops.deleteReview(id));
+          if (confirm("Delete this review permanently?")) run(id, () => ops.deleteReview(id));
         }}
       >
         Delete
@@ -122,19 +129,20 @@ export default function AdminReviews() {
                     <td>
                       <div className="row-actions">
                         {r.status === "rejected" && (
-                          <button className="admin-btn small primary" onClick={() => run(() => ops.setReviewStatus(r.id, "approved"))}>
+                          <button disabled={busyId === r.id} className="admin-btn small primary" onClick={() => run(r.id, () => ops.setReviewStatus(r.id, "approved"))}>
                             Approve
                           </button>
                         )}
                         {r.status === "approved" && (
-                          <button className="admin-btn small" onClick={() => run(() => ops.setReviewStatus(r.id, "rejected"))}>
+                          <button disabled={busyId === r.id} className="admin-btn small" onClick={() => run(r.id, () => ops.setReviewStatus(r.id, "rejected"))}>
                             Unpublish
                           </button>
                         )}
                         <button
                           className="admin-btn small danger"
+                          disabled={busyId === r.id}
                           onClick={() => {
-                            if (confirm("Delete this review permanently?")) run(() => ops.deleteReview(r.id));
+                            if (confirm("Delete this review permanently?")) run(r.id, () => ops.deleteReview(r.id));
                           }}
                         >
                           Delete
