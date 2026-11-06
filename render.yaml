@@ -5,6 +5,8 @@ services:
     buildCommand: npm ci && npm run build
     staticPublishPath: ./dist
     envVars:
+      - key: NODE_VERSION
+        value: 22.14.0
       - key: VITE_CONVEX_URL
         sync: false
       - key: VITE_SITE_URL
