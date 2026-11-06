@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 const port = Number(process.env.PORT) || 5173;
 
 // The public address of the website (no trailing slash). Set VITE_SITE_URL when you build for your real domain.
-const siteUrl = (process.env.VITE_SITE_URL || "https://jagadamba-plastics-public-web-demo.onrender.com").replace(/\/+$/, "");
+const siteUrl = (process.env.VITE_SITE_URL || "https://jagadamba-plastics-public-web-demo.vercel.app").replace(/\/+$/, "");
 
 const PUBLIC_PAGES = ["/", "/about", "/products", "/gallery", "/reviews", "/contact"];
 

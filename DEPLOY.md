@@ -28,12 +28,14 @@ Set two build-time variables in your host's dashboard (see `.env.example`):
 | Variable | Value |
 | --- | --- |
 | `VITE_CONVEX_URL` | the URL printed by `npx convex deploy` |
-| `VITE_SITE_URL` | `https://jagadamba-plastics-public-web-demo.onrender.com` (or your custom domain) |
+| `VITE_SITE_URL` | `https://jagadamba-plastics-public-web-demo.vercel.app` (or your custom domain) |
 
 Build command `npm run build`, output folder `dist`. Ready-made config is included:
 
-- **Render**: `render.yaml` configures the static site and client-side route rewrites. **Vercel**: `vercel.json`. **Netlify**: `netlify.toml`. **Cloudflare Pages**: `public/_headers` and
+- **Vercel**: `vercel.json`. **Netlify**: `netlify.toml`. **Cloudflare Pages**: `public/_headers` and
   `public/_redirects` (no extra setup).
+- Use Render only for a compatible backend service. The Render address above is a frontend URL, not a
+  Convex backend URL and cannot be used as `VITE_CONVEX_URL`.
 - They add the single-page-app fallback, a strict Content-Security-Policy, clickjacking and HTTPS headers,
   long caching for hashed files, and `noindex` for `/admin`.
 - If you use a custom Convex domain, add it to `connect-src` in the three header files.
