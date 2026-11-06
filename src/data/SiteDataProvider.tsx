@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { ConvexProvider, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { convexEnabled, getConvexClient } from "./convexClient";
+import { adminCredential, signOut } from "./adminAuth";
 import * as local from "./store";
 import { buildSeedData } from "./seed";
 import { convexAdminOps, localAdminOps, type AdminOps } from "./backend";
@@ -15,6 +16,7 @@ export type BackendMode = "convex" | "local";
 export interface ReadModel {
   products: SiteData["products"];
   gallery: SiteData["gallery"];
+  documents: NonNullable<SiteData["documents"]>;
   reviews: SiteData["reviews"];
   enquiries: SiteData["enquiries"];
   settings: SiteData["settings"];
@@ -52,6 +54,7 @@ function LocalModel(): ReadModel {
   }, []);
   return {
     ...data,
+    documents: data.documents ?? [],
     content: { ...DEFAULT_CONTENT, ...(data.content ?? {}) },
     heroLayout: data.heroLayout,
     ready: true,
@@ -63,8 +66,9 @@ function LocalModel(): ReadModel {
 function ConvexModel(): ReadModel {
   const products = useQuery(api.site.listProducts) as unknown as SiteData["products"] | undefined;
   const gallery = useQuery(api.site.listGallery) as unknown as SiteData["gallery"] | undefined;
-  const reviews = useQuery(api.site.listAllReviews) as unknown as SiteData["reviews"] | undefined;
-  const enquiries = useQuery(api.site.listEnquiries) as unknown as SiteData["enquiries"] | undefined;
+  const documents = useQuery(api.site.listDocuments) as unknown as SiteData["documents"] | undefined;
+  // visitors only ever receive public data: approved reviews, never enquiries or pending reviews
+  const reviews = useQuery(api.site.listApprovedReviews) as unknown as SiteData["reviews"] | undefined;
   const settings = useQuery(api.site.getSettings) as unknown as SiteData["settings"] | undefined;
   const content = useQuery(api.site.getContent) as unknown as SiteContent | null | undefined;
   const heroLayout = useQuery(api.site.getHeroLayout) as unknown as HeroChipLayout | null | undefined;
@@ -72,8 +76,8 @@ function ConvexModel(): ReadModel {
   const ready =
     products !== undefined &&
     gallery !== undefined &&
+    documents !== undefined &&
     reviews !== undefined &&
-    enquiries !== undefined &&
     settings !== undefined &&
     content !== undefined &&
     heroLayout !== undefined;
@@ -89,13 +93,19 @@ function ConvexModel(): ReadModel {
         ?.mutation(api.site.seedIfEmpty, {
           products: seed.products,
           gallery: seed.gallery,
+          documents: seed.documents,
           reviews: seed.reviews,
           settings: Object.entries(seed.settings).map(([key, value]) => ({ key, value })),
           content: seed.content,
         })
         .catch(() => {});
+    } else if (documents && documents.length === 0) {
+      // existing site that predates "Our documents": add the starter entries once
+      getConvexClient()
+        ?.mutation(api.site.seedDocumentsIfEmpty, { documents: buildSeedData().documents ?? [] })
+        .catch(() => {});
     }
-  }, [ready, products, gallery, seedDone]);
+  }, [ready, products, gallery, documents, seedDone]);
 
   return {
     // Convex may contain legacy image paths from the first catalog seed. Resolve
@@ -105,13 +115,48 @@ function ConvexModel(): ReadModel {
       image: productImageFor(product),
     })),
     gallery: gallery ?? [],
+    documents: documents ?? [],
     reviews: reviews ?? [],
-    enquiries: enquiries ?? [],
+    enquiries: [],
     settings: settings ?? buildSeedData().settings,
     content: content ? { ...DEFAULT_CONTENT, ...content } : DEFAULT_CONTENT,
     heroLayout: heroLayout ?? undefined,
     ready,
   };
+}
+
+/* ---------------- admin data (signed-in sessions only) ---------------- */
+
+/**
+ * Wrap the admin panel in this. In Convex mode it adds what only an admin may read (every enquiry and
+ * every review including pending ones) on top of the public data, using the admin session token.
+ * Visitors' browsers never request these queries.
+ */
+export function AdminDataProvider({ children }: { children: ReactNode }) {
+  const base = useSiteData();
+  if (base.mode !== "convex") return <>{children}</>;
+  return <ConvexAdminData base={base}>{children}</ConvexAdminData>;
+}
+
+function ConvexAdminData({ base, children }: { base: Ctx; children: ReactNode }) {
+  const token = adminCredential();
+  const args = token ? { token } : "skip";
+  const enquiries = useQuery(api.site.listEnquiries, args) as unknown as SiteData["enquiries"] | null | undefined;
+  const reviews = useQuery(api.site.listAllReviews, args) as unknown as SiteData["reviews"] | null | undefined;
+
+  // the server answers null when the session is no longer valid: sign out so the login page appears
+  const rejected = enquiries === null || reviews === null;
+  useEffect(() => {
+    if (rejected) signOut();
+  }, [rejected]);
+
+  const value: Ctx = {
+    ...base,
+    enquiries: enquiries ?? [],
+    reviews: reviews ?? base.reviews,
+    ready: base.ready && enquiries !== undefined && reviews !== undefined,
+  };
+  return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }
 
 /* ---------------- provider ---------------- */

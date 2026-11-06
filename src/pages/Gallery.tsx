@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { GalleryLightbox } from "../components/GalleryLightbox";
 import { useSiteData } from "../data/SiteDataProvider";
 import type { GalleryItem } from "../data/types";
+import { usePageMeta } from "../data/usePageMeta";
 
 function youtubeId(url: string): string | null {
   try {
@@ -27,6 +28,7 @@ function youtubeThumbnailUrl(url: string): string | null {
 }
 
 export default function Gallery() {
+  usePageMeta("Gallery", "Installation photos and product videos from sites across Nepal.");
   const { gallery, settings } = useSiteData();
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [video, setVideo] = useState<GalleryItem | null>(null);
@@ -43,7 +45,7 @@ export default function Gallery() {
       <section className="page-hero">
         <div className="aurora" /><div className="grid-overlay" />
         <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
-          <div className="kicker-future"><span className="kf-dot" /> GALLERY</div>
+          <div className="kicker-future">Gallery</div>
           <h1>On site, <span className="grad">across Nepal.</span></h1>
           <p className="sub">Installation photos, product details and video guides from Bharatpur to Nepalgunj — managed live from the admin panel.</p>
         </div>
@@ -52,7 +54,7 @@ export default function Gallery() {
       <section className="gallery-future section-pad">
         <div className="wrap">
           <div className="gallery-video-callout">
-            <div><span className="kicker-future">WATCH THE WORK IN MOTION</span><h2>See the products where they are made and used.</h2><p>Choose a video thumbnail to play it here, or visit the Jagadamba Plastic channel for the full library.</p></div>
+            <div><span className="kicker-future">Watch the work in motion</span><h2>See the products where they are made and used.</h2><p>Choose a video thumbnail to play it here, or visit the Jagadamba Plastic channel for the full library.</p></div>
             <a className="btn btn-primary" href={settings.youtube} target="_blank" rel="noreferrer">Open YouTube <span aria-hidden="true">↗</span></a>
           </div>
           <div className="gallery-grid-future">

@@ -1,69 +1,53 @@
-import { useEffect, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useSiteData } from "../data/SiteDataProvider";
-import { PUBLIC_THEME_EVENT, setPublicThemePreference } from "../data/theme";
-import { THEMES } from "../data/themes";
-import { PRODUCT_GROUPS } from "../data/types";
+import { PRODUCT_GROUPS, productGroupFor } from "../data/types";
+import { useQuote } from "../data/QuoteProvider";
 
-const Icon = ({ children, size = 15 }: { children: React.ReactNode; size?: number }) => <span aria-hidden="true" style={{ fontSize: size, lineHeight: 1 }}>{children}</span>;
-const ArrowUpRight = ({ size = 15 }: { size?: number }) => <Icon size={size}>↗</Icon>;
-const ChevronDown = ({ size = 13 }: { size?: number }) => <Icon size={size}>⌄</Icon>;
-const Palette = ({ size = 15 }: { size?: number }) => <Icon size={size}>◈</Icon>;
-const Search = ({ size = 17 }: { size?: number }) => <Icon size={size}>⌕</Icon>;
+/* ---------- small inline icons (no emoji glyphs, so they render identically everywhere) ---------- */
+type IconProps = { size?: number };
+const svgProps = (size: number) => ({ width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true as const, focusable: false as const });
+const ArrowUpRight = ({ size = 15 }: IconProps) => <svg {...svgProps(size)}><path d="M7 17 17 7M8 7h9v9" /></svg>;
+const ChevronDown = ({ size = 14 }: IconProps) => <svg {...svgProps(size)}><path d="m6 9 6 6 6-6" /></svg>;
+const SearchIcon = ({ size = 18 }: IconProps) => <svg {...svgProps(size)}><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>;
+const PhoneIcon = ({ size = 16 }: IconProps) => <svg {...svgProps(size)}><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" /></svg>;
+const PinIcon = ({ size = 14 }: IconProps) => <svg {...svgProps(size)}><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z" /><circle cx="12" cy="10" r="2.5" /></svg>;
+const MailIcon = ({ size = 14 }: IconProps) => <svg {...svgProps(size)}><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>;
 
-export function TopBar() {
-  const [darkMode, setDarkMode] = useState(() => document.documentElement.getAttribute("data-theme") === "jagadamba-dark");
-  const { content } = useSiteData();
-  const brandName = content.brandDisplayName ?? "Jagadamba Plastic";
-  const companyName = content.companyDisplayName ?? "Jagadamba Plastic Industries Pvt. Ltd.";
-  const quoteCount = useSiteData().enquiries?.length ?? 0;
+const ListIcon = ({ size = 18 }: IconProps) => <svg {...svgProps(size)}><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01" /></svg>;
 
-  useEffect(() => {
-    const syncTheme = () => setDarkMode(document.documentElement.getAttribute("data-theme") === "jagadamba-dark");
-    window.addEventListener(PUBLIC_THEME_EVENT, syncTheme);
-    return () => window.removeEventListener(PUBLIC_THEME_EVENT, syncTheme);
-  }, []);
+const FacebookIcon = ({ size = 15 }: IconProps) => <svg {...svgProps(size)}><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8.5A.5.5 0 0 1 14 8Z" /></svg>;
+const YoutubeIcon = ({ size = 16 }: IconProps) => <svg {...svgProps(size)}><rect x="3" y="6" width="18" height="12" rx="4" /><path d="m10.5 9.5 4 2.5-4 2.5Z" /></svg>;
 
-  const toggleDarkMode = () => {
-    const nextDarkMode = !darkMode;
-    setPublicThemePreference(nextDarkMode ? "jagadamba-dark" : "heritage-cream");
-    setDarkMode(nextDarkMode);
-  };
+const telHref = (phone: string) => `tel:${phone.replace(/[^0-9+]/g, "")}`;
 
+/**
+ * The small logo in the header/footer: the same layered animation as the loading screen
+ * (ring sweeps in, letters rise, flame lights and flickers), compact and without the wordmark.
+ */
+function LogoMark({ size = 40, lazy = false }: { size?: number; lazy?: boolean }) {
+  const attrs = { loading: lazy ? ("lazy" as const) : ("eager" as const), decoding: "async" as const };
   return (
-    <div className="topbar">
-      <div className="topbar-brand">
-        <Link to="/" aria-label={`${brandName} home`}><img src="/images/logo.png" alt="" /></Link>
-        <span><b>{brandName}</b><small>{companyName}</small></span>
-      </div>
-      <div className="topbar-compact-note">{content.topbarNote ?? "NEPAL-MADE WATER SYSTEMS · EST. 2063 B.S."}</div>
-      <div className="topbar-utility">
-        <button className="theme-toggle" type="button" onClick={toggleDarkMode} aria-pressed={darkMode} aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}>
-          <span aria-hidden="true">{darkMode ? "☼" : "◐"}</span>
-          <b>{darkMode ? "Light" : "Dark"}</b>
-        </button>
-        <span className="topbar-quote-badge" title="Quote cart" onClick={(e) => { e.stopPropagation(); window.location.href = "/quote" }}>
-          {quoteCount > 0 ? <b className="badge">{quoteCount}</b> : null}
-        </span>
-      </div>
-      <button className="theme-toggle" type="button" onClick={toggleDarkMode} aria-pressed={darkMode} aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}>
-        <span aria-hidden="true">{darkMode ? "☼" : "◐"}</span>
-        <b>{darkMode ? "Light" : "Dark"}</b>
-      </button>
-    </div>
+    <span className="logo-mark" style={{ ["--lm" as string]: `${size}px` }} aria-hidden="true">
+      <img className="lm-ring" {...attrs} src="/images/loader/ring.png" alt="" width={489} height={561} />
+      <img className="lm-letters" {...attrs} src="/images/loader/letters.png" alt="" width={489} height={561} />
+      <span className="lm-glow" />
+      <img className="lm-flame" {...attrs} src="/images/loader/flame.png" alt="" width={489} height={561} />
+    </span>
   );
 }
 
+/* ---------- scroll progress + header "scrolled" state ---------- */
 export function ScrollTrack() {
   useEffect(() => {
     const progress = document.getElementById("scrollProgress");
-    const nav = document.getElementById("nav");
+    const header = document.getElementById("siteHeader");
     let ticking = false;
     const onScroll = () => {
       const y = window.scrollY;
       const docH = document.documentElement.scrollHeight - window.innerHeight;
       const ratio = docH > 0 ? Math.min(1, Math.max(0, y / docH)) : 0;
-      nav?.classList.toggle("scrolled", y > 30);
+      header?.classList.toggle("is-scrolled", y > 24);
       if (progress) progress.style.width = `${ratio * 100}%`;
       document.documentElement.style.setProperty("--scroll-ratio", `${ratio}`);
       ticking = false;
@@ -103,68 +87,218 @@ const LINKS = [
   { to: "/about", label: "About" },
   { to: "/gallery", label: "Gallery" },
   { to: "/reviews", label: "Reviews" },
-  { to: "/quote", label: "Quote cart", onClick: (e: React.MouseEvent) => e.preventDefault() },
 ];
 
-export function Nav() {
+/**
+ * One fixed header = slim contact strip (desktop) + main bar.
+ * Heights come from CSS variables (--sx-strip-h / --sx-bar-h / --header-h), so page content
+ * pads itself with var(--header-h) instead of hand-tuned pixel offsets.
+ */
+export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const [flyout, setFlyout] = useState<"products" | "themes" | null>(null);
+  const [flyout, setFlyout] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia("(max-width: 960px)").matches);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const location = useLocation();
+  const navigate = useNavigate();
+  const quote = useQuote();
   const { settings, content, products } = useSiteData();
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const groupImage = (groupId: string) =>
+    (products.find((p) => p.featured && productGroupFor(p.category).id === groupId) ?? products.find((p) => productGroupFor(p.category).id === groupId))?.image;
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
   const brandName = content.brandDisplayName ?? "Jagadamba Plastic";
 
-  useEffect(() => { setOpen(false); setFlyout(null); }, [location.pathname]);
+  useEffect(() => { setOpen(false); setFlyout(false); setSearchOpen(false); }, [location.pathname, location.search]);
   useEffect(() => {
-    const close = (e: KeyboardEvent) => { if (e.key === "Escape") setFlyout(null); };
+    const media = window.matchMedia("(max-width: 960px)");
+    const update = () => { setIsMobile(media.matches); if (!media.matches) setOpen(false); };
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+  useEffect(() => {
+    if (!open || !isMobile) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    drawerRef.current?.querySelector<HTMLElement>("a, button")?.focus();
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      menuButtonRef.current?.focus();
+    };
+  }, [isMobile, open]);
+  useEffect(() => {
+    const close = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setFlyout(false);
+      setSearchOpen(false);
+      if (open) setOpen(false);
+    };
     window.addEventListener("keydown", close);
     return () => window.removeEventListener("keydown", close);
-  }, []);
+  }, [open]);
+
+  useEffect(() => {
+    if (!searchOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    searchInputRef.current?.focus();
+    return () => { document.body.style.overflow = previousOverflow; };
+  }, [searchOpen]);
+
+  const searchResults = (() => {
+    const q = searchText.trim().toLowerCase();
+    if (q.length < 2) return [];
+    return products
+      .filter((p) => `${p.name} ${p.tagline} ${p.category} ${(p.variants ?? []).map((v) => v.size).join(" ")}`.toLowerCase().includes(q))
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .slice(0, 6);
+  })();
+  const submitSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = searchText.trim();
+    setSearchOpen(false);
+    navigate(q ? `/products?q=${encodeURIComponent(q)}` : "/products");
+  };
+
+  const trapFocus = (event: React.KeyboardEvent) => {
+    if (!open || event.key !== "Tab") return;
+    const focusable = drawerRef.current?.querySelectorAll<HTMLElement>("a[href], button:not([disabled])");
+    if (!focusable?.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  };
+
+  const linkClass = ({ isActive }: { isActive: boolean }) => `sx-link${isActive ? " is-active" : ""}`;
 
   return (
-    <nav className="nav" id="nav" onMouseLeave={() => setFlyout(null)}>
-      <div className="nav-inner">
-        <Link to="/" className="nav-logo" onClick={() => setOpen(false)} aria-label={`${brandName} home`}>
-          <span className="mark-wrap"><img className="mark" src="/images/logo-legacy.png" alt="" /></span>
-          <span className="nav-logo-text"><span className="nav-logo-name">{brandName}</span><span className="nav-logo-sub">{content.brandTagline ?? "Pipes · Fittings · Tanks"}</span></span>
-        </Link>
-        <div className={`nav-links${open ? " open" : ""}`} id="navLinks">
-          {LINKS.map((l) => <NavLink key={l.to} to={l.to} className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>{l.label}</NavLink>)}
-          <div className="nav-flyout-anchor" onMouseEnter={() => setFlyout("products")} onFocus={() => setFlyout("products")}>
-            <NavLink to="/products" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>Products <ChevronDown size={13} /></NavLink>
-            {flyout === "products" && <div className="nav-flyout product-flyout">
-              <div className="flyout-kicker">SHOP BY SYSTEM</div>
-              {PRODUCT_GROUPS.map((group) => <Link key={group.id} to={`/products?group=${group.id}`} className="flyout-family"><span><b>{group.label}</b><small>{group.description}</small></span><ArrowUpRight size={15} /></Link>)}
-              <Link to="/products" className="flyout-all">View all {products.length} products <ArrowUpRight size={14} /></Link>
-            </div>}
+    <header className="sx-header" id="siteHeader">
+      <div className="sx-strip">
+        <div className="sx-wrap sx-strip-inner">
+          <div className="sx-strip-contact" aria-label="Contact details">
+            <a href={telHref(settings.phone)}><PhoneIcon size={14} /> {settings.phone}</a>
+            <a href={`mailto:${settings.email}`}><MailIcon /> {settings.email}</a>
           </div>
-          <div className="nav-flyout-anchor" onMouseEnter={() => setFlyout("themes")}>
-            <button className="nav-link nav-theme-button" type="button" onClick={() => setFlyout(flyout === "themes" ? null : "themes")} aria-expanded={flyout === "themes"}><Palette size={14} /> View modes <ChevronDown size={13} /></button>
-            {flyout === "themes" && <div className="nav-flyout theme-flyout">
-              <div className="flyout-kicker">PUBLIC VIEW MODES</div>
-              <div className="theme-flyout-grid">{THEMES.map((theme) => <button type="button" key={theme.id} className={`public-theme-option${settings.theme === theme.id ? " active" : ""}`} onClick={() => { setPublicThemePreference(theme.id); setFlyout(null); }}><i style={{ background: theme.swatch.bg }} /><i style={{ background: theme.swatch.accent }} /><i style={{ background: theme.swatch.cta }} /><span>{theme.name}</span></button>)}</div>
-            </div>}
+          <div className="sx-strip-contact">
+            <span><PinIcon /> {settings.address}</span>
+            <span className="sx-strip-social">
+              <a href={settings.facebook} target="_blank" rel="noreferrer" aria-label="Jagadamba Plastic on Facebook"><FacebookIcon /></a>
+              <a href={settings.youtube} target="_blank" rel="noreferrer" aria-label="Jagadamba Plastic on YouTube"><YoutubeIcon /></a>
+            </span>
+            <span lang="ne" className="sx-strip-ne">नेपालमा बनेको</span>
           </div>
-          <NavLink to="/contact" className="nav-link nav-cta">Get a quote <ArrowUpRight size={14} /></NavLink>
-        </div>
-        <div className="nav-actions">
-          <Link className="nav-search" to="/products" aria-label="Search products"><Search size={17} /></Link>
-          <button className="nav-toggle" type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="navLinks" onClick={() => setOpen((v) => !v)}><span /><span /><span /></button>
         </div>
       </div>
-      <div className="nav-utility" aria-label="Contact and location details">
-        <span className="nav-utility-location"><i aria-hidden="true">⌖</i>{settings.address}</span>
-        <span className="nav-utility-divider" aria-hidden="true" />
-        <a href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`}>☎ {settings.phone}</a>
-        {settings.phoneAlt && <a href={`tel:${settings.phoneAlt.replace(/[^+\d]/g, "")}`}>☎ {settings.phoneAlt}</a>}
-        <a href={`mailto:${settings.email}`}>{settings.email}</a>
-        <span className="nav-utility-badge" title="Quote cart" onClick={(e) => { e.stopPropagation(); window.location.href = "/quote" }}>
-          {useSiteData().enquiries?.length > 0 ? <b className="badge">{useSiteData().enquiries.length}</b> : null}
-        </span>
-        <span className="nav-utility-spacer" />
-        <a href={settings.facebook} target="_blank" rel="noreferrer">Facebook ↗</a>
-        <a href={settings.youtube} target="_blank" rel="noreferrer">YouTube ↗</a>
+
+      <div className="sx-bar">
+        <div className="sx-wrap sx-bar-inner">
+          <Link to="/" className="sx-brand" aria-label={`${brandName} home`}>
+            <span className="sx-brand-mark"><LogoMark size={38} /></span>
+            <span className="sx-brand-text">
+              <span className="sx-brand-name">{brandName}</span>
+              <span className="sx-brand-sub">{content.brandTagline ?? "Pipes · Fittings · Tanks"}</span>
+            </span>
+          </Link>
+
+          <nav className="sx-nav" aria-label="Primary" onMouseLeave={() => setFlyout(false)}>
+            <NavLink to="/about" className={linkClass}>About</NavLink>
+            <div className="sx-has-flyout" onMouseEnter={() => setFlyout(true)} onFocus={() => setFlyout(true)}>
+              <NavLink to="/products" className={linkClass} aria-haspopup="true" aria-expanded={flyout}>Products <ChevronDown size={14} /></NavLink>
+              {flyout && (
+                <div className="sx-flyout">
+                  <div className="sx-flyout-kicker">Shop by system</div>
+                  {PRODUCT_GROUPS.map((group) => (
+                    <Link key={group.id} to={`/products?group=${group.id}`} className={`sx-flyout-item sx-flyout-${group.accent}`}>
+                      <span className="sx-flyout-thumb" aria-hidden="true">{groupImage(group.id) && <img src={groupImage(group.id)} alt="" width={56} height={56} loading="lazy" />}</span>
+                      <span className="sx-flyout-text"><b>{group.label}</b><small>{group.description}</small></span>
+                      <ArrowUpRight size={15} />
+                    </Link>
+                  ))}
+                  <Link to="/products" className="sx-flyout-all">View all {products.length} products <ArrowUpRight size={14} /></Link>
+                </div>
+              )}
+            </div>
+            <NavLink to="/gallery" className={linkClass}>Gallery</NavLink>
+            <NavLink to="/reviews" className={linkClass}>Reviews</NavLink>
+          </nav>
+
+          <div className="sx-actions">
+            <button type="button" className="sx-icon-btn sx-search" aria-label="Search products" onClick={() => setSearchOpen(true)}><SearchIcon /></button>
+            {quote.items.length > 0 && (
+              <Link className="sx-icon-btn sx-quote-count" to="/contact#quote" aria-label={`Quote list, ${quote.items.length} ${quote.items.length === 1 ? "product" : "products"}`}>
+                <ListIcon /><b>{quote.items.length}</b>
+              </Link>
+            )}
+            <a className="sx-icon-btn sx-call" href={telHref(settings.phone)} aria-label={`Call ${settings.phone}`}><PhoneIcon size={18} /></a>
+            <Link to="/contact" className="sx-cta">Get a quote <ArrowUpRight size={14} /></Link>
+            <button ref={menuButtonRef} className="sx-toggle" type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="sxDrawer" onClick={() => setOpen((v) => !v)}>
+              <span /><span /><span />
+            </button>
+          </div>
+        </div>
       </div>
-    </nav>
+
+      {searchOpen && (
+        <div className="sx-search-overlay" role="dialog" aria-modal="true" aria-label="Search products" onClick={() => setSearchOpen(false)}>
+          <div className="sx-search-panel" onClick={(e) => e.stopPropagation()}>
+            <form onSubmit={submitSearch} role="search">
+              <SearchIcon size={20} />
+              <input ref={searchInputRef} type="search" value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder="Search pipes, fittings, tanks or sizes (e.g. 110mm)…" aria-label="Search products" autoComplete="off" />
+              <button type="button" className="sx-search-close" onClick={() => setSearchOpen(false)} aria-label="Close search">Esc</button>
+            </form>
+            <ul className="sx-search-results" aria-live="polite">
+              {searchText.trim().length < 2 && <li className="sx-search-hint">Type at least two letters, or a size such as “110mm”.</li>}
+              {searchText.trim().length >= 2 && searchResults.length === 0 && <li className="sx-search-hint">No products match “{searchText.trim()}”.</li>}
+              {searchResults.map((p) => (
+                <li key={p.id}>
+                  <Link to={`/products/${p.id}`} className="sx-search-item">
+                    <img src={p.image} alt="" width={44} height={44} loading="lazy" decoding="async" />
+                    <span><b>{p.name}</b><small>{p.category}</small></span>
+                    <ArrowUpRight size={14} />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            {searchText.trim().length >= 2 && (
+              <button type="button" className="sx-search-all" onClick={submitSearch as unknown as React.MouseEventHandler}>
+                See all results for “{searchText.trim()}” <ArrowUpRight size={14} />
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* mobile drawer */}
+      <div className={`sx-drawer-backdrop${open ? " is-open" : ""}`} onClick={() => setOpen(false)} aria-hidden="true" />
+      <div ref={drawerRef} id="sxDrawer" className={`sx-drawer${open ? " is-open" : ""}`} aria-hidden={isMobile && !open} onKeyDown={trapFocus} {...(isMobile && !open ? { inert: "" as unknown as undefined } : {})}>
+        <div className="sx-drawer-head">
+          <span>Menu</span>
+          <button type="button" className="sx-drawer-close" aria-label="Close menu" onClick={() => setOpen(false)}>×</button>
+        </div>
+        <div className="sx-drawer-links">
+          {LINKS.map((l) => <NavLink key={l.to} to={l.to} className={linkClass}>{l.label}</NavLink>)}
+          <NavLink to="/products" end className={linkClass}>All products</NavLink>
+        </div>
+        <div className="sx-drawer-kicker">Shop by system</div>
+        <div className="sx-drawer-groups">
+          {PRODUCT_GROUPS.map((group) => (
+            <Link key={group.id} to={`/products?group=${group.id}`} className={`sx-drawer-group sx-flyout-${group.accent}`}>
+              <span className="sx-drawer-thumb" aria-hidden="true">{groupImage(group.id) && <img src={groupImage(group.id)} alt="" width={56} height={56} loading="lazy" />}</span>
+              <b>{group.label}</b><small>{group.eyebrow}</small>
+            </Link>
+          ))}
+        </div>
+        <Link to="/contact" className="sx-cta sx-cta-block">Get a quote <ArrowUpRight size={14} /></Link>
+        <div className="sx-drawer-contact">
+          <a href={telHref(settings.phone)}><PhoneIcon size={15} /> {settings.phone}</a>
+          <a href={`mailto:${settings.email}`}><MailIcon size={15} /> {settings.email}</a>
+          <span><PinIcon size={15} /> {settings.address}</span>
+        </div>
+      </div>
+    </header>
   );
 }
 
@@ -172,5 +306,40 @@ export function Footer({ settings }: { settings: { phone: string; phoneAlt?: str
   const { content } = useSiteData();
   const brandName = content.brandDisplayName ?? "Jagadamba Plastic";
   const companyName = content.companyDisplayName ?? "Jagadamba Plastic Industries Pvt. Ltd.";
-  return <footer><div className="wrap"><div className="footer-grid"><div><div className="brand"><Link to="/" aria-label={`${brandName} home`}><img src="/images/logo.png" alt="" /></Link><Link to="/">{brandName}</Link></div><p className="f-moto">HDPE, PVC and CPVC pipes, fittings and water tanks — manufactured in Chitwan and certified to national standard. नेपालमा बनेको।</p></div><div><h4>EXPLORE</h4><Link to="/about">About us</Link><Link to="/products">Product catalog</Link><Link to="/gallery">Gallery</Link><Link to="/reviews">Customer reviews</Link><Link to="/admin/settings">Design studio</Link></div><div><h4>REACH US</h4><a href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`}>{settings.phone}</a>{settings.phoneAlt && <a href={`tel:${settings.phoneAlt.replace(/[^+\d]/g, "")}`}>{settings.phoneAlt}</a>}<a href={`mailto:${settings.email}`}>{settings.email}</a><a href={settings.facebook} target="_blank" rel="noreferrer">Facebook</a><a href={settings.youtube} target="_blank" rel="noreferrer">YouTube</a><span style={{ display: "block", color: "var(--text-dim)", fontSize: 13.5, padding: "5px 0" }}>{settings.address}</span></div></div><div className="footer-bottom"><span>www.jagadambaplastic.com · नेपालमा बनेको</span><span>© 2026 {companyName} · <Link to="/admin">Admin</Link></span></div></div></footer>;
+  return (
+    <footer className="sx-footer">
+      <div className="sx-wrap">
+        <div className="footer-grid sx-footer-grid">
+          <div>
+            <div className="brand">
+              <Link to="/" aria-label={`${brandName} home`}><LogoMark size={40} lazy /></Link>
+              <Link to="/">{brandName}</Link>
+            </div>
+            <p className="f-moto">HDPE, PVC and CPVC pipes, fittings and water tanks — manufactured in Chitwan and certified to national standard. नेपालमा बनेको।</p>
+          </div>
+          <div>
+            <h4>Explore</h4>
+            <Link to="/about">About us</Link>
+            <Link to="/products">Product catalog</Link>
+            <Link to="/gallery">Gallery</Link>
+            <Link to="/reviews">Customer reviews</Link>
+            <Link to="/contact">Contact</Link>
+          </div>
+          <div>
+            <h4>Reach us</h4>
+            <a href={telHref(settings.phone)}>{settings.phone}</a>
+            {settings.phoneAlt && <a href={telHref(settings.phoneAlt)}>{settings.phoneAlt}</a>}
+            <a href={`mailto:${settings.email}`}>{settings.email}</a>
+            <a href={settings.facebook} target="_blank" rel="noreferrer">Facebook</a>
+            <a href={settings.youtube} target="_blank" rel="noreferrer">YouTube</a>
+            <span className="sx-footer-address">{settings.address}</span>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <span>www.jagadambaplastic.com · नेपालमा बनेको</span>
+          <span>© 2026 {companyName} · <Link to="/admin">Admin</Link></span>
+        </div>
+      </div>
+    </footer>
+  );
 }

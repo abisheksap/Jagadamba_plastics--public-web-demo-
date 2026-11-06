@@ -1,0 +1,72 @@
+import asyncio
+import sys
+from pathlib import Path
+from playwright.async_api import async_playwright
+sys.path.insert(0, str(Path(__file__).parent))
+from common import BASE, ROOT, launch
+PASS=FAIL=0
+def check(cond,msg):
+    global PASS,FAIL
+    if cond: PASS+=1; print("  PASS",msg)
+    else: FAIL+=1; print("  FAIL",msg)
+OP="(s)=>{const e=document.querySelector(s);return e?+getComputedStyle(e).opacity:null}"
+async def main():
+    async with async_playwright() as p:
+        b=await launch(p)
+        print("NORMAL MOTION")
+        ctx=await b.new_context(viewport={"width":1440,"height":900}); pg=await ctx.new_page()
+        await pg.add_init_script("window.__cls=0;new PerformanceObserver(l=>{for(const e of l.getEntries()){if(!e.hadRecentInput)window.__cls+=e.value}}).observe({type:'layout-shift',buffered:true})")
+        await pg.goto(BASE+"/",wait_until="load"); await pg.wait_for_timeout(2500)
+        check(await pg.evaluate("document.documentElement.classList.contains('reveal-ready')"),"reveal system is active (html.reveal-ready)")
+        hidden=await pg.evaluate("[...document.querySelectorAll('[data-reveal]')].length")
+        check(hidden>=15,f"{hidden} below-the-fold blocks are waiting to be revealed")
+        check(await pg.evaluate("document.querySelector('.hero [data-reveal], .hero-inner[data-reveal]')===null"),"hero (above the fold) is never hidden")
+        check(await pg.evaluate("document.querySelector('.ticker-wrap [data-reveal]')===null")," ticker (on screen) is never hidden".strip())
+        op=await pg.evaluate(OP,".serve-row")
+        check(op is not None and op<0.05,f"a below-fold card starts invisible (opacity {op})")
+        delays=await pg.evaluate("[...document.querySelectorAll('.serve-row')].map(e=>e.style.getPropertyValue('--reveal-delay'))")
+        check(len(delays)==3 and delays[0]=="0ms" and delays[1]!=delays[0],f"cards are staggered {delays}")
+        await pg.evaluate("document.querySelector('.serve-row').scrollIntoView({block:'center',behavior:'instant'})"); await pg.wait_for_timeout(1300)
+        op=await pg.evaluate(OP,".serve-row"); check(op==1,f"…then fades in when scrolled into view (opacity {op})")
+        await pg.wait_for_timeout(1800)
+        check(await pg.evaluate("document.querySelector('.serve-row').hasAttribute('data-reveal')")==False,"reveal styles are removed afterwards (hover effects return)")
+        H=await pg.evaluate("document.documentElement.scrollHeight")
+        for y in range(0,H,450):
+            await pg.evaluate(f"window.scrollTo({{top:{y},behavior:'instant'}})"); await pg.wait_for_timeout(110)
+        await pg.wait_for_timeout(1500)
+        stuck=await pg.evaluate("[...document.querySelectorAll('[data-reveal]:not(.is-revealed)')].filter(e=>{const r=e.getBoundingClientRect();return r.top<innerHeight&&r.bottom>0}).length")
+        check(stuck==0,"nothing is left invisible inside the viewport after scrolling the whole page")
+        await pg.evaluate("window.scrollTo({top:document.documentElement.scrollHeight,behavior:'instant'})"); await pg.wait_for_timeout(1500)
+        left=await pg.evaluate("document.querySelectorAll('[data-reveal]').length")
+        check(left==0,f"after reaching the bottom no element is still waiting ({left})")
+        await pg.goto(BASE+"/" if "BASE" in globals() else "http://127.0.0.1:4173/",wait_until="load"); await pg.wait_for_timeout(2500)
+        await pg.evaluate("window.scrollTo({top:document.documentElement.scrollHeight,behavior:'instant'})"); await pg.wait_for_timeout(1800)
+        above=await pg.evaluate("[...document.querySelectorAll('[data-reveal]')].filter(e=>e.getBoundingClientRect().bottom<0).length")
+        check(above==0,f"jumping straight to the bottom (End key) leaves nothing hidden above you ({above})")
+        cls=await pg.evaluate("window.__cls"); check(cls<0.1,f"layout shift stays low while scrolling (CLS {cls:.3f}, good < 0.1)")
+        await pg.goto(BASE+"/about",wait_until="load"); await pg.wait_for_timeout(2500)
+        n=await pg.evaluate("document.querySelectorAll('[data-reveal]').length"); check(n>0,f"also active on other pages (About: {n} blocks)")
+        await pg.goto(BASE+"/#documents",wait_until="load"); await pg.wait_for_timeout(3500)
+        y=await pg.evaluate("Math.round(document.getElementById('documents').getBoundingClientRect().top)")
+        op=await pg.evaluate(OP,"#documents .doc-card"); check(0<=y<250 and (op is None or op==1),f"#documents link scrolls there and the cards are visible (top {y}px, opacity {op})")
+        await ctx.close()
+        print("REDUCED MOTION")
+        ctx=await b.new_context(viewport={"width":1440,"height":900},reduced_motion="reduce"); pg=await ctx.new_page()
+        await pg.goto(BASE+"/",wait_until="load"); await pg.wait_for_timeout(2500)
+        check(await pg.evaluate("document.querySelectorAll('[data-reveal]').length")==0,"no element is hidden or animated")
+        check(await pg.evaluate("document.documentElement.classList.contains('reveal-ready')")==False,"reveal system stays off")
+        op=await pg.evaluate(OP,".serve-row"); check(op==1,"content is fully visible immediately")
+        await ctx.close()
+        print("MOBILE")
+        ctx=await b.new_context(viewport={"width":390,"height":844}); pg=await ctx.new_page()
+        await pg.goto(BASE+"/",wait_until="load"); await pg.wait_for_timeout(2500)
+        n=await pg.evaluate("document.querySelectorAll('[data-reveal]').length"); check(n>=15,f"works on phones ({n} blocks)")
+        H=await pg.evaluate("document.documentElement.scrollHeight")
+        for y in range(0,H,420):
+            await pg.evaluate(f"window.scrollTo({{top:{y},behavior:'instant'}})"); await pg.wait_for_timeout(100)
+        await pg.wait_for_timeout(1500)
+        check(await pg.evaluate("document.querySelectorAll('[data-reveal]').length")==0,"everything revealed after scrolling on a phone")
+        print(f"\nRESULT: {PASS} passed, {FAIL} failed")
+        await b.close()
+asyncio.run(main())
+sys.exit(1 if FAIL else 0)

@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
+import { adminCredential } from "../data/adminAuth";
 import { fetchActivity } from "../data/backend";
 import type { ActivityEntry, ActivityKind } from "../data/types";
 
 const KIND_ICON: Record<ActivityKind, string> = {
   product: "📦",
   gallery: "🖼️",
+  document: "📄",
   review: "★",
   enquiry: "✉",
   content: "✎",
@@ -21,6 +23,7 @@ const FILTERS: Array<{ id: "all" | ActivityKind; label: string }> = [
   { id: "review", label: "Reviews" },
   { id: "content", label: "Content" },
   { id: "gallery", label: "Gallery" },
+  { id: "document", label: "Documents" },
   { id: "layout", label: "Home group" },
   { id: "settings", label: "Settings" },
   { id: "theme", label: "Theme" },
@@ -45,7 +48,7 @@ export default function AdminActivity() {
   useEffect(() => {
     let live = true;
     const load = async () => {
-      const rows = await fetchActivity();
+      const rows = await fetchActivity(adminCredential());
       if (live) {
         setEntries(rows);
         setLoading(false);

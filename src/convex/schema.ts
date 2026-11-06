@@ -32,6 +32,19 @@ export default defineSchema({
     videoUrl: v.optional(v.string()),
     sortOrder: v.optional(v.number()),
   }),
+  documents: defineTable({
+    title: v.string(),
+    kind: v.string(),
+    issuer: v.optional(v.string()),
+    issuedOn: v.optional(v.string()),
+    validUntil: v.optional(v.string()),
+    note: v.optional(v.string()),
+    // uploaded scan (storage id) OR a plain URL/path; may be empty for a placeholder entry
+    image: v.string(),
+    imageStorageId: v.optional(v.id("_storage")),
+    fileUrl: v.optional(v.string()),
+    sortOrder: v.optional(v.number()),
+  }),
   reviews: defineTable({
     name: v.string(),
     business: v.optional(v.string()),
@@ -66,12 +79,27 @@ export default defineSchema({
     key: v.string(),
     value: v.any(),
   }).index("by_key", ["key"]),
+  // key "passcode": a passcode chosen in Settings (salted PBKDF2). When absent, the ADMIN_PASSCODE
+  // environment variable is the credential. key "loginState": sign-in attempt counter and lockout.
   admin: defineTable({
     key: v.string(),
-    passcodeHash: v.string(),
+    passcodeHash: v.optional(v.string()),
+    salt: v.optional(v.string()),
+    iterations: v.optional(v.number()),
     credentialVersion: v.optional(v.number()),
     changedAt: v.optional(v.number()),
+    failures: v.optional(v.number()),
+    windowStart: v.optional(v.number()),
+    lockedUntil: v.optional(v.number()),
   }).index("by_key", ["key"]),
+  // Revocable sign-in sessions. Only a SHA-256 of the token is stored, never the token itself.
+  adminSessions: defineTable({
+    tokenHash: v.string(),
+    createdAt: v.number(),
+    expiresAt: v.number(),
+  })
+    .index("by_hash", ["tokenHash"])
+    .index("by_expires", ["expiresAt"]),
   siteContent: defineTable({
     key: v.literal("main"),
     // Content/layout intentionally accept optional forward-compatible fields.

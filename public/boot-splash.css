@@ -1,0 +1,71 @@
+/* Jagadamba logo loading animation.
+   Used by the boot splash in index.html and by /loading-animation.html (preview page).
+   Layers (public/images/loader): ring = blue ring + tagline, letters = red "JP" + lamp, flame = lamp flame.
+   Sequence: ring sweeps in -> letters rise -> flame lights and flickers. */
+
+@property --bs-p { syntax: "<number>"; inherits: false; initial-value: 0; }
+
+#boot-splash {
+  position: fixed; inset: 0; z-index: 99999; display: grid; place-items: center;
+  background: radial-gradient(60% 55% at 50% 38%, #fffaf0 0%, #f6efe0 55%, #efe5cf 100%);
+  transition: opacity 0.7s ease, visibility 0.7s;
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+}
+#boot-splash.is-done { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.bs-stage { display: flex; flex-direction: column; align-items: center; gap: 26px; padding: 24px; }
+.bs-logo { position: relative; width: min(52vw, 230px); aspect-ratio: 489 / 561; animation: bsBreathe 3.4s ease-in-out 2s infinite; }
+.bs-logo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; user-select: none; -webkit-user-drag: none; }
+
+/* 1. ring + tagline: conic sweep (fades in where @property is unsupported) */
+.bs-ring {
+  animation: bsRingFade 0.5s ease 0.1s both, bsRingSweep 1.15s cubic-bezier(0.55, 0.05, 0.2, 1) 0.1s both;
+  -webkit-mask-image: conic-gradient(from 205deg at 50% 52%, #000 calc(var(--bs-p) * 3.6deg), transparent 0);
+  mask-image: conic-gradient(from 205deg at 50% 52%, #000 calc(var(--bs-p) * 3.6deg), transparent 0);
+}
+@keyframes bsRingSweep { from { --bs-p: 0; } to { --bs-p: 101; } }
+@keyframes bsRingFade { from { opacity: 0; } to { opacity: 1; } }
+
+/* 2. red JP + lamp rise and wipe in */
+.bs-letters { animation: bsRise 0.85s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s both; }
+@keyframes bsRise {
+  from { opacity: 0; transform: translateY(26px) scale(0.96); clip-path: inset(0 100% 0 0); }
+  60% { opacity: 1; }
+  to { opacity: 1; transform: none; clip-path: inset(0 0 0 0); }
+}
+
+/* 3. flame lights up, then flickers */
+.bs-glow {
+  position: absolute; left: 39.8%; top: 23%; width: 26%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 176, 64, 0.5), rgba(255, 120, 60, 0.14) 45%, transparent 70%);
+  opacity: 0; animation: bsGlow 1.7s ease-in-out 1.35s infinite;
+}
+.bs-flame { transform-origin: 39.5% 28.5%; animation: bsFlameIn 0.55s ease 1.3s both, bsFlicker 1.5s ease-in-out 1.85s infinite; }
+@keyframes bsFlameIn { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: scale(1); } }
+@keyframes bsFlicker {
+  0%, 100% { transform: scaleY(1) skewX(0deg); filter: brightness(1); }
+  25% { transform: scaleY(1.07) skewX(-2deg); filter: brightness(1.12); }
+  55% { transform: scaleY(0.96) skewX(1.5deg); filter: brightness(0.96); }
+  80% { transform: scaleY(1.04) skewX(-1deg); filter: brightness(1.08); }
+}
+@keyframes bsGlow { 0% { opacity: 0; } 25% { opacity: 1; } 60% { opacity: 0.6; } 100% { opacity: 0; } }
+@keyframes bsBreathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.025); } }
+
+/* wordmark + progress line */
+.bs-word { font-weight: 700; font-size: 15px; letter-spacing: 0.34em; text-indent: 0.34em; text-transform: uppercase; color: #064c92; opacity: 0; animation: bsFadeUp 0.7s ease 1.5s both; }
+.bs-bar { width: 132px; height: 3px; border-radius: 3px; overflow: hidden; background: rgba(6, 76, 146, 0.14); opacity: 0; animation: bsFadeUp 0.5s ease 1.6s both; }
+.bs-bar i { display: block; width: 45%; height: 100%; border-radius: 3px; background: linear-gradient(90deg, #064c92, #e02129); animation: bsSlide 1.2s ease-in-out 1.6s infinite; }
+@keyframes bsFadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes bsSlide { 0% { transform: translateX(-110%); } 100% { transform: translateX(240%); } }
+
+/* repeat visits in the same tab: skip straight to the finished logo */
+#boot-splash.is-quick *, #boot-splash.is-quick *::before { animation: none !important; }
+#boot-splash.is-quick .bs-ring { -webkit-mask-image: none; mask-image: none; }
+#boot-splash.is-quick .bs-word, #boot-splash.is-quick .bs-bar { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bs-logo, .bs-ring, .bs-letters, .bs-flame, .bs-glow, .bs-word, .bs-bar, .bs-bar i { animation: none !important; }
+  .bs-ring { -webkit-mask-image: none; mask-image: none; }
+  .bs-glow { display: none; }
+  .bs-word, .bs-bar { opacity: 1; }
+}

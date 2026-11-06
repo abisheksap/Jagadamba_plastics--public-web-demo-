@@ -162,7 +162,7 @@ export default function AdminGallery() {
                   onDrop={onDrop}
                 >
                   {editing.image ? (
-                    <img src={editing.image} alt="Preview" style={{ maxHeight: 110, width: "100%", objectFit: "cover" }} />
+                    <img loading="lazy" decoding="async" src={editing.image} alt="Preview" style={{ maxHeight: 110, width: "100%", objectFit: "cover" }} />
                   ) : (
                     <div>Drop a photo here or click to browse</div>
                   )}

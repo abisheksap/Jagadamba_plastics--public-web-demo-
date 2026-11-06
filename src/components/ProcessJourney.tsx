@@ -40,7 +40,7 @@ export function ProcessJourney({ products = [] }: { products?: Product[] }) {
       <div className="process-journey-grid" aria-hidden="true" />
       <div className="wrap process-journey-head">
         <div>
-          <div className="kicker-future"><span className="kf-dot" /> THE JAGADAMBA METHOD</div>
+          <div className="kicker-future">The Jagadamba method</div>
           <h2 id="process-journey-title">From compound <span>to confidence.</span></h2>
         </div>
         <div>

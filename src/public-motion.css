@@ -791,12 +791,6 @@
 
 /* ---------- Home page hero subtitle glow ---------- */
 
-.hero-sub { animation: subtitleGlow 4s ease-in-out infinite; }
-@keyframes subtitleGlow {
-  0%, 100% { color: var(--text-mid); }
-  50% { color: var(--cyan); text-shadow: 0 0 12px rgba(var(--cyan-rgb), 0.5); }
-}
-
 /* ---------- Page transition fade ---------- */
 
 .page-transition { overflow: hidden; }

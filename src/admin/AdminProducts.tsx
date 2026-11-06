@@ -277,7 +277,7 @@ export default function AdminProducts() {
                     onDrop={onDrop}
                   >
                     {editing.image ? (
-                      <img src={editing.image} alt="Product preview" />
+                      <img loading="lazy" decoding="async" src={editing.image} alt="Product preview" />
                     ) : (
                       <div>Drop an image here or click to browse</div>
                     )}

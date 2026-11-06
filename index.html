@@ -9,6 +9,8 @@
       content="HDPE, PVC and CPVC pipes, fittings and water tanks manufactured in Bharatpur, Chitwan, Nepal. NS & ISO certified manufacturing since 2063 B.S. — dealer network across all 7 provinces."
     />
     <meta name="theme-color" content="#f4eddd" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="__SITE_URL__/" />
     <link rel="icon" type="image/png" href="/images/logo.png" />
     <link rel="apple-touch-icon" href="/images/logo.png" />
 
@@ -20,7 +22,8 @@
       property="og:description"
       content="NS-certified HDPE, PVC & CPVC pipes, fittings and water tanks, manufactured in Chitwan and trusted on sites across Nepal."
     />
-    <meta property="og:image" content="/images/logo.png" />
+    <meta property="og:url" content="__SITE_URL__/" />
+    <meta property="og:image" content="__SITE_URL__/images/logo.png" />
     <meta property="og:image:alt" content="Jagadamba Plastic Industries logo" />
     <meta property="og:locale" content="en_NP" />
 
@@ -31,7 +34,34 @@
       name="twitter:description"
       content="NS-certified HDPE, PVC & CPVC pipes, fittings and water tanks, manufactured in Chitwan, Nepal."
     />
-    <meta name="twitter:image" content="/images/logo.png" />
+    <meta name="twitter:image" content="__SITE_URL__/images/logo.png" />
+
+    <!-- structured data for search engines -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Jagadamba Plastic Industries Pvt. Ltd.",
+        "url": "__SITE_URL__/",
+        "logo": "__SITE_URL__/images/logo.png",
+        "telephone": "+977-56-528831",
+        "email": "info@jagadambaplastic.com",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Bharatpur-4, Narayanghat",
+          "addressLocality": "Chitwan",
+          "addressCountry": "NP"
+        },
+        "foundingDate": "2006"
+      }
+    </script>
+
+    <!-- boot splash (logo animation) -->
+    <link rel="stylesheet" href="/boot-splash.css" />
+    <link rel="preload" as="image" href="/images/loader/ring.png" />
+    <link rel="preload" as="image" href="/images/loader/letters.png" />
+    <link rel="preload" as="image" href="/images/loader/flame.png" />
+    <noscript><style>#boot-splash{display:none}</style></noscript>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -41,6 +71,25 @@
     />
   </head>
   <body>
+    <div id="boot-splash" role="status" aria-live="polite" aria-label="Loading Jagadamba Plastic">
+      <div class="bs-stage">
+        <div class="bs-logo" aria-hidden="true">
+          <img class="bs-ring" src="/images/loader/ring.png" alt="" width="489" height="561" />
+          <img class="bs-letters" src="/images/loader/letters.png" alt="" width="489" height="561" />
+          <span class="bs-glow"></span>
+          <img class="bs-flame" src="/images/loader/flame.png" alt="" width="489" height="561" />
+        </div>
+        <div class="bs-word">Jagadamba Plastic</div>
+        <div class="bs-bar" aria-hidden="true"><i></i></div>
+      </div>
+    </div>
+    <script src="/boot-splash.js"></script>
+    <noscript>
+      <p style="padding:24px;font-family:system-ui,sans-serif;text-align:center">
+        Jagadamba Plastic — pipes, fittings and water tanks, Bharatpur, Chitwan. This website needs JavaScript.
+        Please enable it, or call +977-56-528831 / email info@jagadambaplastic.com.
+      </p>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -1,5 +1,5 @@
 // Seed data: the generated price-list catalog plus demo gallery/reviews.
-import type { GalleryItem, Review, SiteData } from "./types";
+import type { DocumentItem, GalleryItem, Review, SiteData } from "./types";
 import { DEFAULT_CONTENT, DEFAULT_SETTINGS } from "./types";
 import { SEED_PRODUCTS } from "./seedCatalog";
 
@@ -110,6 +110,13 @@ export const SEED_REVIEWS: Review[] = [
   },
 ];
 
+/** Starter entries so the "Our documents" section is visible; replace the placeholders with real scans in the admin panel. */
+export const SEED_DOCUMENTS: DocumentItem[] = [
+  { id: "d-ns", title: "Nepal Standard (NS) certification", kind: "certificate", issuer: "Nepal Bureau of Standards and Metrology", note: "Product lines manufactured to Nepal Standard.", image: "", sortOrder: 10 },
+  { id: "d-iso", title: "ISO quality management", kind: "certificate", issuer: "Certification body", note: "Quality system covering production and testing.", image: "", sortOrder: 20 },
+  { id: "d-reg", title: "Company registration", kind: "registration", issuer: "Office of the Company Registrar", note: "Jagadamba Plastic Industries Pvt. Ltd.", image: "", sortOrder: 30 },
+];
+
 export function buildSeedData(): SiteData {
   return {
     products: SEED_PRODUCTS.map((p) => ({
@@ -118,6 +125,7 @@ export function buildSeedData(): SiteData {
       variants: (p.variants ?? []).map((v) => ({ ...v })),
     })),
     gallery: SEED_GALLERY.map((g) => ({ ...g })),
+    documents: SEED_DOCUMENTS.map((d) => ({ ...d })),
     reviews: SEED_REVIEWS.map((r) => ({ ...r })),
     enquiries: [],
     settings: { ...DEFAULT_SETTINGS },

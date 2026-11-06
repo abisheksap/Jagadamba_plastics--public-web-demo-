@@ -1,0 +1,137 @@
+/* =====================================================================
+   Home page sections (imported after refresh.css)
+   Several home components shipped without any layout CSS (brand story,
+   audience grid, ticker pause button, CTA section) and the "method"
+   timeline collapsed into a sliver on phones. This file supplies them,
+   and gives the long page alternating, more colourful bands.
+   ===================================================================== */
+
+/* ---------- stats band ---------- */
+:root .stats-future, :root[data-theme] .stats-future { padding-block: clamp(36px, 5vw, 64px); background: linear-gradient(115deg, var(--sx-navy), #0b4a91 60%, #0a3a70); border-block: 0; }
+.stat-cards-future { gap: 16px; }
+:root .stats-future .stat-card-future { position: relative; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 20px; background: rgba(255, 255, 255, 0.07); box-shadow: none; }
+:root .stats-future .stat-card-future::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--red); }
+:root .stats-future .stat-card-future:nth-child(2)::before { background: #59a8f0; }
+:root .stats-future .stat-card-future:nth-child(3)::before { background: #f2b544; }
+:root .stats-future .stat-card-future:nth-child(4)::before { background: #4fcf9a; }
+:root .stats-future .stat-card-future .num { color: #fff; }
+:root .stats-future .stat-card-future .num .suffix, :root .stats-future .stat-card-future .accent-num { color: #ff7d83; }
+:root .stats-future .stat-card-future .lbl { color: rgba(255, 255, 255, 0.78); }
+
+/* ---------- who we serve ---------- */
+.about.section-pad { background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.07), transparent 70%); }
+:root .glass-card { border-radius: 22px; }
+.glass-card .g-icon { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 16px; background: rgba(var(--accent-rgb), 0.1); color: var(--cyan); }
+
+/* ---------- product atlas ---------- */
+.product-atlas-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2vw, 24px); }
+@media (max-width: 900px) { .product-atlas-grid { grid-template-columns: 1fr; } }
+.atlas-card { overflow: hidden; }
+.atlas-card .atlas-visual { --ps: 1; height: 268px; overflow: hidden; border-radius: 20px; }
+.atlas-card .atlas-product-1 { width: calc(138px * var(--ps)); height: calc(174px * var(--ps)); }
+.atlas-card .atlas-product-2 { width: calc(108px * var(--ps)); height: calc(126px * var(--ps)); }
+.atlas-card .atlas-product-3 { width: calc(92px * var(--ps)); height: calc(104px * var(--ps)); }
+@media (max-width: 900px) { .atlas-card .atlas-visual { --ps: 0.84; height: 228px; } }
+.atlas-card.atlas-cyan .atlas-visual { background: radial-gradient(70% 80% at 50% 50%, rgba(var(--accent-rgb), 0.14), transparent 75%); }
+.atlas-card.atlas-red .atlas-visual { background: radial-gradient(70% 80% at 50% 50%, rgba(var(--red-rgb), 0.14), transparent 75%); }
+.atlas-card.atlas-gold .atlas-visual { background: radial-gradient(70% 80% at 50% 50%, rgba(242, 181, 68, 0.26), transparent 75%); }
+
+/* ---------- the Jagadamba method (process) ---------- */
+:root .process-journey {
+  background: radial-gradient(60% 70% at 8% 0%, rgba(47, 143, 224, 0.35), transparent 70%), radial-gradient(50% 60% at 96% 100%, rgba(var(--red-rgb), 0.3), transparent 70%), linear-gradient(160deg, var(--sx-navy), #0a3f7c);
+  border-block: 0;
+}
+:root .process-journey-head h2, :root .process-stage h3 { color: #fff; }
+:root .process-journey-head h2 span { color: #8cc6ff; }
+:root .process-journey-head p, :root .process-stage p { color: rgba(255, 255, 255, 0.78); }
+:root .process-journey-catalog-link { color: rgba(255, 255, 255, 0.7); }
+:root .process-journey-catalog-link b { color: #8cc6ff; }
+:root .process-journey-catalog-link a { color: #ff8a90; }
+:root .process-stage-copy { border-color: rgba(255, 255, 255, 0.16); background: rgba(255, 255, 255, 0.07); }
+:root .process-stage:hover .process-stage-copy { border-color: rgba(140, 198, 255, 0.7); }
+:root .process-stage-kicker { color: #8cc6ff; }
+:root .process-stage:nth-child(3) .process-stage-kicker, :root .process-stage:nth-child(5) .process-stage-kicker { color: #ff8a90; }
+:root .process-stage-tag { color: rgba(255, 255, 255, 0.55); }
+:root .process-stage-marker { background: var(--sx-navy); border-color: #8cc6ff; }
+:root .process-stage-marker span { color: #8cc6ff; }
+@media (max-width: 680px) {
+  .process-journey-stages { position: relative; gap: 14px; }
+  .process-stage { display: grid; grid-template-columns: 34px minmax(0, 1fr); column-gap: 14px; padding-top: 0; }
+  .process-stage .process-stage-marker { position: relative; top: auto; left: auto; grid-column: 1; grid-row: 1; width: 30px; height: 30px; align-self: start; }
+  .process-stage .process-stage-copy { grid-column: 2; grid-row: 1; min-height: 0; padding: 16px; }
+  .process-stage::before { content: ""; position: absolute; left: 14px; top: 34px; bottom: -14px; width: 2px; background: linear-gradient(#8cc6ff, rgba(140, 198, 255, 0.1)); }
+  .process-stage:last-child::before { display: none; }
+  .process-stage h3 { font-size: 18px; }
+  .process-stage p { font-size: 13.5px; }
+}
+
+/* ---------- brand story (our world / standard / craft / reach) ---------- */
+.brand-story { padding: clamp(56px, 8vw, 104px) 0; }
+.brand-story-grid { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+.brand-story-copy h2 { margin: 18px 0 0; font-size: clamp(30px, 3.8vw, 52px); line-height: 1.04; letter-spacing: -0.035em; }
+.brand-story-copy > p { margin: 18px 0 0; max-width: 46ch; font-size: clamp(15.5px, 1.3vw, 17.5px); line-height: 1.75; }
+.brand-story-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 18px; margin-top: 28px; }
+.brand-story-dots { display: flex; gap: 8px; }
+.brand-story-dots button { width: 32px; height: 8px; padding: 0; border: 0; border-radius: 999px; background: rgba(var(--accent-rgb), 0.2); cursor: pointer; transition: width 0.3s var(--ease), background 0.3s; }
+.brand-story-dots button.active { width: 56px; background: var(--red); }
+.story-pause { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgba(var(--panel-rgb), 0.7); color: var(--text-mid); font: 600 11px var(--font-mono); letter-spacing: 0.06em; cursor: pointer; }
+.story-pause:hover { border-color: var(--line-glow); color: var(--text-hi); }
+.brand-story-tag { display: inline-block; margin-top: 20px; padding: 6px 12px; border-radius: 999px; background: rgba(var(--red-rgb), 0.1); color: var(--red); font: 600 11px var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* the story images were rendering at full natural size; keep them inside a fixed stage */
+.brand-story-visual { position: relative; display: grid; place-items: center; aspect-ratio: 5 / 4; max-height: 520px; overflow: hidden; border-radius: 28px; border: 1px solid var(--line); background: radial-gradient(70% 70% at 50% 45%, rgba(var(--accent-rgb), 0.12), transparent 75%), linear-gradient(160deg, rgba(var(--panel-rgb), 0.9), rgba(var(--panel-rgb), 0.5)); }
+.brand-story-visual img { position: relative; z-index: 1; max-width: 72%; max-height: 80%; width: auto; height: auto; object-fit: contain; filter: drop-shadow(0 24px 30px rgba(var(--ink-rgb), 0.28)); animation: sxStoryIn 0.7s var(--ease) both; }
+@keyframes sxStoryIn { from { opacity: 0; transform: translateY(14px) scale(0.96); } to { opacity: 1; transform: none; } }
+.story-pipe-line { position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.35), rgba(var(--red-rgb), 0.35), transparent); }
+.story-caption { position: absolute; z-index: 2; left: 20px; right: 20px; bottom: 16px; display: flex; justify-content: space-between; gap: 12px; font: 600 11px var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+.story-caption b { color: var(--red); }
+.story-support-strip { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(24px, 3vw, 40px); }
+.story-support-strip a { display: inline-flex; align-items: center; gap: 12px; padding: 8px 18px 8px 8px; border-radius: 999px; border: 1px solid var(--line); background: rgba(var(--panel-rgb), 0.85); color: var(--text-mid); font-size: 14px; font-weight: 500; transition: transform 0.2s var(--ease), border-color 0.2s; }
+.story-support-strip a:hover { transform: translateY(-2px); border-color: var(--line-glow); color: var(--text-hi); }
+.story-support-strip img { width: 46px; height: 46px; object-fit: contain; border-radius: 50%; background: rgba(var(--accent-rgb), 0.08); padding: 4px; }
+@media (max-width: 860px) {
+  .brand-story-grid { grid-template-columns: 1fr; }
+  .brand-story-visual { aspect-ratio: 4 / 3; max-height: 340px; }
+  .brand-story-visual img { max-width: 64%; max-height: 190px; }
+  .story-support-strip { display: grid; grid-template-columns: 1fr; }
+}
+
+/* ---------- products + reviews bands ---------- */
+.products-future { background: linear-gradient(180deg, transparent, rgba(var(--red-rgb), 0.04)); }
+.reviews-future { background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.06), transparent); }
+:root .r-card-future { border-radius: 22px; border-top: 4px solid var(--red); }
+:root .r-card-future:nth-child(2) { border-top-color: var(--cyan); }
+:root .r-card-future:nth-child(3) { border-top-color: #e0a526; }
+.gallery-future .g-tile-future { border-radius: 20px; }
+
+/* ---------- closing CTA ---------- */
+.home-cta-section { padding: clamp(24px, 4vw, 56px) 0 clamp(40px, 6vw, 72px); }
+:root .cta-band { border: 0; border-radius: 28px; background: radial-gradient(60% 120% at 100% 0%, rgba(var(--red-rgb), 0.55), transparent 65%), linear-gradient(120deg, var(--sx-navy), #0b4a91); box-shadow: 0 40px 70px -40px rgba(6, 42, 82, 0.7); }
+:root .cta-band h2 { color: #fff; }
+:root .cta-band p { color: rgba(255, 255, 255, 0.82); }
+
+/* kicker pill on dark bands */
+:root .process-journey .kicker-future { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.28); color: #fff; }
+:root .process-journey .kicker-future .kf-dot { background: #ff7d83; }
+
+/* product atlas heading no longer crowds the cards */
+.product-atlas .section-head-future { margin-bottom: clamp(24px, 3vw, 40px); }
+
+/* contact block heading was hard-coded white (unreadable on light themes) */
+:root .contact-future h2 { color: var(--text-hi); }
+:root .contact-future h2 .grad { color: inherit; }
+
+/* hero product panel on phones: the desktop stage height must not leave a blank block under the family cards */
+@media (max-width: 880px) {
+  :root .hero-visual.showcase-viewport { height: auto !important; min-height: 0 !important; }
+}
+
+.product-atlas-grid { margin-top: clamp(20px, 3vw, 36px); }
+
+/* About: story text and timeline sit side by side instead of leaving the right half empty */
+@media (min-width: 961px) {
+  .section-pad > .wrap:has(> .story-copy) { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); column-gap: clamp(40px, 6vw, 96px); align-items: start; }
+  .section-pad > .wrap:has(> .story-copy) > .section-head-future { grid-column: 1 / -1; }
+  .section-pad > .wrap:has(> .story-copy) > .story-copy { grid-column: 1; max-width: none; }
+  .section-pad > .wrap:has(> .story-copy) > .timeline { grid-column: 2; grid-row: 2; margin-top: 0; }
+}

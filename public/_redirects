@@ -1,0 +1,2 @@
+# Single-page app: send every path that is not a real file to the app (Netlify, Cloudflare Pages)
+/*    /index.html   200

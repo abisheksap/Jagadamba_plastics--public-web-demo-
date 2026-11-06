@@ -1,8 +1,10 @@
 import { ReviewForm } from "../components/ReviewForm";
 import { useSiteData } from "../data/SiteDataProvider";
 import { pickApproved } from "../data/backend";
+import { usePageMeta } from "../data/usePageMeta";
 
 export default function Reviews() {
+  usePageMeta("Customer reviews", "What dealers and contractors say about Jagadamba pipes, fittings and water tanks.");
   const { reviews } = useSiteData();
   const approved = pickApproved(reviews);
 
@@ -12,10 +14,7 @@ export default function Reviews() {
         <div className="aurora" />
         <div className="grid-overlay" />
         <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
-          <div className="kicker-future">
-            <span className="kf-dot" />
-            CUSTOMER REVIEWS
-          </div>
+          <div className="kicker-future">Customer reviews</div>
           <h1>
             What our dealers &amp; <span className="grad">customers say.</span>
           </h1>

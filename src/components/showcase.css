@@ -1,4 +1,4 @@
-/* Scoped overrides for the responsive, fixed-coordinate product stage. */
+/* Scoped rules for the desktop product stage and its mobile family-card alternative. */
 .showcase-component .showcase-mode-switch {
   display: inline-flex;
   gap: 3px;
@@ -10,6 +10,7 @@
 }
 
 .showcase-component .showcase-mode-switch button {
+  min-height: 36px;
   border: 0;
   border-radius: 999px;
   padding: 6px 11px;
@@ -34,12 +35,14 @@
 }
 
 .hero-visual.showcase-viewport {
+  position: relative;
   width: 100%;
   height: var(--showcase-height, 560px) !important;
   min-height: 0;
   transform: none !important;
   transform-origin: initial !important;
   overflow: visible;
+  transition: height 0.6s var(--ease);
 }
 
 .showcase-viewport .showcase-stage {
@@ -48,24 +51,19 @@
   left: 50%;
   width: 900px;
   height: 560px;
-  transform: translateX(-50%) scale(var(--showcase-scale, 1));
+  transform: translate(calc(-50% + var(--showcase-shift-x, 0px)), var(--showcase-shift-y, 0px)) scale(var(--showcase-scale, 1));
   transform-origin: top center;
+  transition: transform 0.6s var(--ease);
 }
 
-.showcase-viewport .showcase-orbit {
-  animation-delay: 0.15s;
-}
+.showcase-viewport .showcase-orbit { animation-delay: 0.15s; }
 
-.showcase-viewport .orbit-chip {
-  transform: translate(-50%, -50%) translate(var(--tx, 0px), var(--ty, 0px)) rotate(var(--rot, 0deg)) scale(var(--chip-scale, 1));
-  transition: none;
-  will-change: transform;
-}
-
+.showcase-viewport .orbit-chip,
 .showcase-viewport .showcase-orbit.scattered .orbit-chip,
 .showcase-viewport .showcase-orbit.scattered .orbit-chip:nth-child(odd) {
   transform: translate(-50%, -50%) translate(var(--tx, 0px), var(--ty, 0px)) rotate(var(--rot, 0deg)) scale(var(--chip-scale, 1));
   transition: none;
+  will-change: transform;
 }
 
 .showcase-viewport .orbit-chip:focus-visible {
@@ -75,16 +73,66 @@
 }
 
 .showcase-viewport .orbit-chip:hover .chip-disc,
-.showcase-viewport .orbit-chip:focus-visible .chip-disc {
-  transform: scale(1.08);
-}
-
-.showcase-viewport .orbit-chip:focus-visible .chip-label {
-  opacity: 1;
-}
+.showcase-viewport .orbit-chip:focus-visible .chip-disc { transform: scale(1.08); }
+.showcase-viewport .orbit-chip:focus-visible .chip-label { opacity: 1; }
+.showcase-mobile-grid { display: none; }
 
 @media (max-width: 880px) {
   .showcase-component .showcase-heading { text-align: center; }
+  .hero-visual.showcase-viewport {
+    height: auto !important;
+    min-height: 0;
+    margin: 0 auto;
+  }
+  .showcase-viewport .showcase-stage { display: none; }
+  .showcase-mobile-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+  }
+  .showcase-family-card {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    min-width: 0;
+    min-height: 112px;
+    padding: 12px 8px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    color: var(--text-hi);
+    background: rgba(var(--paper-rgb), .08);
+    text-align: center;
+    transition: border-color .2s ease, transform .2s ease, background .2s ease;
+  }
+  .showcase-family-card:hover,
+  .showcase-family-card:focus-visible {
+    border-color: var(--red);
+    background: rgba(var(--paper-rgb), .14);
+    transform: translateY(-2px);
+    outline: none;
+  }
+  .showcase-family-card img {
+    width: 100%;
+    height: 58px;
+    margin-bottom: 5px;
+    object-fit: contain;
+  }
+  .showcase-family-card span { font-size: 13px; font-weight: 650; }
+  .showcase-family-card small {
+    margin-top: 3px;
+    color: var(--text-dim);
+    font: 8px var(--font-mono);
+    letter-spacing: .05em;
+  }
+}
+
+@media (max-width: 480px) {
+  .showcase-mobile-grid { gap: 8px; }
+  .showcase-family-card { min-height: 102px; padding: 10px 5px; }
+  .showcase-family-card img { height: 50px; }
+  .showcase-family-card span { font-size: 12px; }
+  .showcase-family-card small { font-size: 7px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -97,7 +145,6 @@
   .showcase-viewport .orbit-chip,
   .showcase-viewport .orbit-chip .chip-disc,
   .showcase-viewport .orbit-chip img,
-  .showcase-component .core-note {
-    transition: none !important;
-  }
+  .showcase-component .core-note,
+  .showcase-family-card { transition: none !important; }
 }

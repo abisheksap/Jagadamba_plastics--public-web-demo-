@@ -4,3 +4,12 @@ dist/
 .DS_Store
 tsocache/
 *.tsbuildinfo
+.env
+.env.*
+!.env.example
+.tmp-dist-convex/
+coverage/
+.vercel/
+.netlify/
+.vercel
+.env*

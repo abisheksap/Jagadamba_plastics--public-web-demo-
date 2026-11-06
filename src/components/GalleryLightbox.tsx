@@ -57,7 +57,7 @@ export function GalleryLightbox({
         </>
       )}
       <figure>
-        <img src={item.image} alt={item.title} />
+        <img loading="lazy" decoding="async" src={item.image} alt={item.title} />
         <figcaption>
           {item.title} — {current + 1}/{items.length}
         </figcaption>

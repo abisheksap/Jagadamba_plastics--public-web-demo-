@@ -9,6 +9,7 @@ const NAV = [
   { to: "/admin/arranger", label: "Homepage designer" },
   { to: "/admin/content", label: "Content" },
   { to: "/admin/gallery", label: "Gallery" },
+  { to: "/admin/documents", label: "Documents" },
   { to: "/admin/reviews", label: "Reviews" },
   { to: "/admin/enquiries", label: "Enquiries" },
   { to: "/admin/activity", label: "Activity log" },
@@ -31,7 +32,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     <div className="admin-shell">
       <aside className={`admin-side${open ? " open" : ""}`}>
         <div className="brand">
-          <img src="/images/logo.png" alt="" />
+          <img loading="lazy" decoding="async" src="/images/logo.png" alt="" />
           Jagadamba Admin
         </div>
         <div className="side-label">DESIGN & MANAGE</div>

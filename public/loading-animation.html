@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Jagadamba logo loading animation</title>
+    <link rel="icon" type="image/png" href="/images/logo.png" />
+    <link rel="stylesheet" href="/boot-splash.css" />
+    <style>
+      /* preview page: show the animation as a normal full-screen page and add a replay button */
+      body { margin: 0; }
+      #replay {
+        position: fixed; z-index: 100000; left: 50%; bottom: 28px; transform: translateX(-50%);
+        padding: 12px 22px; border: 0; border-radius: 999px; cursor: pointer;
+        background: #e02129; color: #fff; font: 600 14px "Space Grotesk", system-ui, sans-serif;
+        box-shadow: 0 10px 24px -10px rgba(224, 33, 41, 0.8);
+      }
+      #replay:focus-visible { outline: 3px solid #064c92; outline-offset: 3px; }
+    </style>
+  </head>
+  <body>
+    <div id="boot-splash" role="img" aria-label="Jagadamba Plastic logo animation">
+      <div class="bs-stage">
+        <div class="bs-logo" aria-hidden="true">
+          <img class="bs-ring" src="/images/loader/ring.png" alt="" width="489" height="561" />
+          <img class="bs-letters" src="/images/loader/letters.png" alt="" width="489" height="561" />
+          <span class="bs-glow"></span>
+          <img class="bs-flame" src="/images/loader/flame.png" alt="" width="489" height="561" />
+        </div>
+        <div class="bs-word">Jagadamba Plastic</div>
+        <div class="bs-bar" aria-hidden="true"><i></i></div>
+      </div>
+    </div>
+    <button id="replay" type="button">Replay animation</button>
+    <script>
+      // restart every CSS animation by cloning the stage
+      document.getElementById("replay").addEventListener("click", function () {
+        var stage = document.querySelector(".bs-stage");
+        var clone = stage.cloneNode(true);
+        stage.parentNode.replaceChild(clone, stage);
+      });
+    </script>
+  </body>
+</html>

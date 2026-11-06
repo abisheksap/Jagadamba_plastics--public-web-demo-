@@ -1,27 +1,26 @@
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { SiteDataProvider, useSiteData } from "./data/SiteDataProvider";
 import { useThemeApplier } from "./data/theme";
-import { Footer, Nav, ScrollTrack, TopBar } from "./components/SiteChrome";
-import { CompanyAssistant } from "./components/CompanyAssistant";
-import { RequireAdmin } from "./admin/RequireAdmin";
-import AdminLayout from "./admin/AdminLayout";
-import AdminDashboard from "./admin/AdminDashboard";
-import AdminProducts from "./admin/AdminProducts";
-import AdminArranger from "./admin/AdminArranger";
-import AdminContent from "./admin/AdminContent";
-import AdminGallery from "./admin/AdminGallery";
-import AdminReviews from "./admin/AdminReviews";
-import AdminEnquiries from "./admin/AdminEnquiries";
-import AdminActivity from "./admin/AdminActivity";
-import AdminSettings from "./admin/AdminSettings";
+import { Footer, ScrollTrack, SiteHeader } from "./components/SiteChrome";
+import { ScrollToTop } from "./components/ScrollToTop";
+import { QuoteProvider } from "./data/QuoteProvider";
+import { DataGate } from "./components/DataGate";
+import { ErrorBoundary } from "./components/ErrorBoundary";
+import { PageLoader, useIdle } from "./components/Lazy";
+import { ScrollReveal } from "./components/ScrollReveal";
 import Home from "./pages/Home";
-import About from "./pages/About";
-import { ProductsPage, ProductDetailPage } from "./pages/Products";
-import Gallery from "./pages/Gallery";
-import Reviews from "./pages/Reviews";
-import Contact from "./pages/Contact";
-import NotFound from "./pages/NotFound";
+
+// Everything except the home page (the first thing most visitors see) loads on demand.
+const AdminApp = lazy(() => import("./admin/AdminApp"));
+const CompanyAssistant = lazy(() => import("./components/CompanyAssistant").then((m) => ({ default: m.CompanyAssistant })));
+const About = lazy(() => import("./pages/About"));
+const ProductsPage = lazy(() => import("./pages/Products").then((m) => ({ default: m.ProductsPage })));
+const ProductDetailPage = lazy(() => import("./pages/Products").then((m) => ({ default: m.ProductDetailPage })));
+const Gallery = lazy(() => import("./pages/Gallery"));
+const Reviews = lazy(() => import("./pages/Reviews"));
+const Contact = lazy(() => import("./pages/Contact"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 function ThemeRoot() {
   const { settings } = useSiteData();
@@ -33,25 +32,53 @@ function Chrome({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const { settings } = useSiteData();
 
-  // restart at the top on every navigation (anchor-style scroll stays smooth)
+  // restart at the top on every navigation; "#section" links scroll smoothly to their section once it exists
   useEffect(() => {
-    if (!location.hash) window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+    if (!location.hash) {
+      window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+      return;
+    }
+    const id = decodeURIComponent(location.hash.slice(1));
+    let tries = 0;
+    const timer = window.setInterval(() => {
+      const el = document.getElementById(id);
+      if (el || ++tries > 25) {
+        window.clearInterval(timer);
+        el?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 100);
+    return () => window.clearInterval(timer);
   }, [location.pathname, location.hash]);
 
   return (
-    <>
-      <TopBar />
+    <DataGate>
+      <a className="skip-link" href="#main">Skip to content</a>
       <ScrollTrack />
-      <Nav />
-      {children}
+      <SiteHeader />
+      <main id="main" tabIndex={-1}>{children}</main>
       <Footer settings={settings} />
+      <Assistant />
+      <ScrollReveal />
+      <ScrollToTop />
+    </DataGate>
+  );
+}
+
+/** The chat widget is not needed for the first paint: it loads once the browser is idle or the visitor interacts. */
+function Assistant() {
+  const { settings } = useSiteData();
+  const idle = useIdle();
+  if (!idle) return null;
+  return (
+    <Suspense fallback={null}>
       <CompanyAssistant settings={settings} />
-    </>
+    </Suspense>
   );
 }
 
 function PublicRoutes() {
   return (
+    <Suspense fallback={<PageLoader />}>
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
@@ -62,44 +89,24 @@ function PublicRoutes() {
       <Route path="/contact" element={<Contact />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
+    </Suspense>
   );
 }
 
 export default function App() {
   return (
+    <ErrorBoundary>
     <SiteDataProvider>
+      <QuoteProvider>
       <ThemeRoot />
       <BrowserRouter>
         <Routes>
           <Route
-            path="/admin"
-            element={
-              <RequireAdmin>
-                <AdminLayout>
-                  <AdminDashboard />
-                </AdminLayout>
-              </RequireAdmin>
-            }
-          />
-          <Route
             path="/admin/*"
             element={
-              <RequireAdmin>
-                <AdminLayout>
-                  <Routes>
-                    <Route path="products" element={<AdminProducts />} />
-                    <Route path="arranger" element={<AdminArranger />} />
-                    <Route path="content" element={<AdminContent />} />
-                    <Route path="gallery" element={<AdminGallery />} />
-                    <Route path="reviews" element={<AdminReviews />} />
-                    <Route path="enquiries" element={<AdminEnquiries />} />
-                    <Route path="activity" element={<AdminActivity />} />
-                    <Route path="settings" element={<AdminSettings />} />
-                    <Route index element={<AdminDashboard />} />
-                    <Route path="*" element={<AdminDashboard />} />
-                  </Routes>
-                </AdminLayout>
-              </RequireAdmin>
+              <Suspense fallback={<PageLoader label="Loading admin" minHeight="100vh" />}>
+                <AdminApp />
+              </Suspense>
             }
           />
           <Route
@@ -112,6 +119,8 @@ export default function App() {
           />
         </Routes>
       </BrowserRouter>
+      </QuoteProvider>
     </SiteDataProvider>
+    </ErrorBoundary>
   );
 }

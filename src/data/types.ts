@@ -88,6 +88,31 @@ export function productGroupFor(category: ProductCategory): ProductGroup {
   return PRODUCT_GROUPS.find((group) => group.categories.includes(category)) ?? PRODUCT_GROUPS[0];
 }
 
+export type DocumentKind = "certificate" | "registration" | "test-report" | "award" | "other";
+
+export const DOCUMENT_KINDS: Array<{ id: DocumentKind; label: string }> = [
+  { id: "certificate", label: "Certificate" },
+  { id: "registration", label: "Registration" },
+  { id: "test-report", label: "Test report" },
+  { id: "award", label: "Award" },
+  { id: "other", label: "Other" },
+];
+
+/** A certificate, licence or report shown in the "Our documents" section on the home page. */
+export interface DocumentItem {
+  id: string;
+  title: string; // e.g. "Nepal Standard (NS) certification"
+  kind: DocumentKind;
+  issuer?: string; // e.g. "Nepal Bureau of Standards and Metrology"
+  issuedOn?: string; // free text, e.g. "2079 B.S."
+  validUntil?: string; // free text, e.g. "2084 B.S."
+  note?: string; // short line shown under the title
+  image: string; // scan or preview — URL, data: URL (local mode) or Convex storage URL; may be empty
+  imageStorageId?: string;
+  fileUrl?: string; // optional link to the full PDF
+  sortOrder?: number; // lower numbers appear first
+}
+
 export interface GalleryItem {
   id: string;
   title: string;
@@ -184,6 +209,7 @@ export interface HomeSectionVisibility {
   featuredProducts?: boolean;
   reviews?: boolean;
   gallery?: boolean;
+  documents?: boolean;
   cta?: boolean;
   contact?: boolean;
 }
@@ -251,6 +277,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     featuredProducts: true,
     reviews: true,
     gallery: true,
+    documents: true,
     cta: true,
     contact: true,
   },
@@ -323,6 +350,7 @@ export interface HeroChipLayout {
 export type ActivityKind =
   | "product"
   | "gallery"
+  | "document"
   | "review"
   | "enquiry"
   | "content"
@@ -346,6 +374,7 @@ export interface ActivityEntry {
 export interface SiteData {
   products: Product[];
   gallery: GalleryItem[];
+  documents?: DocumentItem[];
   reviews: Review[];
   enquiries: Enquiry[];
   settings: SiteSettings;

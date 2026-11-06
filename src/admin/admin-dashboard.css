@@ -1,17 +1,34 @@
-/* Admin Dashboard Styles */
+/* Admin dashboard styles, using the site's shared theme tokens. */
+
+.admin-dashboard {
+  display: grid;
+  gap: 22px;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.admin-dashboard > .admin-card { margin: 0; }
+
+.admin-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
 
 .admin-head {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 24px;
-  background: var(--panel-bg, #0a0a0a);
-  border-bottom: 1px solid var(--line, #e0e0e0);
+  padding: 0 0 22px;
+  background: transparent;
+  border-bottom: 1px solid var(--line);
 }
 
 .admin-head-logo img {
   width: 40px;
   height: 40px;
+  object-fit: contain;
+  border-radius: 8px;
 }
 
 .admin-head-sub {
@@ -21,52 +38,91 @@
 
 .stat-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 16px;
-  padding: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+  gap: 14px;
+  padding: 0;
 }
 
 .stat-card-future {
-  background: var(--card-bg, #1a1a1a);
-  border: 1px solid var(--line, #e0e0e0);
-  border-radius: 12px;
-  padding: 24px;
-  text-align: center;
+  height: 100%;
+  background: var(--admin-card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px 18px;
+  text-align: left;
+  transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
 }
 
 .num-future {
-  font-size: clamp(36px, 5vw, 48px);
-  color: var(--text-hi, #fff);
-  margin-bottom: 8px;
+  font-family: var(--font-mono);
+  font-size: clamp(28px, 3vw, 40px);
+  color: var(--text-hi);
+  line-height: 1;
+  margin-bottom: 10px;
 }
 
 .lbl-future {
-  color: var(--text-mid, #a0a0a0);
-  font-size: 13px;
+  color: var(--text-mid);
+  font-size: 12px;
+  line-height: 1.45;
 }
 
 .admin-card {
-  background: var(--card-bg, #1a1a1a);
-  border: 1px solid var(--line, #e0e0e0);
+  background: var(--admin-card);
+  border: 1px solid var(--line);
   border-radius: 12px;
   padding: 24px;
   margin-top: 24px;
+  margin-bottom: 0;
+}
+
+.stat-grid + .admin-card { margin-top: 0; }
+.stat-grid > a { min-width: 0; }
+.stat-grid > a:hover .stat-card-future,
+.stat-grid > a:focus-visible .stat-card-future {
+  transform: translateY(-3px);
+  border-color: var(--red);
+  box-shadow: 0 14px 30px -24px rgba(var(--ink-rgb), .38);
+}
+.stat-grid > a:focus-visible { outline: none; }
+
+.admin-designer-callout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-left: 4px solid var(--red);
+}
+.admin-designer-callout p { color: var(--text-mid); line-height: 1.55; }
+.admin-designer-callout .admin-btn-primary { flex: none; }
+
+.admin-main .admin-card-attention { border-left: 4px solid var(--red); }
+.admin-main .admin-card-callout { border-left: 4px solid var(--cyan); }
+
+@media (max-width: 640px) {
+  .admin-designer-callout { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .admin-dashboard { gap: 16px; }
+  .admin-main .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .admin-head { gap: 10px; }
+  .admin-head-sub { flex-basis: 100%; }
+  .admin-table th, .admin-table td { padding: 9px 8px; }
+  .admin-quick-actions > a { min-height: 44px; display: inline-flex; align-items: center; }
 }
 
 .admin-card-attention {
-  border-left: 4px solid #ff4a52;
-  background: rgba(0, 0, 0, 0.5);
+  border-left: 4px solid var(--red);
+  background: rgba(var(--red-rgb), 0.055);
 }
 
 .admin-card-callout {
-  border-left: 4px solid #59d2e8;
-  background: rgba(8, 28, 55, 0.8);
+  border-left: 4px solid var(--cyan);
+  background: rgba(var(--cyan-rgb), 0.055);
 }
 
 .admin-card-attention h3,
 .admin-card-callout h3,
 .admin-card h3 {
-  color: #fff;
+  color: var(--text-hi);
   margin: 0 0 16px 0;
   font-size: 16px;
 }
@@ -89,13 +145,15 @@
 }
 
 .admin-table th {
-  color: #a0a0a0;
-  font-size: 12px;
-  border-bottom: 1px solid var(--line, #e0e0e0);
+  color: var(--text-dim);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  letter-spacing: .08em;
+  border-bottom: 1px solid var(--line);
 }
 
 .admin-table td {
-  color: #fff;
+  color: var(--text-mid);
   font-size: 13px;
 }
 
@@ -113,8 +171,9 @@
   padding: 10px 16px;
   font-size: 13px;
   font-weight: 500;
-  color: #fff;
-  background: var(--primary, #59d2e8);
+  color: var(--text-hi);
+  color: var(--deep);
+  background: var(--cyan);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -122,7 +181,7 @@
 }
 
 .admin-btn:hover {
-  background: #38bdf8;
+  background: var(--cyan-2);
 }
 
 .admin-btn-primary {
@@ -130,35 +189,34 @@
   padding: 12px 24px;
   font-size: 14px;
   font-weight: 600;
-  color: #fff;
-  background: #59d2e8;
+  color: var(--deep);
+  background: var(--cyan);
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s ease;
-  margin-top: 16px;
-  display: inline-block;
+  margin-top: 0;
 }
 
 .admin-btn-primary:hover {
-  background: #38bdf8;
+  background: var(--cyan-2);
 }
 
 .admin-btn-small {
   display: inline-block;
   padding: 6px 12px;
   font-size: 12px;
-  color: #59d2e8;
-  background: rgba(89, 210, 232, 0.1);
-  border: 1px solid #59d2e8;
+  color: var(--cyan);
+  background: var(--cyan-soft);
+  border: 1px solid rgba(var(--cyan-rgb), .5);
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .admin-btn-small:hover {
-  background: #59d2e8;
-  color: #fff;
+  background: var(--cyan);
+  color: var(--deep);
 }
 
 .admin-side-callout {
@@ -173,21 +231,21 @@
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #a0e0ff;
+  color: var(--cyan-2);
   margin-bottom: 8px;
 }
 
 .admin-burger {
   background: none;
   border: none;
-  color: #fff;
+  color: var(--text-hi);
   font-size: 24px;
   cursor: pointer;
   padding: 8px;
 }
 
 .admin-burger:hover {
-  color: #59d2e8;
+  color: var(--cyan);
 }
 
 .side-foot {
@@ -201,7 +259,7 @@
 .admin-btn.view-website {
   text-align: center;
   padding: 12px;
-  color: #fff;
+  color: var(--text-hi);
   background: transparent;
   border: none;
   font-size: 13px;
@@ -209,7 +267,10 @@
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  .admin-table tbody tr {
+  .admin-table tbody tr,
+  .stat-card-future {
     transition: none;
   }
+  .stat-grid > a:hover .stat-card-future,
+  .admin-card:hover { transform: none; }
 }

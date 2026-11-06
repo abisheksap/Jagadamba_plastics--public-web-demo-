@@ -1,25 +1,23 @@
+import { lazy } from "react";
 import { Link } from "react-router-dom";
 import { ProductShowcase } from "../components/ProductShowcase";
 import { EnquiryForm } from "../components/EnquiryForm";
 import { ProductPulse, StatsBand, Ticker, BrandStory } from "../components/FutureUI";
-import { ProcessJourney } from "../components/ProcessJourney";
-import { useRevealOnScroll } from "../components/useRevealOnScroll";
+import { LazyOnView } from "../components/Lazy";
+import { ServeSection } from "../components/ServeSection";
+import { numberWord, selectProductLines } from "../data/productLines";
 import { useSiteData } from "../data/SiteDataProvider";
 import { pickApproved } from "../data/backend";
 import type { Product } from "../data/types";
+
+// below-the-fold sections: their code and images load only when the visitor scrolls near them
+const ProcessJourney = lazy(() => import("../components/ProcessJourney").then((m) => ({ default: m.ProcessJourney })));
+const DocumentsSection = lazy(() => import("../components/DocumentsSection").then((m) => ({ default: m.DocumentsSection })));
 
 const ArrowIcon = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="3.2" cy="12" r="1.6" fill="currentColor" stroke="none" />
     <path d="M6 12h8M11.5 7.2 17.5 12l-6 4.8" />
-  </svg>
-);
-
-const HomeIcon = (
-  <svg className="g-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.6">
-    <path d="M6 24 24 10l18 14" />
-    <path d="M10 22v16h28V22" />
-    <rect x="20" y="28" width="8" height="10" />
   </svg>
 );
 
@@ -46,16 +44,15 @@ function selectFlowProducts(products: Product[]): Product[] {
 
 export default function Home() {
   const { products, gallery, reviews: allReviews, settings, content } = useSiteData();
-  const featured = products.filter((p) => p.featured).slice(0, 6);
+  const productLines = selectProductLines(products);
   const reviews = pickApproved(allReviews).slice(0, 3);
   const variantCount = products.reduce((n, p) => n + (p.variants?.length ?? 0), 0);
   const flowProducts = selectFlowProducts(products);
-  const audienceRef = useRevealOnScroll<HTMLDivElement>();
   const sections = content.homeSections;
   const isVisible = (section: keyof NonNullable<typeof sections>) => sections?.[section] !== false;
 
   return (
-    <main className="home-page">
+    <div className="home-page">
       <section className="hero hero-wavy">
         <div className="aurora" />
         <div className="grid-overlay" />
@@ -74,12 +71,8 @@ export default function Home() {
             </h1>
             <p className="hero-sub">{content.heroSub}</p>
             <div className="hero-actions">
-              <Link to="/products" className="btn btn-primary">
-                Explore our products
-              </Link>
-              <Link to="/contact" className="btn btn-ghost">
-                Talk to a dealer
-              </Link>
+              <Link to="/products" className="btn btn-primary">Explore our products</Link>
+              <Link to="/contact" className="btn btn-outline">Talk to a dealer</Link>
             </div>
             <div className="hero-meta">
               <div>
@@ -104,14 +97,14 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="ticker section-reveal">{isVisible("ticker") && <Ticker items={content.tickerItems} />}</section>
+      <section className="ticker-wrap section-reveal">{isVisible("ticker") && <Ticker items={content.tickerItems} />}</section>
 
       <section className="stats-future">{isVisible("stats") && (
         <div className="wrap">
           <StatsBand
             stats={[
               { target: 2063, suffix: " B.S.", label: "Founded — milestone of the Manakamana Group" },
-              { target: 6, label: "Product lines, one supply chain" },
+              { target: productLines.length, label: "Product lines, one supply chain" },
               { target: 77, label: "Districts reached by our dealer network" },
               { target: Math.max(variantCount, 100), label: "Sizes & rates in the price list" },
             ]}
@@ -121,56 +114,20 @@ export default function Home() {
 
       <section className="about section-pad section-stagger">{isVisible("audience") && (
         <div className="wrap">
-          <div className="section-head-future">
-            <div>
-              <div className="kicker-future">
-                <span className="kf-dot" /> WHO WE SERVE
-              </div>
-              <h2>Built for <span className="grad">every water need</span> in Nepal.</h2>
-            </div>
-            <p>
-              Government-certified plastic pipe and water storage manufacturing, supplying dealers
-              across all seven provinces — district 1 to 77.
-            </p>
-          </div>
-          <div className="glass-card" style={{ gridTemplateColumns: "repeat(3,1fr)" }} ref={audienceRef}>
-            <div className="glass-card">
-              {HomeIcon}
-              <h3>Homes & builders</h3>
-              <p>Water tanks, PVC and CPVC fittings for household plumbing, hot-water lines and rooftop storage.</p>
-              <div className="g-tag">WATER TANK · PVC · CPVC FITTINGS</div>
-            </div>
-            <div className="glass-card">
-              <svg className="g-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.6">
-                <circle cx="24" cy="14" r="6" />
-                <path d="M24 20v24M14 30h20M16 38h16" />
-              </svg>
-              <h3>Farms & irrigation</h3>
-              <p>Borewell casing and flexible HDPE pipe built for groundwater extraction and field irrigation.</p>
-              <div className="g-tag">BOREWELL PIPES · HDPE PIPE</div>
-            </div>
-            <div className="glass-card">
-              <svg className="g-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.6">
-                <rect x="6" y="18" width="36" height="12" rx="1" />
-                <path d="M6 18 2 24l4 6" />
-                <path d="M42 18l4 6-4 6" />
-              </svg>
-              <h3>Industry & infrastructure</h3>
-              <p>Underground drainage systems built to handle structural load on municipal and industrial sites.</p>
-              <div className="g-tag">UG DRAINAGE PIPES</div>
-            </div>
-          </div>
-          <div style={{ marginTop: 34 }}>
-            <Link to="/about" className="p-link-future" style={{ display: "inline-flex" }}>
-              Read our full story {ArrowIcon}
-            </Link>
-          </div>
+          <ServeSection
+            heading={<>Built for <span className="grad">every water need</span> in Nepal.</>}
+            text="Government-certified plastic pipe and water storage manufacturing, supplying dealers across all seven provinces — district 1 to 77."
+          />
         </div>
       )}</section>
 
       <section className="product-atlas section-reveal">{isVisible("productAtlas") && <ProductPulse products={flowProducts} />}</section>
 
-      {isVisible("process") && <ProcessJourney products={products} />}
+      {isVisible("process") && (
+        <LazyOnView className="ph-process">
+          <ProcessJourney products={products} />
+        </LazyOnView>
+      )}
 
       <section className="brand-story section-reveal">{isVisible("brandStory") && <BrandStory products={flowProducts} brandLabel={content.brandStoryLabel} />}</section>
 
@@ -178,17 +135,15 @@ export default function Home() {
         <div className="wrap">
           <div className="section-head-future">
             <div>
-              <div className="kicker-future">
-                <span className="kf-dot" /> OUR PRODUCTS
-              </div>
-              <h2>Six lines, <span className="grad">one standard.</span></h2>
+              <div className="kicker-future">Our products</div>
+              <h2>{numberWord(productLines.length)} lines, <span className="grad">one standard.</span></h2>
             </div>
             <p>
-              From underground drainage to rooftop storage — manufactured to national standard and
-              ready for dealer stock nationwide.
+              From underground drainage and fittings to rooftop storage — manufactured to national
+              standard and ready for dealer stock nationwide.
             </p>
           </div>
-          <div className="product-grid-future">{featured.map((p) => (
+          <div className="product-grid-future">{productLines.map((p) => (
             <Link
               key={p.id}
               to={`/products/${p.id}`}
@@ -203,6 +158,7 @@ export default function Home() {
                   style={{ transition: "transform 0.45s var(--ease)", borderRadius: "14px", objectFit: "contain" }}
                 />
               </div>
+              <span className="p-line">{p.category}</span>
               <h3>{p.name}</h3>
               <div className="tagline">{p.tagline}</div>
               <p className="desc">{p.description}</p>
@@ -219,9 +175,7 @@ export default function Home() {
         <div className="wrap">
           <div className="section-head-future">
             <div>
-              <div className="kicker-future">
-                <span className="kf-dot" /> DEALER NETWORK
-              </div>
+              <div className="kicker-future">Dealer network</div>
               <h2>What our <span className="grad">dealers say.</span></h2>
             </div>
             <p>Real feedback from the people who stock and install our products every day.</p>
@@ -252,9 +206,7 @@ export default function Home() {
         <div className="wrap">
           <div className="section-head-future">
             <div>
-              <div className="kicker-future">
-                <span className="kf-dot" /> GALLERY
-              </div>
+              <div className="kicker-future">Gallery</div>
               <h2>On site, <span className="grad">across Nepal.</span></h2>
             </div>
             <p>Installation photos and product videos from the field.</p>
@@ -279,6 +231,12 @@ export default function Home() {
         </div>
       )}</section>
 
+      {isVisible("documents") && (
+        <LazyOnView id="documents" className="ph-documents">
+          <DocumentsSection />
+        </LazyOnView>
+      )}
+
       <section className="home-cta-section section-reveal">{isVisible("cta") && (
         <div className="wrap">
           <div className="cta-band">
@@ -295,9 +253,7 @@ export default function Home() {
 
       <section className="contact-future section-pad section-reveal" style={{ paddingTop: 0 }}>{isVisible("contact") && (        <div className="wrap contact-grid">
           <div>
-            <div className="kicker-future">
-              <span className="kf-dot" /> GET IN TOUCH
-            </div>
+            <div className="kicker-future">Get in touch</div>
             <h2 style={{ color: "#fff", fontSize: "clamp(26px,3vw,36px)" }}>
               Become a dealer, or place an order.
             </h2>
@@ -356,6 +312,6 @@ export default function Home() {
           </div>
         </div>
       )}</section>
-    </main>
+    </div>
   );
 }

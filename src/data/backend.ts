@@ -24,22 +24,8 @@ export function pickApproved(reviews: Review[]): Review[] {
     .sort((a, b) => b.createdAt - a.createdAt);
 }
 
-/**
- * Change the admin passcode in whichever backend is active.
- * Returns false when the current passcode is wrong or the new one is too short.
- */
-export async function changePasscodeAnywhere(current: string, next: string): Promise<boolean> {
-  if (convexEnabled) {
-    const client = getConvexClient();
-    if (client) {
-      try {
-        await client.mutation(api.site.changePasscode, { current, next });
-        return true;
-      } catch {
-        return false;
-      }
-    }
-  }
+/** Change the admin passcode in whichever backend is active (see adminAuth.changePasscode). */
+export async function changePasscodeAnywhere(current: string, next: string): Promise<{ ok: boolean; message: string }> {
   const { changePasscode } = await import("./adminAuth");
   return changePasscode(current, next);
 }
@@ -47,7 +33,7 @@ export async function changePasscodeAnywhere(current: string, next: string): Pro
 // ---------- public form submissions ----------
 
 export async function submitEnquiry(
-  input: Pick<Enquiry, "name" | "phone" | "interest" | "message">,
+  input: Pick<Enquiry, "name" | "phone" | "interest" | "message"> & { hp?: string },
 ) {
   if (convexEnabled) {
     const client = getConvexClient();
@@ -56,11 +42,13 @@ export async function submitEnquiry(
       return;
     }
   }
-  local.submitEnquiry(input);
+  if (input.hp) return; // bot caught by the hidden field
+  const { hp: _hp, ...clean } = input;
+  local.submitEnquiry(clean);
 }
 
 export async function submitReview(
-  input: Pick<Review, "name" | "business" | "rating" | "quote">,
+  input: Pick<Review, "name" | "business" | "rating" | "quote"> & { hp?: string },
 ) {
   if (convexEnabled) {
     const client = getConvexClient();
@@ -69,10 +57,12 @@ export async function submitReview(
       return;
     }
   }
-  local.submitReview(input);
+  if (input.hp) return;
+  const { hp: _hp, ...clean } = input;
+  local.submitReview(clean);
 }
 
-// ---------- admin operations (passcode required in convex mode) ----------
+// ---------- admin operations (a signed-in admin session is required in convex mode) ----------
 
 export interface AdminOps {
   upsertProduct(p: any): Promise<void>;
@@ -80,6 +70,8 @@ export interface AdminOps {
   setProductVariants(productId: string, variants: ProductVariant[]): Promise<void>;
   upsertGalleryItem(g: any): Promise<void>;
   deleteGalleryItem(id: string): Promise<void>;
+  upsertDocument(d: any): Promise<void>;
+  deleteDocument(id: string): Promise<void>;
   setReviewStatus(id: string, status: Review["status"]): Promise<void>;
   deleteReview(id: string): Promise<void>;
   setEnquiryStatus(id: string, status: Enquiry["status"]): Promise<void>;
@@ -88,8 +80,8 @@ export interface AdminOps {
   updateContent(c: SiteContent): Promise<void>;
   saveHeroLayout(l: HeroChipLayout): Promise<void>;
   clearHeroLayout(): Promise<void>;
-  changePasscode(current: string, next: string): Promise<boolean>;
-  uploadImage(file: File): Promise<{ url: string; storageId?: string }>;
+  /** maxEdge: longest side in px after downscaling (default 900; documents use a larger size so text stays readable). */
+  uploadImage(file: File, maxEdge?: number): Promise<{ url: string; storageId?: string }>;
 }
 
 /** Local (localStorage) implementation of the admin ops. */
@@ -108,6 +100,12 @@ export const localAdminOps: AdminOps = {
   },
   async deleteGalleryItem(id) {
     local.deleteGalleryItem(id);
+  },
+  async upsertDocument(d) {
+    local.upsertDocument(d);
+  },
+  async deleteDocument(id) {
+    local.deleteDocument(id);
   },
   async setReviewStatus(id, status) {
     local.setReviewStatus(id, status);
@@ -133,19 +131,15 @@ export const localAdminOps: AdminOps = {
   async clearHeroLayout() {
     local.clearHeroLayout();
   },
-  async changePasscode(current, next) {
-    const { changePasscode } = await import("./adminAuth");
-    return changePasscode(current, next);
-  },
-  async uploadImage(file) {
+  async uploadImage(file, maxEdge) {
     const { fileToCompactDataUrl } = await import("./upload");
-    const url = await fileToCompactDataUrl(file);
+    const url = await fileToCompactDataUrl(file, maxEdge);
     return { url: url ?? "" };
   },
 };
 
-/** Convex implementation of the admin ops (passcode-guarded server-side). */
-export function convexAdminOps(passcode: string): AdminOps {
+/** Convex implementation of the admin ops (guarded server-side by the admin session token). */
+export function convexAdminOps(token: string): AdminOps {
   const client = getConvexClient()!;
   return {
     async upsertProduct(p) {
@@ -162,14 +156,14 @@ export function convexAdminOps(passcode: string): AdminOps {
         priceNote: p.priceNote,
         featured: p.featured,
         sortOrder: p.sortOrder,
-        passcode,
+        token,
       });
     },
     async deleteProduct(id) {
-      await client.mutation(api.site.deleteProduct, { id: id as any, passcode });
+      await client.mutation(api.site.deleteProduct, { id: id as any, token });
     },
     async setProductVariants(productId, variants) {
-      await client.mutation(api.site.setProductVariants, { id: productId as any, variants, passcode });
+      await client.mutation(api.site.setProductVariants, { id: productId as any, variants, token });
     },
     async upsertGalleryItem(g) {
       await client.mutation(api.site.upsertGalleryItem, {
@@ -180,23 +174,42 @@ export function convexAdminOps(passcode: string): AdminOps {
         imageStorageId: g.imageStorageId,
         videoUrl: g.videoUrl,
         sortOrder: g.sortOrder,
-        passcode,
+        token,
       });
     },
     async deleteGalleryItem(id) {
-      await client.mutation(api.site.deleteGalleryItem, { id: id as any, passcode });
+      await client.mutation(api.site.deleteGalleryItem, { id: id as any, token });
+    },
+    async upsertDocument(d) {
+      await client.mutation(api.site.upsertDocument, {
+        id: d.id || undefined,
+        title: d.title,
+        kind: d.kind,
+        issuer: d.issuer,
+        issuedOn: d.issuedOn,
+        validUntil: d.validUntil,
+        note: d.note,
+        image: d.image ?? "",
+        imageStorageId: d.imageStorageId,
+        fileUrl: d.fileUrl,
+        sortOrder: d.sortOrder,
+        token,
+      });
+    },
+    async deleteDocument(id) {
+      await client.mutation(api.site.deleteDocument, { id: id as any, token });
     },
     async setReviewStatus(id, status) {
-      await client.mutation(api.site.setReviewStatus, { id: id as any, status, passcode });
+      await client.mutation(api.site.setReviewStatus, { id: id as any, status, token });
     },
     async deleteReview(id) {
-      await client.mutation(api.site.deleteReview, { id: id as any, passcode });
+      await client.mutation(api.site.deleteReview, { id: id as any, token });
     },
     async setEnquiryStatus(id, status) {
-      await client.mutation(api.site.setEnquiryStatus, { id: id as any, status, passcode });
+      await client.mutation(api.site.setEnquiryStatus, { id: id as any, status, token });
     },
     async deleteEnquiry(id) {
-      await client.mutation(api.site.deleteEnquiry, { id: id as any, passcode });
+      await client.mutation(api.site.deleteEnquiry, { id: id as any, token });
     },
     async updateSettings(s) {
       await client.mutation(api.site.updateSettings, {
@@ -209,28 +222,24 @@ export function convexAdminOps(passcode: string): AdminOps {
         showPrices: s.showPrices,
         priceListDate: s.priceListDate,
         theme: s.theme,
-        passcode,
+        token,
       });
     },
     async updateContent(c) {
-      await client.mutation(api.site.updateContent, { content: c as any, passcode });
+      await client.mutation(api.site.updateContent, { content: c as any, token });
     },
     async saveHeroLayout(l) {
-      await client.mutation(api.site.saveHeroLayout, { layout: l as any, passcode });
+      await client.mutation(api.site.saveHeroLayout, { layout: l as any, token });
     },
     async clearHeroLayout() {
-      await client.mutation(api.site.clearHeroLayout, { passcode });
+      await client.mutation(api.site.clearHeroLayout, { token });
     },
-    async changePasscode(current, next) {
-      await client.mutation(api.site.changePasscode, { current, next });
-      return true;
-    },
-    async uploadImage(file) {
+    async uploadImage(file, maxEdge) {
       const { fileToCompactDataUrl } = await import("./upload");
-      const dataUrl = await fileToCompactDataUrl(file);
+      const dataUrl = await fileToCompactDataUrl(file, maxEdge);
       if (!dataUrl) return { url: "" };
       const blob = await (await fetch(dataUrl)).blob();
-      const uploadUrl = await client.mutation(api.site.generateUploadUrl, { passcode });
+      const uploadUrl = await client.mutation(api.site.generateUploadUrl, { token });
       const res = await fetch(uploadUrl, {
         method: "POST",
         headers: { "Content-Type": blob.type || "image/jpeg" },
@@ -244,12 +253,12 @@ export function convexAdminOps(passcode: string): AdminOps {
 }
 
 /** Recent change-log entries (Convex when connected, local otherwise). */
-export async function fetchActivity(): Promise<ActivityEntry[]> {
+export async function fetchActivity(token = ""): Promise<ActivityEntry[]> {
   if (convexEnabled) {
     const client = getConvexClient();
     if (client) {
       try {
-        const rows = (await client.query(api.site.listActivity, {})) as Array<{
+        const rows = (await client.query(api.site.listActivity, { token })) as Array<{
           _id: string;
           kind: ActivityEntry["kind"];
           summary: string;
@@ -257,6 +266,7 @@ export async function fetchActivity(): Promise<ActivityEntry[]> {
           byAdmin: boolean;
           createdAt: number;
         }>;
+        if (!rows) return [];
         return rows.map((r) => ({ id: r._id, kind: r.kind, summary: r.summary, detail: r.detail, byAdmin: r.byAdmin, createdAt: r.createdAt }));
       } catch {
         return [];

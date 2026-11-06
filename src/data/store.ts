@@ -10,6 +10,7 @@ import type {
   ActivityEntry,
   ActivityKind,
   Enquiry,
+  DocumentItem,
   GalleryItem,
   HeroChipLayout,
   Product,
@@ -46,6 +47,7 @@ function load(): SiteData {
         // migrate products written before variants existed
         parsed.products = parsed.products.map((p) => ({ ...p, variants: p.variants ?? [] }));
         parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
+        parsed.documents = parsed.documents ?? buildSeedData().documents;
         return migrateImages(parsed);
       }
     }
@@ -68,8 +70,9 @@ function load(): SiteData {
         });
       }
     }
-  } catch {
+  } catch (err) {
     // corrupted record — fall through to a fresh seed
+    console.warn("Saved site data could not be loaded; using the starter data instead.", err);
   }
   return buildSeedData();
 }
@@ -93,11 +96,15 @@ function isValid(d: unknown): d is SiteData {
  * catalog only ever show the alt text instead of the photo.
  */
 function migrateImages(d: SiteData): SiteData {
+  // Built here, not at module level: load() runs while this module is still being evaluated, so a
+  // module-level constant declared further down would still be uninitialised and load() would
+  // throw (silently falling back to the starter data and losing saved admin changes).
+  const shipped = new Set(IMAGE_MANIFEST.map((p) => p.replace(/^\/public\//, "/").replace(/^\//, "")));
   const exists = new Set<string>();
   const fileExists = (path: string) => {
     if (exists.has(path)) return true;
     const normalized = path.replace(/^\/public\//, "/").replace(/^\//, "");
-    const ok = IMAGE_SET.has(normalized);
+    const ok = shipped.has(normalized);
     if (ok) exists.add(path);
     return ok;
   };
@@ -123,11 +130,6 @@ function migrateImages(d: SiteData): SiteData {
   if (!galleryIsUsable) d.gallery = buildSeedData().gallery.map((g) => ({ ...g }));
   return d;
 }
-
-/** Paths (without the leading "/") of every image shipped in /public. */
-const IMAGE_SET = new Set(
-  IMAGE_MANIFEST.map((p) => p.replace(/^\/public\//, "/").replace(/^\//, "")),
-);
 
 function persist() {
   try {
@@ -216,6 +218,29 @@ export function deleteGalleryItem(id: string) {
   const g = data.gallery.find((x) => x.id === id);
   data.gallery = data.gallery.filter((g) => g.id !== id);
   log("gallery", `Gallery item deleted — ${g?.title ?? id}`);
+  persist();
+}
+
+// ---------- documents (certificates, licences, reports) ----------
+
+export function upsertDocument(item: DocumentItem) {
+  const list = (data.documents = data.documents ?? []);
+  const idx = list.findIndex((d) => d.id === item.id);
+  if (idx >= 0) {
+    list[idx] = item;
+    log("document", `Document updated — ${item.title}`);
+  } else {
+    list.push(item);
+    log("document", `Document added — ${item.title}`, item.kind);
+  }
+  list.sort((a, b) => (a.sortOrder ?? 999) - (b.sortOrder ?? 999));
+  persist();
+}
+
+export function deleteDocument(id: string) {
+  const d = (data.documents ?? []).find((x) => x.id === id);
+  data.documents = (data.documents ?? []).filter((x) => x.id !== id);
+  log("document", `Document deleted — ${d?.title ?? id}`);
   persist();
 }
 

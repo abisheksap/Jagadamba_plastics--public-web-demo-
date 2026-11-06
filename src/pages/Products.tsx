@@ -3,6 +3,9 @@ import { Link, useParams, useSearchParams } from "react-router-dom";
 import { EnquiryForm } from "../components/EnquiryForm";
 import { useRevealOnScroll } from "../components/useRevealOnScroll";
 import { useSiteData } from "../data/SiteDataProvider";
+import { useQuote } from "../data/QuoteProvider";
+import { usePageMeta } from "../data/usePageMeta";
+import { priceSummary, rateCell, rateHeading } from "../data/pricing";
 import type { Product, ProductCategory, ProductGroupId, ProductVariant } from "../data/types";
 import { PRODUCT_CATEGORIES, PRODUCT_GROUPS, productGroupFor } from "../data/types";
 
@@ -25,11 +28,7 @@ export function formatPrice(n: number): string {
 }
 
 function fromPrice(p: Product, showPrices: boolean): string | null {
-  if (!showPrices) return null;
-  const prices = (p.variants ?? []).map((v) => v.price).filter((x): x is number => typeof x === "number");
-  if (prices.length === 0) return null;
-  const min = Math.min(...prices);
-  return `From ${formatPrice(min)}`;
+  return priceSummary(p, showPrices);
 }
 
 function variantLabel(v: ProductVariant): string {
@@ -77,10 +76,12 @@ export function ProductsPage() {
   const [categoryFilter, setCategoryFilter] = useState<ProductCategory | "all">(
     requestedCategory && PRODUCT_CATEGORIES.includes(requestedCategory) ? requestedCategory : "all",
   );
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const showPrices = settings.showPrices !== false;
+  usePageMeta("Products — pipes, fittings & water tanks", "Browse the full Jagadamba Plastic catalog: HDPE, PVC and CPVC pipes, fittings and water tanks with sizes and rates.");
 
   useEffect(() => {
+    setQuery(searchParams.get("q") ?? "");
     const group = searchParams.get("group") as ProductGroupId | null;
     const category = searchParams.get("category") as ProductCategory | null;
     setGroupFilter(group && PRODUCT_GROUPS.some((item) => item.id === group) ? group : "all");
@@ -120,10 +121,7 @@ export function ProductsPage() {
         <div className="aurora" />
         <div className="grid-overlay" />
         <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
-          <div className="kicker-future">
-            <span className="kf-dot" />
-            PRODUCT CATALOG
-          </div>
+          <div className="kicker-future">Product catalog</div>
           <h1>
             Every line, <span className="grad">one standard.</span>
           </h1>
@@ -249,6 +247,8 @@ export function ProductDetailPage() {
   const { products, settings } = useSiteData();
   const product = products.find((p) => p.id === id);
   const showPrices = settings.showPrices !== false;
+  const quote = useQuote();
+  usePageMeta(product ? `${product.name} — ${product.category}` : "Product not found", product?.description);
 
   if (!product) {
     return (
@@ -278,23 +278,21 @@ export function ProductDetailPage() {
 
   return (
     <>
-      <section className="detail-hero">
+      <section className="page-hero detail-hero">
         <div className="aurora" />
         <div className="grid-overlay" />
         <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
-          <div className="crumb mono" style={{ color: "var(--cyan)", fontSize: 12, marginBottom: 16, display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <nav className="crumb mono" aria-label="Breadcrumb">
             <Link to="/">HOME</Link>
-            <span>/</span>
+            <span aria-hidden="true">/</span>
             <Link to="/products">PRODUCTS</Link>
-            <span>/</span>
-            <span>{group.label.toUpperCase()}</span>
-            <span>/</span>
-            <span>{product.category.toUpperCase()}</span>
-          </div>
-          <h1 style={{ color: "#fff", fontSize: "clamp(32px,4.2vw,52px)" }}>{product.name}</h1>
-          <p className="sub" style={{ color: "var(--text-mid)", fontSize: 17, marginTop: 14, maxWidth: 560 }}>
-            {product.tagline}
-          </p>
+            <span aria-hidden="true">/</span>
+            <Link to={`/products?group=${group.id}`}>{group.label.toUpperCase()}</Link>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">{product.category.toUpperCase()}</span>
+          </nav>
+          <h1>{product.name}</h1>
+          <p className="sub">{product.tagline}</p>
         </div>
       </section>
 
@@ -302,28 +300,45 @@ export function ProductDetailPage() {
         <div className="wrap">
           <div className="detail-grid">
             <div className="detail-media-future">
-              <img src={product.image} alt={product.name} />
+              <img src={product.image} alt={product.name} decoding="async" {...({ fetchpriority: "high" } as Record<string, string>)} />
             </div>
             <div className="detail-body">
-              <p style={{ marginTop: 22, fontSize: 16.5, color: "var(--text-mid)", maxWidth: 560 }}>
-                {product.description}
-              </p>
-              <h2 style={{ fontSize: 24, marginTop: 34 }}>Key specifications</h2>
+              <div className="detail-meta">
+                <span>{group.label}</span>
+                <span>{product.category}</span>
+                {variants.length > 0 && <span>{variants.length} sizes</span>}
+                {fromPrice(product, showPrices) && <span className="is-price">{fromPrice(product, showPrices)}</span>}
+              </div>
+              <p className="detail-lead">{product.description}</p>
+              <h2>Key specifications</h2>
               <ul className="detail-specs" style={{ listStyle: "none", padding: 0, margin: "18px 0 0" }}>
                 {product.specs.map((s) => (
                   <li key={s} style={{ padding: "13px 2px", borderBottom: "1px solid rgba(93,138,184,0.2)", display: "flex", gap: 10, alignItems: "baseline" }}>
-                    <span style={{ width: 6, height: 6, background: "var(--red)", flex: "none", transform: "translateY(-2px)", boxShadow: "0 0 8px rgba(224,33,41,0.7)" }} />
                     {s}
                   </li>
                 ))}
               </ul>
               <div style={{ display: "flex", gap: 14, marginTop: 34, flexWrap: "wrap" }}>
-                <a href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`} className="btn btn-primary">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  aria-pressed={quote.has(product.id)}
+                  onClick={() => quote.toggle({ id: product.id, name: product.name, category: product.category, image: product.image })}
+                >
+                  {quote.has(product.id) ? "✓ Added to quote" : "Add to quote"}
+                </button>
+                <a href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`} className="btn btn-outline">
                   Call {settings.phone}
                 </a>
-                <Link to="/contact" className="btn btn-outline">
-                  Send an enquiry
-                </Link>
+              </div>
+              <div className="detail-quote-hint" aria-live="polite">
+                {quote.items.length > 0 ? (
+                  <>
+                    {quote.items.length} in your quote list · <Link to="/contact#quote">review &amp; send →</Link>
+                  </>
+                ) : (
+                  "Add products to your quote list, then send them in one enquiry."
+                )}
               </div>
             </div>
           </div>
@@ -333,10 +348,7 @@ export function ProductDetailPage() {
             <div className="variant-block" style={{ marginTop: 70 }}>
               <div className="section-head-future" style={{ marginBottom: 24 }}>
                 <div>
-                  <div className="kicker-future">
-                    <span className="kf-dot" />
-                    SIZES &amp; RATES
-                  </div>
+                  <div className="kicker-future">Sizes &amp; rates</div>
                   <h2 style={{ fontSize: "clamp(22px,2.6vw,30px)" }}>
                     {variants.length} variants available.
                   </h2>
@@ -353,8 +365,8 @@ export function ProductDetailPage() {
                   <table className="price-table">
                     <thead>
                       <tr>
-                        <th>SIZE</th>
-                        <th>RATE</th>
+                        <th>Size</th>
+                        <th>{rateHeading(product)}</th>
                         {variants.some((v) => v.packing) && <th>PACKING</th>}
                       </tr>
                     </thead>
@@ -364,7 +376,7 @@ export function ProductDetailPage() {
                           <td>
                             <span className="v-size">{variantLabel(v)}</span>
                           </td>
-                          <td className="v-price mono">{typeof v.price === "number" ? formatPrice(v.price) : "—"}</td>
+                          <td className="v-price mono">{typeof v.price === "number" ? rateCell(product, v.price) : "—"}</td>
                           {variants.some((x) => x.packing) && <td className="v-packing">{v.packing ?? "—"}</td>}
                         </tr>
                       ))}
@@ -386,7 +398,7 @@ export function ProductDetailPage() {
 
           {related.length > 0 && (
             <>
-              <h3 style={{ margin: "80px 0 28px", fontSize: 24, color: "#fff" }}>
+              <h3 className="detail-related-title">
                 More in {product.category} · {group.label}
               </h3>
               <div className="product-grid-future">
@@ -409,12 +421,9 @@ export function ProductDetailPage() {
       <section className="contact-future section-pad" style={{ paddingTop: 0 }}>
         <div className="wrap contact-grid">
           <div>
-            <div className="kicker-future">
-              <span className="kf-dot" />
-              ENQUIRE ABOUT THIS PRODUCT
-            </div>
-            <h2 style={{ color: "#fff", fontSize: "clamp(26px,3vw,36px)" }}>Tell us what you need.</h2>
-            <p className="contact-p" style={{ color: "var(--text-mid)" }}>
+            <div className="kicker-future">Enquire about this product</div>
+            <h2 className="detail-enquire-title">Tell us what you need.</h2>
+            <p className="contact-p">
               Mention quantities and delivery location — our team will quote accordingly.
             </p>
           </div>

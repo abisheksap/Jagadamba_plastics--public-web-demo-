@@ -23,3 +23,54 @@ jobs:
 
       - name: Typecheck
         run: bun run typecheck
+
+  test:
+    name: Server and auth tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # Runs the real Convex functions: admin sign-in, lockout, sessions, admin-only data, spam guards
+      - name: Tests
+        run: bun run test
+
+  build:
+    name: Build and release checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build
+        run: bun run build
+
+      # Fails if a default password appears anywhere, the admin ships to every visitor, or hosting files are missing
+      - name: Release checks
+        run: node scripts/verify-release.mjs

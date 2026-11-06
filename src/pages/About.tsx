@@ -1,20 +1,30 @@
 import { Link } from "react-router-dom";
 import { StatsBand } from "../components/FutureUI";
+import { ServeSection } from "../components/ServeSection";
+import { numberWord, selectProductLines } from "../data/productLines";
 import { useSiteData } from "../data/SiteDataProvider";
+import { usePageMeta } from "../data/usePageMeta";
 
 export default function About() {
-  const { content } = useSiteData();
+  usePageMeta("About us", "Jagadamba Plastic Industries: a milestone company of the Manakamana Group manufacturing HDPE, PVC and CPVC pipes, fittings and tanks in Bharatpur, Chitwan.");
+  const { content, documents, products } = useSiteData();
+  const lineCount = selectProductLines(products).length;
   const LEADERS = content.leaders;
+  // certificates come from Admin → Documents; the static list is only a fallback if none are published
+  const certs = documents.filter((d) => d.kind === "certificate" || d.kind === "registration" || d.kind === "test-report" || d.kind === "award").slice(0, 8);
+  const certCards = certs.length
+    ? certs.map((d) => ({ name: d.title, code: d.issuer ?? d.note ?? "" }))
+    : [
+        { name: "NS Mark", code: "Nepal Standard" },
+        { name: "ISO 9001", code: "Quality management" },
+      ];
   return (
     <>
       <section className="page-hero">
         <div className="aurora" />
         <div className="grid-overlay" />
         <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
-          <div className="kicker-future">
-            <span className="kf-dot" />
-            ABOUT US
-          </div>
+          <div className="kicker-future">About us</div>
           <h1>
             {content.aboutTitle.split(" ").slice(0, -4).join(" ")}{" "}
             <span className="grad">{content.aboutTitle.split(" ").slice(-4).join(" ")}</span>
@@ -28,10 +38,7 @@ export default function About() {
         <div className="wrap">
           <div className="section-head-future" style={{ marginBottom: 40 }}>
             <div>
-              <div className="kicker-future">
-                <span className="kf-dot" />
-                OUR STORY
-              </div>
+              <div className="kicker-future">Our story</div>
               <h2 style={{ fontSize: "clamp(24px,2.8vw,34px)" }}>
                 Who <span className="grad">we are.</span>
               </h2>
@@ -57,7 +64,7 @@ export default function About() {
             </div>
             <div className="tl-item">
               <div className="tl-year">EXPANSION</div>
-              <h3>Six product families</h3>
+              <h3>{numberWord(lineCount)} product lines</h3>
               <p>
                 From the first PVC lines to HDPE coils, borewell casing, UG drainage, CPVC fittings
                 and rooftop water tanks — one supply chain covering every water need.
@@ -88,10 +95,7 @@ export default function About() {
         <div className="wrap">
           <div className="section-head-future">
             <div>
-              <div className="kicker-future">
-                <span className="kf-dot" />
-                LEADERSHIP
-              </div>
+              <div className="kicker-future">Leadership</div>
               <h2>
                 Words from the <span className="grad">Director &amp; MD.</span>
               </h2>
@@ -108,7 +112,7 @@ export default function About() {
                 <blockquote>{l.message}</blockquote>
                 <figcaption>
                   <span className="leader-avatar" aria-hidden="true">
-                    {l.image ? <img src={l.image} alt={l.role} /> : l.initials}
+                    {l.image ? <img loading="lazy" decoding="async" src={l.image} alt={l.role} /> : l.initials}
                   </span>
                   <span className="leader-meta">
                     <span className="leader-role">{l.role}</span>
@@ -122,12 +126,12 @@ export default function About() {
         </div>
       </section>
 
-      <section style={{ paddingBottom: 40 }}>
+      <section className="stats-future">
         <div className="wrap">
           <StatsBand
             stats={[
               { target: 2063, suffix: " B.S.", label: "Founded — milestone of the Manakamana Group" },
-              { target: 6, label: "Product lines, one supply chain" },
+              { target: lineCount, label: "Product lines, one supply chain" },
               { target: 77, label: "Districts reached by our dealer network" },
               { target: 100, suffix: "+", label: "SKUs in the full catalog" },
             ]}
@@ -135,51 +139,13 @@ export default function About() {
         </div>
       </section>
 
-      <section className="section-pad" style={{ paddingTop: 40 }}>
+      <section className="section-pad about-serve" style={{ paddingTop: 56 }}>
         <div className="wrap">
-          <div className="section-head-future">
-            <div>
-              <div className="kicker-future">
-                <span className="kf-dot" />
-                WHO WE SERVE
-              </div>
-              <h2>
-                From homes to <span className="grad">highways.</span>
-              </h2>
-            </div>
-            <p>Different sites, different loads — the same certified standard behind them all.</p>
-          </div>
-          <div className="stat-cards-future" style={{ gridTemplateColumns: "repeat(3,1fr)" }}>
-            <div className="glass-card">
-              <svg className="g-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.6">
-                <path d="M6 24 24 10l18 14" />
-                <path d="M10 22v16h28V22" />
-                <rect x="20" y="28" width="8" height="10" />
-              </svg>
-              <h3>Homes &amp; builders</h3>
-              <p>Water tanks, PVC and CPVC fittings for household plumbing, hot-water lines and rooftop storage.</p>
-              <div className="g-tag">WATER TANK · PVC · CPVC FITTINGS</div>
-            </div>
-            <div className="glass-card">
-              <svg className="g-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.6">
-                <circle cx="24" cy="14" r="6" />
-                <path d="M24 20v24M14 30h20M16 38h16" />
-              </svg>
-              <h3>Farms &amp; irrigation</h3>
-              <p>Borewell casing and flexible HDPE pipe built for groundwater extraction and field irrigation.</p>
-              <div className="g-tag">BOREWELL PIPES · HDPE PIPE</div>
-            </div>
-            <div className="glass-card">
-              <svg className="g-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.6">
-                <rect x="6" y="18" width="36" height="12" rx="1" />
-                <path d="M6 18 2 24l4 6" />
-                <path d="M42 18l4 6-4 6" />
-              </svg>
-              <h3>Industry &amp; infrastructure</h3>
-              <p>Underground drainage systems built to handle structural load on municipal and industrial sites.</p>
-              <div className="g-tag">UG DRAINAGE PIPES</div>
-            </div>
-          </div>
+          <ServeSection
+            heading={<>From homes to <span className="grad">highways.</span></>}
+            text="Different sites, different loads — the same certified standard behind them all."
+            showStoryLink={false}
+          />
         </div>
       </section>
 
@@ -187,10 +153,7 @@ export default function About() {
         <div className="wrap">
           <div className="section-head-future">
             <div>
-              <div className="kicker-future">
-                <span className="kf-dot" />
-                QUALITY
-              </div>
+              <div className="kicker-future">Quality</div>
               <h2>
                 Certified to <span className="grad">national standard.</span>
               </h2>
@@ -198,12 +161,7 @@ export default function About() {
             <p>Every product line is tested and certified before it reaches a dealer shelf.</p>
           </div>
           <div className="cert-row-future">
-            {[
-              { name: "NS Mark", code: "NEPAL STANDARD" },
-              { name: "ISO 9001", code: "QUALITY MGMT" },
-              { name: "NS Pipe", code: "PVC PIPE" },
-              { name: "ISO Certified", code: "QUALITY MGMT" },
-            ].map((c) => (
+            {certCards.map((c) => (
               <div key={c.name} className="cert-card-future">
                 <svg className="cert-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
                   <path d="M12 2l8 4v6c0 5-3.4 8.7-8 10-4.6-1.3-8-5-8-10V6l8-4Z" />
@@ -213,9 +171,12 @@ export default function About() {
               </div>
             ))}
           </div>
-          <div style={{ marginTop: 48 }}>
+          <div style={{ marginTop: 48, display: "flex", flexWrap: "wrap", gap: 12 }}>
             <Link to="/products" className="btn btn-primary">
               Explore the product range
+            </Link>
+            <Link to="/#documents" className="btn btn-outline">
+              View our documents
             </Link>
           </div>
         </div>

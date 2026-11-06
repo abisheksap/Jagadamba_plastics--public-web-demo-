@@ -15,6 +15,7 @@ const HOME_SECTION_LABELS: Array<[keyof HomeSectionVisibility, string]> = [
   ["featuredProducts", "Featured products"],
   ["reviews", "Dealer reviews"],
   ["gallery", "Gallery"],
+  ["documents", "Our documents"],
   ["cta", "Call to action"],
   ["contact", "Contact form"],
 ];
@@ -266,7 +267,7 @@ export default function AdminContent() {
                 title="Click or drop a portrait photo"
               >
                 {l.image ? (
-                  <img src={l.image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  <img loading="lazy" decoding="async" src={l.image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 ) : (
                   <div style={{ fontSize: 11, textAlign: "center", padding: 8 }}>
                     {uploadIdx === idx ? "Uploading…" : "Portrait"}

@@ -6,6 +6,12 @@ const ArrowUpRight = ({ size = 16 }: { size?: number }) => <span aria-hidden="tr
 import type { Product, SiteTickerItem } from "../data/types";
 import { DEFAULT_CONTENT, PRODUCT_GROUPS } from "../data/types";
 
+/** "OUR CRAFT" -> "Our craft" (admin text may be typed in capitals). */
+function sentenceCase(text: string): string {
+  const lower = text.trim().toLowerCase();
+  return lower.charAt(0).toUpperCase() + lower.slice(1);
+}
+
 const FALLBACK_TICKER_ITEMS = DEFAULT_CONTENT.tickerItems ?? [];
 
 function usePrefersReducedMotion() {
@@ -27,26 +33,32 @@ export function Ticker({ items = FALLBACK_TICKER_ITEMS }: { items?: SiteTickerIt
   const doubled = [...safeItems, ...safeItems];
   const motionPaused = paused || reducedMotion;
   return (
-    <section className={`ticker${motionPaused ? " is-paused" : ""}`} aria-label="Company highlights">
+    <div className={`ticker${motionPaused ? " is-paused" : ""}`} role="region" aria-label="Company highlights">
       <div className="ticker-track" role="list">
         {doubled.map((item, i) => (
           <span key={`${item.label}-${item.highlight}-${i}`} className="ticker-item" role="listitem" aria-hidden={i >= safeItems.length}>
-            <span className="dot" aria-hidden="true" />
+            <span className="tk-joint" aria-hidden="true" />
             {item.label} <b>{item.highlight}</b>
           </span>
         ))}
       </div>
-      <button
-        className="ticker-pause"
-        type="button"
-        onClick={() => setPaused((value) => !value)}
-        aria-pressed={motionPaused}
-        disabled={reducedMotion}
-      >
-        <span aria-hidden="true">{motionPaused ? "▶" : "Ⅱ"}</span>
-        {reducedMotion ? "Motion reduced" : paused ? "Play highlights" : "Pause highlights"}
-      </button>
-    </section>
+      {!reducedMotion && (
+        <button
+          className="ticker-pause"
+          type="button"
+          onClick={() => setPaused((value) => !value)}
+          aria-pressed={paused}
+          aria-label={paused ? "Play highlights" : "Pause highlights"}
+          title={paused ? "Play highlights" : "Pause highlights"}
+        >
+          {paused ? (
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M8 5.5v13l11-6.5Z" fill="currentColor" /></svg>
+          ) : (
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor" /></svg>
+          )}
+        </button>
+      )}
+    </div>
   );
 }
 
@@ -144,10 +156,7 @@ export function ProductPulse({ products }: { products: Product[] }) {
     <section className="product-atlas" aria-label="Jagadamba product families">
       <div className="wrap product-atlas-head">
         <div>
-          <div className="kicker-future">
-            <span className="kf-dot" />
-            PRODUCT ATLAS
-          </div>
+          <div className="kicker-future">Product atlas</div>
           <h2>
             Find the right <span className="grad">waterway.</span>
           </h2>
@@ -210,8 +219,8 @@ export function BrandStory({ products = [], brandLabel = DEFAULT_CONTENT.brandSt
   const supporting = products.filter((product) => ["PVC Fittings", "CPVC Fittings", "Water Tank"].includes(product.category)).slice(0, 3);
   return <section className="brand-story" aria-label="Our world, standard, craft and reach" onMouseEnter={() => setInteracting(true)} onMouseLeave={() => setInteracting(false)} onFocusCapture={() => setInteracting(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setInteracting(false); }}>
     <div className="wrap brand-story-grid">
-      <div className="brand-story-copy"><div className="kicker-future"><span className="kf-dot" /> {story.kicker}</div><h2>{story.title}</h2><p>{story.copy}</p><div className="brand-story-controls"><div className="brand-story-dots">{stories.map((item, i) => <button type="button" key={item.kicker} className={i === active ? "active" : ""} onClick={() => setActive(i)} aria-label={`Show ${item.kicker.toLowerCase()}`} aria-current={i === active ? "step" : undefined} />)}</div><button className="story-pause" type="button" onClick={() => setPaused((value) => !value)} aria-pressed={paused || reducedMotion} disabled={reducedMotion}>{reducedMotion ? "Motion reduced" : paused ? "Play story" : "Pause story"}</button></div><span className="brand-story-tag">{story.tag}</span></div>
-      <div className="brand-story-visual"><div className="story-pipe-line" /><img key={story.image} src={story.image} alt={story.title} /><div className="story-caption"><span>{brandLabel.toUpperCase()} / 0{active + 1}</span><b>{story.tag}</b></div></div>
+      <div className="brand-story-copy"><div className="kicker-future">{sentenceCase(story.kicker)}</div><h2>{story.title}</h2><p>{story.copy}</p><div className="brand-story-controls"><div className="brand-story-dots">{stories.map((item, i) => <button type="button" key={item.kicker} className={i === active ? "active" : ""} onClick={() => setActive(i)} aria-label={`Show ${item.kicker.toLowerCase()}`} aria-current={i === active ? "step" : undefined} />)}</div><button className="story-pause" type="button" onClick={() => setPaused((value) => !value)} aria-pressed={paused || reducedMotion} disabled={reducedMotion}>{reducedMotion ? "Motion reduced" : paused ? "Play story" : "Pause story"}</button></div><span className="brand-story-tag">{story.tag}</span></div>
+      <div className="brand-story-visual"><div className="story-pipe-line" /><img loading="lazy" decoding="async" key={story.image} src={story.image} alt={story.title} /><div className="story-caption"><span>{brandLabel.toUpperCase()} / 0{active + 1}</span><b>{story.tag}</b></div></div>
     </div>
     <div className="wrap story-support-strip">{supporting.map((product) => <Link key={product.id} to={`/products/${product.id}`}><img src={product.image} alt="" loading="lazy" /><span>{product.category}</span><ArrowUpRight size={14} /></Link>)}</div>
   </section>;
