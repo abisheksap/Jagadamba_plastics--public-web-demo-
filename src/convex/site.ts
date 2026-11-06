@@ -116,6 +116,7 @@ export const listProducts = query({
     const resolved = await Promise.all(
       rows.map(async (r: any) => ({
         ...r,
+        id: r._id,
         image:
           r.imageStorageId != null
             ? (await ctx.storage.getUrl(r.imageStorageId)) ?? r.image
@@ -132,6 +133,7 @@ export const listGallery = query({
     return Promise.all(
       rows.map(async (r: any) => ({
         ...r,
+        id: r._id,
         image:
           r.imageStorageId != null
             ? (await ctx.storage.getUrl(r.imageStorageId)) ?? r.image
@@ -147,6 +149,7 @@ export const listDocuments = query({
     return Promise.all(
       rows.map(async (r: any) => ({
         ...r,
+        id: r._id,
         image:
           r.imageStorageId != null
             ? (await ctx.storage.getUrl(r.imageStorageId)) ?? r.image
@@ -177,7 +180,10 @@ export const listActivity = query({
   handler: async (ctx, args) => {
     if (!(await isAdminToken(ctx, args.token))) return null;
     const rows = await ctx.db.query("activity").collect();
-    return rows.sort((a: any, b: any) => b.createdAt - a.createdAt).slice(0, 200);
+    return rows
+      .map((r: any) => ({ ...r, id: r._id }))
+      .sort((a: any, b: any) => b.createdAt - a.createdAt)
+      .slice(0, 200);
   },
 });
 
@@ -238,6 +244,7 @@ export const listApprovedReviews = query({
     const rows = await ctx.db.query("reviews").collect();
     return rows
       .filter((r: any) => r.status === "approved")
+      .map((r: any) => ({ ...r, id: r._id }))
       .sort((a: any, b: any) => b.createdAt - a.createdAt);
   },
 });
@@ -248,7 +255,7 @@ export const listAllReviews = query({
   handler: async (ctx, args) => {
     if (!(await isAdminToken(ctx, args.token))) return null;
     const rows = await ctx.db.query("reviews").collect();
-    return rows.sort((a: any, b: any) => b.createdAt - a.createdAt);
+    return rows.map((r: any) => ({ ...r, id: r._id })).sort((a: any, b: any) => b.createdAt - a.createdAt);
   },
 });
 
@@ -258,7 +265,7 @@ export const listEnquiries = query({
   handler: async (ctx, args) => {
     if (!(await isAdminToken(ctx, args.token))) return null;
     const rows = await ctx.db.query("enquiries").collect();
-    return rows.sort((a: any, b: any) => b.createdAt - a.createdAt);
+    return rows.map((r: any) => ({ ...r, id: r._id })).sort((a: any, b: any) => b.createdAt - a.createdAt);
   },
 });
 
