@@ -1,7 +1,10 @@
+import { DealerFinder } from "../components/DealerFinder";
 import { EnquiryForm } from "../components/EnquiryForm";
 import { useSiteData } from "../data/SiteDataProvider";
+import { usePageMeta } from "../data/usePageMeta";
 
 export default function Contact() {
+  usePageMeta("Contact & dealers", "Request a quote, become a Jagadamba dealer or find stock near you. Bharatpur, Chitwan, Nepal.");
   const { settings } = useSiteData();
 
   return (
@@ -10,10 +13,7 @@ export default function Contact() {
         <div className="aurora" />
         <div className="grid-overlay" />
         <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
-          <div className="kicker-future">
-            <span className="kf-dot" />
-            GET IN TOUCH
-          </div>
+          <div className="kicker-future">Get in touch</div>
           <h1>
             Become a dealer, <span className="grad">or place an order.</span>
           </h1>
@@ -35,7 +35,7 @@ export default function Contact() {
                 </svg>
               </span>
               <div>
-                <div className="c-lbl">ADDRESS</div>
+                <div className="c-lbl">Address</div>
                 {settings.address}
               </div>
             </div>
@@ -46,7 +46,7 @@ export default function Contact() {
                 </svg>
               </span>
               <div>
-                <div className="c-lbl">PHONE</div>
+                <div className="c-lbl">Phone</div>
                 <a href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`}>{settings.phone}</a>
               </div>
             </div>
@@ -58,7 +58,7 @@ export default function Contact() {
                 </svg>
               </span>
               <div>
-                <div className="c-lbl">EMAIL</div>
+                <div className="c-lbl">Email</div>
                 <a href={`mailto:${settings.email}`}>{settings.email}</a>
               </div>
             </div>
@@ -69,7 +69,7 @@ export default function Contact() {
                 </svg>
               </span>
               <div>
-                <div className="c-lbl">FACEBOOK</div>
+                <div className="c-lbl">Facebook</div>
                 <a href={settings.facebook} target="_blank" rel="noreferrer">
                   Jagadamba Plastic Industry
                 </a>
@@ -82,16 +82,16 @@ export default function Contact() {
                 </svg>
               </span>
               <div>
-                <div className="c-lbl">YOUTUBE</div>
+                <div className="c-lbl">Youtube</div>
                 <a href={settings.youtube} target="_blank" rel="noreferrer">
                   Jagadamba Pipe &amp; Fittings
                 </a>
               </div>
             </div>
 
-            <div style={{ marginTop: 28, padding: 22, borderRadius: 14, border: "1px solid rgba(89,210,232,0.25)", background: "var(--cyan-soft)" }}>
-              <h3 style={{ color: "#fff", fontSize: 16 }}>Dealer enquiries welcome</h3>
-              <p style={{ color: "var(--text-mid)", fontSize: 13.5, marginTop: 8 }}>
+            <div className="contact-dealer-note">
+              <h3>Dealer enquiries welcome</h3>
+              <p>
                 We onboard dealers across all seven provinces. Ask about territory availability,
                 margins and delivery schedules.
               </p>
@@ -102,6 +102,36 @@ export default function Contact() {
           </div>
         </div>
       </section>
+
+      <section className="location-map-section section-pad" aria-labelledby="location-map-title">
+        <div className="wrap">
+          <div className="location-map-heading">
+            <div>
+              <div className="kicker-future">Visit our location</div>
+              <h2 id="location-map-title">Find us in <span className="grad">Bharatpur, Chitwan.</span></h2>
+            </div>
+            <a
+              className="btn btn-outline"
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Open in Google Maps ↗
+            </a>
+          </div>
+          <div className="location-map-frame">
+            <iframe
+              title={`Map showing ${settings.address}`}
+              src={`https://www.google.com/maps?q=${encodeURIComponent(settings.address)}&z=15&output=embed`}
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      </section>
+
+      <DealerFinder />
     </>
   );
 }

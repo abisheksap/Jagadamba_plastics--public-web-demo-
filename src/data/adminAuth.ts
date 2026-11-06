@@ -1,16 +1,34 @@
-// Lightweight client-side admin gate. This is a convenience lock for a static
-// site — it keeps the panel out of casual reach but is not server-grade
-// security. When Convex is configured, sign-in is also verified by the backend
-// before the local session is opened.
+// Admin sign-in.
+//
+// Production (Convex): the passcode is checked ONLY by the server, which answers with a short-lived,
+// revocable session token. The passcode is never stored in the browser, and there is no default
+// passcode anywhere in this code. The token lives in sessionStorage (this tab only).
+//
+// Local development (no Convex, `npm run dev`): the first visit asks you to create a passcode, which is
+// kept in this browser as a salted hash. A production build without a backend has no admin at all.
 
 import { api } from "../convex/_generated/api";
+import { hashPasscode, verifyPasscodeHash } from "../convex/authLib";
+import type { StoredPasscode } from "../convex/authLib";
 import { convexEnabled, getConvexClient } from "./convexClient";
 
-const SESSION_KEY = "jagadamba-admin-session";
-const PASSCODE_KEY = "jagadamba-admin-passcode";
-const CRED_KEY = "jagadamba-admin-cred";
+export const MIN_PASSCODE = 12;
+
+const TOKEN_KEY = "jagadamba-admin-token";
+const EXPIRES_KEY = "jagadamba-admin-expires";
+const DEV_PASSCODE_KEY = "jagadamba-dev-admin-passcode";
 const AUTH_EVENT = "jagadamba-admin-auth-change";
-const DEFAULT_PASSCODE = "jagadamba2077";
+const DEV_SESSION_MS = 12 * 60 * 60 * 1000;
+
+export type AuthMode = "convex" | "local-dev" | "unavailable";
+export type SignInResult =
+  | { ok: true }
+  | { ok: false; error: "bad_passcode" | "locked" | "not_configured" | "unavailable" | "network" | "weak"; message: string; retryAfterSec?: number; attemptsLeft?: number };
+
+export function authMode(): AuthMode {
+  if (convexEnabled) return "convex";
+  return import.meta.env.DEV ? "local-dev" : "unavailable";
+}
 
 function announceAuthChange() {
   window.dispatchEvent(new Event(AUTH_EVENT));
@@ -21,26 +39,10 @@ export function subscribeToAdminAuth(listener: () => void): () => void {
   return () => window.removeEventListener(AUTH_EVENT, listener);
 }
 
-const memoryLocal = new Map<string, string>();
+/* ---- storage (falls back to memory where storage is blocked) ---- */
+
 const memorySession = new Map<string, string>();
-
-function localGet(key: string): string | null {
-  try {
-    return window.localStorage.getItem(key) ?? memoryLocal.get(key) ?? null;
-  } catch {
-    return memoryLocal.get(key) ?? null;
-  }
-}
-
-function localSet(key: string, value: string) {
-  memoryLocal.set(key, value);
-  try {
-    window.localStorage.setItem(key, value);
-  } catch {
-    // Private browsing and embedded previews can deny storage; memory fallback
-    // still lets the admin panel work for the current tab.
-  }
-}
+const memoryLocal = new Map<string, string>();
 
 function sessionGet(key: string): string | null {
   try {
@@ -49,147 +51,184 @@ function sessionGet(key: string): string | null {
     return memorySession.get(key) ?? null;
   }
 }
-
 function sessionSet(key: string, value: string) {
   memorySession.set(key, value);
   try {
     window.sessionStorage.setItem(key, value);
   } catch {
-    // See localSet().
+    /* memory fallback keeps this tab working */
   }
 }
-
 function sessionRemove(key: string) {
   memorySession.delete(key);
   try {
     window.sessionStorage.removeItem(key);
   } catch {
-    // See localSet().
+    /* see sessionSet */
+  }
+}
+function localGet(key: string): string | null {
+  try {
+    return window.localStorage.getItem(key) ?? memoryLocal.get(key) ?? null;
+  } catch {
+    return memoryLocal.get(key) ?? null;
+  }
+}
+function localSet(key: string, value: string) {
+  memoryLocal.set(key, value);
+  try {
+    window.localStorage.setItem(key, value);
+  } catch {
+    /* see sessionSet */
+  }
+}
+function localRemove(key: string) {
+  memoryLocal.delete(key);
+  try {
+    window.localStorage.removeItem(key);
+  } catch {
+    /* see sessionSet */
   }
 }
 
-/** SHA-256 fallback for non-secure static hosts where crypto.subtle is absent. */
-function sha256Hex(ascii: string): string {
-  const rightRotate = (value: number, amount: number) => (value >>> amount) | (value << (32 - amount));
-  const maxWord = 2 ** 32;
-  const words: number[] = [];
-  const hash: number[] = [];
-  const k: number[] = [];
-  const isComposite: Record<number, boolean> = {};
-  let primeCounter = 0;
-  for (let candidate = 2; primeCounter < 64; candidate++) {
-    if (!isComposite[candidate]) {
-      for (let i = 0; i < 313; i += candidate) isComposite[i] = true;
-      hash[primeCounter] = (Math.sqrt(candidate) * maxWord) | 0;
-      k[primeCounter++] = (Math.pow(candidate, 1 / 3) * maxWord) | 0;
-    }
-  }
-
-  const bitLength = ascii.length * 8;
-  ascii += "\x80";
-  while (ascii.length % 64 !== 56) ascii += "\x00";
-  for (let i = 0; i < ascii.length; i++) {
-    const j = ascii.charCodeAt(i);
-    if (j >> 8) return "";
-    words[i >> 2] |= j << (((3 - i) % 4) * 8);
-  }
-  words[words.length] = (bitLength / maxWord) | 0;
-  words[words.length] = bitLength;
-
-  for (let j = 0; j < words.length; ) {
-    const w = words.slice(j, (j += 16));
-    const oldHash = hash.slice(0);
-    for (let i = 0; i < 64; i++) {
-      const w15 = w[i - 15];
-      const w2 = w[i - 2];
-      const a = hash[0];
-      const e = hash[4];
-      const temp1 =
-        hash[7] +
-        (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) +
-        ((e & hash[5]) ^ (~e & hash[6])) +
-        k[i] +
-        (w[i] = i < 16 ? w[i] : (w[i - 16] + (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3)) + w[i - 7] + (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))) | 0);
-      const temp2 = (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) + ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
-      hash.unshift((temp1 + temp2) | 0);
-      hash[4] = (hash[4] + temp1) | 0;
-    }
-    for (let i = 0; i < 8; i++) hash[i] = (hash[i] + oldHash[i]) | 0;
-  }
-
-  let result = "";
-  for (let i = 0; i < 8; i++) {
-    for (let j = 3; j + 1; j--) {
-      const b = (hash[i] >> (j * 8)) & 255;
-      result += (b < 16 ? "0" : "") + b.toString(16);
-    }
-  }
-  return result;
-}
-
-async function sha256(text: string): Promise<string> {
-  if (globalThis.crypto?.subtle) {
-    const buf = await globalThis.crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
-    return Array.from(new Uint8Array(buf))
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
-  }
-  return sha256Hex(text);
-}
-
-export function storedPasscodeHash(): string {
-  return localGet(PASSCODE_KEY) ?? "";
-}
-
-export async function ensurePasscodeSeeded() {
-  if (!localGet(PASSCODE_KEY)) localSet(PASSCODE_KEY, await sha256(DEFAULT_PASSCODE));
-}
-
-export async function signIn(passcode: string): Promise<boolean> {
-  await ensurePasscodeSeeded();
-  if ((await sha256(passcode)) !== storedPasscodeHash()) return false;
-
-  // The local hash keeps the static/local-storage mode usable. In Convex mode,
-  // never grant the UI session until the server confirms the same credential.
-  if (convexEnabled) {
-    const client = getConvexClient();
-    if (!client) return false;
-    const serverAccepted = await client.mutation(api.site.adminSignIn, { passcode });
-    if (!serverAccepted) return false;
-  }
-
-  sessionSet(SESSION_KEY, "1");
-  // Remember the plaintext credential for this tab so backend operations can
-  // use the passcode server-side in Convex mode.
-  sessionSet(CRED_KEY, passcode);
-  announceAuthChange();
-  return true;
-}
-
-export function signOut() {
-  sessionRemove(SESSION_KEY);
-  sessionRemove(CRED_KEY);
+function openSession(token: string, expiresAt: number) {
+  sessionSet(TOKEN_KEY, token);
+  sessionSet(EXPIRES_KEY, String(expiresAt));
   announceAuthChange();
 }
 
+/** The session token sent with admin requests ("" when signed out). Not the passcode. */
 export function adminCredential(): string {
-  return sessionGet(CRED_KEY) ?? "";
+  return isAdmin() ? sessionGet(TOKEN_KEY) ?? "" : "";
 }
 
+export function sessionExpiresAt(): number {
+  return Number(sessionGet(EXPIRES_KEY) ?? 0);
+}
+
+/** Client-side hint only: the server decides whether a token is valid. */
 export function isAdmin(): boolean {
-  return sessionGet(SESSION_KEY) === "1";
+  return Boolean(sessionGet(TOKEN_KEY)) && sessionExpiresAt() > Date.now();
 }
 
-export async function changePasscode(current: string, next: string): Promise<boolean> {
-  await ensurePasscodeSeeded();
-  if ((await sha256(current)) !== storedPasscodeHash()) return false;
-  if (next.length < 6) return false;
-  localSet(PASSCODE_KEY, await sha256(next));
-  return true;
+/** Forget the session in this tab (also asks the server to revoke it). */
+export function signOut() {
+  const token = sessionGet(TOKEN_KEY);
+  sessionRemove(TOKEN_KEY);
+  sessionRemove(EXPIRES_KEY);
+  if (convexEnabled && token) {
+    getConvexClient()?.mutation(api.site.adminSignOut, { token }).catch(() => undefined);
+  }
+  announceAuthChange();
 }
 
-/** Recovery for local-mode previews after a forgotten custom passcode. */
-export async function resetLocalPasscode(): Promise<void> {
-  localSet(PASSCODE_KEY, await sha256(DEFAULT_PASSCODE));
+/* ---- local development mode ---- */
+
+function readDevPasscode(): StoredPasscode | null {
+  try {
+    const raw = localGet(DEV_PASSCODE_KEY);
+    return raw ? (JSON.parse(raw) as StoredPasscode) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Local dev only: true until a passcode has been created in this browser. */
+export function localNeedsSetup(): boolean {
+  return authMode() === "local-dev" && !readDevPasscode();
+}
+
+export async function setupLocalPasscode(passcode: string): Promise<SignInResult> {
+  if (authMode() !== "local-dev") return { ok: false, error: "unavailable", message: "Local setup is only available while developing." };
+  if (passcode.length < MIN_PASSCODE) {
+    return { ok: false, error: "weak", message: `Use at least ${MIN_PASSCODE} characters.` };
+  }
+  localSet(DEV_PASSCODE_KEY, JSON.stringify(await hashPasscode(passcode)));
+  openSession("local-dev", Date.now() + DEV_SESSION_MS);
+  return { ok: true };
+}
+
+/** Local dev only: forget the locally created passcode so setup starts again. */
+export function resetLocalAdmin() {
+  if (authMode() !== "local-dev") return;
+  localRemove(DEV_PASSCODE_KEY);
   signOut();
+}
+
+/* ---- sign in / change passcode ---- */
+
+/** The Convex client queues a request until it can connect, so without this an unreachable server would hang forever. */
+function withTimeout<T>(promise: Promise<T>, ms = 12000): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = window.setTimeout(() => reject(new Error("timeout")), ms);
+    promise.then(
+      (value) => {
+        window.clearTimeout(timer);
+        resolve(value);
+      },
+      (error) => {
+        window.clearTimeout(timer);
+        reject(error);
+      },
+    );
+  });
+}
+
+export async function signIn(passcode: string): Promise<SignInResult> {
+  const mode = authMode();
+  if (mode === "unavailable") {
+    return { ok: false, error: "unavailable", message: "Admin is not available: this site was built without a backend connection." };
+  }
+
+  if (mode === "local-dev") {
+    const stored = readDevPasscode();
+    if (!stored) return { ok: false, error: "bad_passcode", message: "No passcode has been created yet." };
+    if (!(await verifyPasscodeHash(passcode, stored))) return { ok: false, error: "bad_passcode", message: "Incorrect passcode." };
+    openSession("local-dev", Date.now() + DEV_SESSION_MS);
+    return { ok: true };
+  }
+
+  const client = getConvexClient();
+  if (!client) return { ok: false, error: "network", message: "Could not reach the server." };
+  try {
+    const res = await withTimeout(client.mutation(api.site.adminSignIn, { passcode }));
+    if (res.ok) {
+      openSession(res.token, res.expiresAt);
+      return { ok: true };
+    }
+    if (res.error === "locked") {
+      const minutes = Math.max(1, Math.ceil((res.retryAfterSec ?? 900) / 60));
+      return { ok: false, error: "locked", retryAfterSec: res.retryAfterSec, message: `Too many wrong attempts. Try again in about ${minutes} minute${minutes === 1 ? "" : "s"}.` };
+    }
+    if (res.error === "not_configured") {
+      return { ok: false, error: "not_configured", message: "Admin sign-in has not been set up on the server yet. Set the ADMIN_PASSCODE environment variable in your Convex dashboard, then try again." };
+    }
+    const left = res.attemptsLeft;
+    return { ok: false, error: "bad_passcode", attemptsLeft: left, message: left != null ? `Incorrect passcode. ${left} attempt${left === 1 ? "" : "s"} left before a short lockout.` : "Incorrect passcode." };
+  } catch {
+    return { ok: false, error: "network", message: "Could not reach the server. Check your connection and try again." };
+  }
+}
+
+export async function changePasscode(current: string, next: string): Promise<{ ok: boolean; message: string }> {
+  if (next.length < MIN_PASSCODE) return { ok: false, message: `The new passcode needs at least ${MIN_PASSCODE} characters.` };
+  const mode = authMode();
+  if (mode === "local-dev") {
+    const stored = readDevPasscode();
+    if (!stored || !(await verifyPasscodeHash(current, stored))) return { ok: false, message: "The current passcode is wrong." };
+    localSet(DEV_PASSCODE_KEY, JSON.stringify(await hashPasscode(next)));
+    return { ok: true, message: "Passcode updated." };
+  }
+  const client = getConvexClient();
+  const token = adminCredential();
+  if (!client || !token) return { ok: false, message: "Sign in again, then retry." };
+  try {
+    const res = await withTimeout(client.mutation(api.site.changePasscode, { token, current, next }));
+    if (res.ok) return { ok: true, message: "Passcode updated. Other devices have been signed out." };
+    if (res.error === "bad_current") return { ok: false, message: "The current passcode is wrong." };
+    if (res.error === "locked") return { ok: false, message: "Too many wrong attempts. Try again in a few minutes." };
+    return { ok: false, message: `The new passcode needs at least ${MIN_PASSCODE} characters.` };
+  } catch {
+    return { ok: false, message: "Could not update the passcode. Sign in again and retry." };
+  }
 }

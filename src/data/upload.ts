@@ -3,10 +3,19 @@
 // non-images or anything that fails to decode.
 const MAX_EDGE = 900;
 const QUALITY = 0.82;
+const MAX_FILE_BYTES = 15 * 1024 * 1024;
 
-export function fileToCompactDataUrl(file: File): Promise<string | null> {
+export function fileToCompactDataUrl(file: File, maxEdge: number = MAX_EDGE): Promise<string | null> {
   return new Promise((resolve) => {
     if (!file.type.startsWith("image/")) {
+      resolve(null);
+      return;
+    }
+    if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type)) {
+      resolve(null);
+      return;
+    }
+    if (file.size <= 0 || file.size > MAX_FILE_BYTES) {
       resolve(null);
       return;
     }
@@ -16,7 +25,7 @@ export function fileToCompactDataUrl(file: File): Promise<string | null> {
       const img = new Image();
       img.onerror = () => resolve(null);
       img.onload = () => {
-        const scale = Math.min(1, MAX_EDGE / Math.max(img.width, img.height));
+        const scale = Math.min(1, maxEdge / Math.max(img.width, img.height));
         const w = Math.max(1, Math.round(img.width * scale));
         const h = Math.max(1, Math.round(img.height * scale));
         const canvas = document.createElement("canvas");

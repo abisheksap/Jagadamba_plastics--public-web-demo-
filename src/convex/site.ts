@@ -14,11 +14,11 @@ import {
 //   npx convex env set ADMIN_PASSCODE "a long, private passphrase"
 declare const process: { env: Record<string, string | undefined> };
 
-const SESSION_TTL_MS = 12 * 60 * 60 * 1000; // a sign-in lasts 12 hours
+const SESSION_TTL_MS = 8 * 60 * 60 * 1000; // a sign-in lasts 8 hours
 const MAX_FAILURES = 5; // wrong attempts allowed per window…
 const FAILURE_WINDOW_MS = 15 * 60 * 1000;
 const LOCK_MS = 15 * 60 * 1000; // …then sign-in is locked for this long
-const MIN_PASSCODE = 10;
+const MIN_PASSCODE = 12;
 
 // ---------- helpers ----------
 
@@ -43,7 +43,7 @@ async function checkPasscode(ctx: any, passcode: string): Promise<PasscodeCheck>
     return ok ? "ok" : "bad";
   }
   const configured = process.env.ADMIN_PASSCODE;
-  if (!configured || configured.length < 8) return "unconfigured";
+  if (!configured || configured.length < MIN_PASSCODE) return "unconfigured";
   return (await matchesConfiguredPasscode(passcode, configured)) ? "ok" : "bad";
 }
 
