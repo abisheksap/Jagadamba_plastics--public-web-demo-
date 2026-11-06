@@ -11,6 +11,7 @@ export function ReviewForm({ bare }: { bare?: boolean }) {
   const [error, setError] = useState("");
 
   const [busy, setBusy] = useState(false);
+  const [trap, setTrap] = useState(""); // honeypot: hidden from people, bots fill it in
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -21,14 +22,14 @@ export function ReviewForm({ bare }: { bare?: boolean }) {
     setBusy(true);
     setError("");
     try {
-      await submitReview({ name: name.trim(), business: business.trim(), rating, quote: quote.trim() });
+      await submitReview({ name: name.trim(), business: business.trim(), rating, quote: quote.trim(), hp: trap });
       setSent(true);
       setName("");
       setBusiness("");
       setQuote("");
       setRating(5);
-    } catch {
-      setError("Something went wrong — please try again in a moment.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong — please try again in a moment.");
     } finally {
       setBusy(false);
     }
@@ -36,6 +37,10 @@ export function ReviewForm({ bare }: { bare?: boolean }) {
 
   const body = (
     <form onSubmit={onSubmit}>
+      <div className="hp-field" aria-hidden="true">
+        <label htmlFor="rev-website">Leave this field empty</label>
+        <input id="rev-website" type="text" name="website" tabIndex={-1} autoComplete="off" value={trap} onChange={(e) => setTrap(e.target.value)} />
+      </div>
       <div className="form-row">
         <label htmlFor="rev-name">YOUR NAME</label>
         <input
