@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { useSiteData } from "../data/SiteDataProvider";
+import { DEALERS } from "../data/dealers";
+import { downloadCsv } from "../data/csv";
 
 export default function AdminDashboard() {
   const data = useSiteData();
@@ -8,22 +10,31 @@ export default function AdminDashboard() {
   const variantTotal = data.products.reduce((n, p) => n + (p.variants?.length ?? 0), 0);
   const totalProducts = data.products.length;
 
+  const exportDealers = () => {
+    downloadCsv(
+      `dealers-${new Date().toISOString().slice(0, 10)}.csv`,
+      ["Name", "Province", "District", "Phone", "Address"],
+      DEALERS.map((dealer) => [dealer.name, dealer.province, dealer.district, dealer.phone, dealer.address ?? ""]),
+    );
+  };
+
   const cards = [
     { label: "Products live", num: totalProducts, to: "/admin/products" },
     { label: "Size / rate variants", num: variantTotal, to: "/admin/products" },
     { label: "Gallery items", num: data.gallery.length, to: "/admin/gallery" },
+    { label: "Documents shown", num: (data.documents ?? []).length, to: "/admin/documents" },
     { label: "Reviews awaiting approval", num: pendingReviews.length, to: "/admin/reviews" },
     { label: "New enquiries", num: newEnquiries.length, to: "/admin/enquiries" },
   ];
 
   return (
-    <>
+    <div className="admin-dashboard">
       <header className="admin-head">
         <div className="admin-head-logo">
-          <img src="/images/logo.png" alt="Jagadamba" /> Jagadamba Admin
+          <img loading="lazy" decoding="async" src="/images/logo.png" alt="Jagadamba" /> Jagadamba Admin
         </div>
         <h1>Dashboard</h1>
-        <div className="admin-head-sub">Everything the public site shows is managed from here.</div>
+        <div className="admin-head-sub">Welcome! Manage your website content, products, and enquiries from here.</div>
       </header>
 
       <div className="stat-grid">
@@ -82,7 +93,7 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      <div className="admin-card admin-card-callout">
+      <div className="admin-card admin-designer-callout">
         <div>
           <span className="admin-side-callout-kicker">HOMEPAGE DESIGNER</span>
           <h3>Shape the first product impression</h3>
@@ -93,15 +104,20 @@ export default function AdminDashboard() {
 
       <div className="admin-card">
         <h3>Quick actions</h3>
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-          <Link to="/admin/products" className="admin-btn">Add a product</Link>
-          <Link to="/admin/arranger" className="admin-btn">Open homepage designer</Link>
-          <Link to="/admin/content" className="admin-btn">Edit hero & leadership content</Link>
-          <Link to="/admin/gallery" className="admin-btn">Upload gallery photo</Link>
-          <Link to="/admin/activity" className="admin-btn">View activity log</Link>
-          <Link to="/admin/settings" className="admin-btn">Edit contact details</Link>
+        <p style={{ marginBottom: 14, color: "var(--text-dim)", fontSize: 13.5 }}>Common tasks to update your website quickly.</p>
+        <div className="admin-quick-actions">
+          <Link to="/admin/products" className="admin-btn">Add/edit products</Link>
+          <Link to="/admin/arranger" className="admin-btn">Arrange homepage products</Link>
+          <Link to="/admin/content" className="admin-btn">Edit homepage text</Link>
+          <Link to="/admin/gallery" className="admin-btn">Manage gallery</Link>
+          <Link to="/admin/documents" className="admin-btn">Manage documents</Link>
+          <Link to="/admin/reviews" className="admin-btn">Moderate reviews</Link>
+          <Link to="/admin/enquiries" className="admin-btn">View enquiries</Link>
+          <button className="admin-btn" type="button" onClick={exportDealers} disabled={DEALERS.length === 0}>Export dealers CSV</button>
+          <Link to="/admin/settings" className="admin-btn">Site settings & theme</Link>
+          <Link to="/admin/activity" className="admin-btn">Activity log</Link>
         </div>
       </div>
-    </>
+    </div>
   );
 }

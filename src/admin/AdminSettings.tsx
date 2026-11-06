@@ -4,6 +4,7 @@ import { changePasscodeAnywhere, localAdminOps } from "../data/backend";
 import { useBackendMode, useSiteData } from "../data/SiteDataProvider";
 import * as store from "../data/store";
 import type { SiteSettings } from "../data/types";
+import { DEFAULT_THEME, getTheme, THEMES } from "../data/themes";
 
 export default function AdminSettings() {
   const { settings, products, gallery, reviews, enquiries } = useSiteData();
@@ -36,15 +37,13 @@ export default function AdminSettings() {
 
   const onChangePw = async (e: FormEvent) => {
     e.preventDefault();
-    const ok = await changePasscodeAnywhere(currentPw, nextPw);
-    if (ok) {
-      setPwMsg("Passcode updated.");
+    const res = await changePasscodeAnywhere(currentPw, nextPw);
+    setPwMsg(res.message);
+    if (res.ok) {
       setCurrentPw("");
       setNextPw("");
-    } else {
-      setPwMsg("Failed — current passcode wrong, or new one is under 6 characters.");
     }
-    setTimeout(() => setPwMsg(""), 3500);
+    setTimeout(() => setPwMsg(""), 6000);
   };
 
   /** Build a full JSON snapshot from the live model (works in both modes). */
@@ -104,6 +103,26 @@ export default function AdminSettings() {
             it on other devices, or connect Convex in project settings to share everything live.
           </p>
         )}
+      </div>
+
+      <div className="admin-card admin-appearance-card">
+        <h3>Public site appearance</h3>
+        <p className="admin-card-description">Choose the brand palette visitors see. Public visitors cannot change this setting.</p>
+        <div className="admin-field admin-appearance-field">
+          <label htmlFor="site-theme">SITE THEME</label>
+          <select id="site-theme" value={form.theme ?? DEFAULT_THEME} onChange={(e) => setForm({ ...form, theme: e.target.value })}>
+            {THEMES.map((theme) => <option key={theme.id} value={theme.id}>{theme.name}</option>)}
+          </select>
+          <div className="admin-theme-preview" aria-live="polite">
+            <span className="admin-theme-swatches" aria-label={`${getTheme(form.theme ?? DEFAULT_THEME).name} color preview`}>
+              <i style={{ background: getTheme(form.theme ?? DEFAULT_THEME).swatch.bg }} />
+              <i style={{ background: getTheme(form.theme ?? DEFAULT_THEME).swatch.accent }} />
+              <i style={{ background: getTheme(form.theme ?? DEFAULT_THEME).swatch.cta }} />
+            </span>
+            <span>{getTheme(form.theme ?? DEFAULT_THEME).description}</span>
+          </div>
+        </div>
+        <p className="admin-appearance-save-note">Save changes below to publish the selected appearance across the public site.</p>
       </div>
 
       <div className="admin-card">
@@ -173,11 +192,11 @@ export default function AdminSettings() {
           <div className="admin-grid-2">
             <div className="admin-field">
               <label htmlFor="pw-cur">CURRENT PASSCODE</label>
-              <input id="pw-cur" type="password" value={currentPw} onChange={(e) => setCurrentPw(e.target.value)} />
+              <input id="pw-cur" type="password" autoComplete="current-password" value={currentPw} onChange={(e) => setCurrentPw(e.target.value)} />
             </div>
             <div className="admin-field">
-              <label htmlFor="pw-new">NEW PASSCODE (min 6 chars)</label>
-              <input id="pw-new" type="password" value={nextPw} onChange={(e) => setNextPw(e.target.value)} />
+              <label htmlFor="pw-new">NEW PASSCODE (min 12 chars)</label>
+              <input id="pw-new" type="password" autoComplete="new-password" value={nextPw} onChange={(e) => setNextPw(e.target.value)} />
             </div>
           </div>
           <button className="admin-btn" type="submit">

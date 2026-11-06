@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { adminCredential } from "../data/adminAuth";
 import { useAdminOps, useSiteData } from "../data/SiteDataProvider";
+import { downloadCsv } from "../data/csv";
 
 export default function AdminEnquiries() {
   const { enquiries } = useSiteData();
@@ -8,6 +9,14 @@ export default function AdminEnquiries() {
   const [error, setError] = useState("");
   const open = enquiries.filter((e) => e.status !== "archived");
   const archived = enquiries.filter((e) => e.status === "archived");
+
+  const exportEnquiries = () => {
+    downloadCsv(
+      `enquiries-${new Date().toISOString().slice(0, 10)}.csv`,
+      ["Name", "Phone", "Interest", "Message", "Status", "Submitted"],
+      enquiries.map((enquiry) => [enquiry.name, enquiry.phone, enquiry.interest, enquiry.message, enquiry.status, new Date(enquiry.createdAt).toLocaleString()]),
+    );
+  };
 
   const run = (fn: () => Promise<void>) => {
     fn().catch((err) => setError(err instanceof Error ? err.message : "Action failed"));
@@ -71,6 +80,9 @@ export default function AdminEnquiries() {
             archived
           </div>
         </div>
+        <button className="admin-btn" type="button" onClick={exportEnquiries} disabled={enquiries.length === 0}>
+          Export CSV
+        </button>
       </header>
 
       {error && (

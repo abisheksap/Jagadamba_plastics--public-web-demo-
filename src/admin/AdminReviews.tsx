@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { adminCredential } from "../data/adminAuth";
 import { useAdminOps, useSiteData } from "../data/SiteDataProvider";
+import { downloadCsv } from "../data/csv";
 
 export default function AdminReviews() {
   const { reviews } = useSiteData();
@@ -9,6 +10,14 @@ export default function AdminReviews() {
   const [busyId, setBusyId] = useState("");
   const pending = reviews.filter((r) => r.status === "pending");
   const decided = reviews.filter((r) => r.status !== "pending");
+
+  const exportReviews = () => {
+    downloadCsv(
+      `reviews-${new Date().toISOString().slice(0, 10)}.csv`,
+      ["Name", "Business / Location", "Rating", "Status", "Review", "Submitted"],
+      reviews.map((review) => [review.name, review.business ?? "", review.rating, review.status, review.quote, new Date(review.createdAt).toLocaleString()]),
+    );
+  };
 
   const run = (id: string, fn: () => Promise<void>) => {
     if (busyId) return;
@@ -50,6 +59,9 @@ export default function AdminReviews() {
             published on the site
           </div>
         </div>
+        <button className="admin-btn" type="button" onClick={exportReviews} disabled={reviews.length === 0}>
+          Export CSV
+        </button>
       </header>
 
       {error && (
