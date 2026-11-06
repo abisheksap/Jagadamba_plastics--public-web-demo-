@@ -79,7 +79,8 @@
 .serve-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); counter-reset: serve; }
 .serve-row { position: relative; display: grid; grid-template-columns: 64px minmax(0, 1fr) 46px; gap: 22px; align-items: start; padding: 30px 12px 30px 0; border-bottom: 1px solid var(--line); transition: padding 0.3s var(--ease), background 0.3s; }
 .serve-row:hover { padding-left: 16px; background: linear-gradient(90deg, rgba(var(--accent-rgb), 0.06), transparent 80%); }
-.serve-icon { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 20px; background: rgba(var(--accent-rgb), 0.1); color: var(--cyan); }
+.serve-icon { display: block; width: 64px; height: 64px; overflow: hidden; border-radius: 8px; background: #dfe9ef; box-shadow: 0 0 0 1px rgba(var(--accent-rgb), 0.16); }
+.serve-icon img { width: 100%; height: 100%; display: block; object-fit: cover; filter: saturate(.82) contrast(1.04); }
 .serve-red .serve-icon { background: rgba(var(--red-rgb), 0.1); color: var(--red); }
 .serve-gold .serve-icon { background: rgba(242, 181, 68, 0.22); color: #a8710d; }
 .serve-icon .g-icon { width: 34px; height: 34px; margin: 0; }
@@ -88,8 +89,8 @@
 .serve-links { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 16px; }
 .serve-links a { padding-bottom: 1px; border-bottom: 1.5px solid rgba(var(--accent-rgb), 0.3); font-size: 14px; font-weight: 600; color: var(--cyan); transition: border-color 0.2s, color 0.2s; }
 .serve-links a:hover { border-color: var(--red); color: var(--red); }
-.serve-go { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--line); color: var(--text-hi); transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.25s var(--ease); }
-.serve-row:hover .serve-go { background: var(--red); border-color: var(--red); color: #fff; transform: translateX(4px); }
+.serve-go { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 4px; border-left: 5px solid var(--cyan); border-right: 5px solid var(--red); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--text-hi); background: rgba(255,255,255,.78); transition: border-color 0.25s, color 0.25s, transform 0.25s var(--ease); }
+.serve-row:hover .serve-go { border-left-color: var(--red); border-right-color: var(--cyan); color: var(--red); transform: translateX(4px); }
 @media (max-width: 960px) { .serve-layout { grid-template-columns: 1fr; } .serve-intro { position: static; } }
 @media (max-width: 560px) {
   .serve-row { grid-template-columns: 52px minmax(0, 1fr); gap: 16px; padding-block: 24px; }

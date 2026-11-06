@@ -1,34 +1,11 @@
 import { Link } from "react-router-dom";
 import type { ReactNode } from "react";
 
-const HomeIcon = (
-  <svg className="g-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.6">
-    <path d="M6 24 24 10l18 14" />
-    <path d="M10 22v16h28V22" />
-    <rect x="20" y="28" width="8" height="10" />
-  </svg>
-);
-
-const FarmIcon = (
-  <svg className="g-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.6">
-    <circle cx="24" cy="14" r="6" />
-    <path d="M24 20v24M14 30h20M16 38h16" />
-  </svg>
-);
-
-const IndustryIcon = (
-  <svg className="g-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.6">
-    <rect x="6" y="18" width="36" height="12" rx="1" />
-    <path d="M6 18 2 24l4 6" />
-    <path d="M42 18l4 6-4 6" />
-  </svg>
-);
-
 /** Each audience links straight to the matching part of the catalog. */
 const AUDIENCES = [
   {
     tone: "blue",
-    icon: HomeIcon,
+    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=320&q=82",
     title: "Homes & builders",
     text: "Water tanks, PVC and CPVC fittings for household plumbing, hot-water lines and rooftop storage.",
     links: [
@@ -38,14 +15,14 @@ const AUDIENCES = [
   },
   {
     tone: "red",
-    icon: FarmIcon,
+    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=320&q=82",
     title: "Farms & irrigation",
     text: "Borewell casing and flexible HDPE pipe built for groundwater extraction and field irrigation.",
     links: [{ label: "Borewell & HDPE pipes", to: "/products?group=pipes" }],
   },
   {
     tone: "gold",
-    icon: IndustryIcon,
+    image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=320&q=82",
     title: "Industry & infrastructure",
     text: "Underground drainage systems built to handle structural load on municipal and industrial sites.",
     links: [{ label: "UG drainage pipes", to: "/products?group=pipes" }],
@@ -70,7 +47,9 @@ export function ServeSection({ heading, text, showStoryLink = true }: { heading:
       <ol className="serve-list">
         {AUDIENCES.map((a) => (
           <li key={a.title} className={`serve-row serve-${a.tone}`}>
-            <span className="serve-icon">{a.icon}</span>
+            <span className="serve-icon">
+              <img src={a.image} alt="" loading="lazy" decoding="async" />
+            </span>
             <div className="serve-copy">
               <h3>{a.title}</h3>
               <p>{a.text}</p>
