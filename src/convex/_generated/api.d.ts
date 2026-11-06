@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as authLib from "../authLib.js";
 import type * as site from "../site.js";
 
 import type {
@@ -17,6 +18,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  authLib: typeof authLib;
   site: typeof site;
 }>;
 
