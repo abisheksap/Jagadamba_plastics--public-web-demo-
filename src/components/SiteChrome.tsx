@@ -334,6 +334,24 @@ export function Footer({ settings }: { settings: { phone: string; phoneAlt?: str
             <a href={settings.youtube} target="_blank" rel="noreferrer">YouTube</a>
             <span className="sx-footer-address">{settings.address}</span>
           </div>
+          <div className="sx-footer-location">
+            <h4>Our location</h4>
+            <iframe
+              title={`Map showing ${settings.address}`}
+              src="https://www.openstreetmap.org/export/embed.html?bbox=84.415%2C27.673%2C84.442%2C27.699&amp;layer=mapnik&amp;marker=27.686%2C84.428"
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
+            <a
+              className="sx-footer-map-link"
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              View in Google Maps <ArrowUpRight size={13} />
+            </a>
+          </div>
         </div>
         <div className="footer-bottom">
           <span>www.jagadambaplastic.com · नेपालमा बनेको</span>
