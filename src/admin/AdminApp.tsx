@@ -18,7 +18,7 @@ const AdminEnquiries = lazy(() => import("./AdminEnquiries"));
 const AdminActivity = lazy(() => import("./AdminActivity"));
 const AdminSettings = lazy(() => import("./AdminSettings"));
 
-/** Everything under /admin. Imported lazily by App so the public site stays small. */
+/** The protected admin application. Imported lazily so the public site stays small. */
 export default function AdminApp() {
   return (
     <RequireAdmin>

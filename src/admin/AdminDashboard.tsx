@@ -19,12 +19,12 @@ export default function AdminDashboard() {
   };
 
   const cards = [
-    { label: "Products live", num: totalProducts, to: "/admin/products" },
-    { label: "Size / rate variants", num: variantTotal, to: "/admin/products" },
-    { label: "Gallery items", num: data.gallery.length, to: "/admin/gallery" },
-    { label: "Documents shown", num: (data.documents ?? []).length, to: "/admin/documents" },
-    { label: "Reviews awaiting approval", num: pendingReviews.length, to: "/admin/reviews" },
-    { label: "New enquiries", num: newEnquiries.length, to: "/admin/enquiries" },
+    { label: "Products live", num: totalProducts, to: "/auth/admin-services/admin/products" },
+    { label: "Size / rate variants", num: variantTotal, to: "/auth/admin-services/admin/products" },
+    { label: "Gallery items", num: data.gallery.length, to: "/auth/admin-services/admin/gallery" },
+    { label: "Documents shown", num: (data.documents ?? []).length, to: "/auth/admin-services/admin/documents" },
+    { label: "Reviews awaiting approval", num: pendingReviews.length, to: "/auth/admin-services/admin/reviews" },
+    { label: "New enquiries", num: newEnquiries.length, to: "/auth/admin-services/admin/enquiries" },
   ];
 
   return (
@@ -71,7 +71,7 @@ export default function AdminDashboard() {
                     <td>{r.name}</td>
                     <td>{new Date(r.createdAt).toLocaleDateString()}</td>
                     <td>
-                      <Link to="/admin/reviews" className="admin-btn-small">Moderate →</Link>
+                      <Link to="/auth/admin-services/admin/reviews" className="admin-btn-small">Moderate →</Link>
                     </td>
                   </tr>
                 ))}
@@ -83,7 +83,7 @@ export default function AdminDashboard() {
                     <td>{e.name} · {e.phone}</td>
                     <td>{new Date(e.createdAt).toLocaleDateString()}</td>
                     <td>
-                      <Link to="/admin/enquiries" className="admin-btn-small">Open inbox →</Link>
+                      <Link to="/auth/admin-services/admin/enquiries" className="admin-btn-small">Open inbox →</Link>
                     </td>
                   </tr>
                 ))}
@@ -99,23 +99,23 @@ export default function AdminDashboard() {
           <h3>Shape the first product impression</h3>
           <p>Open the visual arranger to place, resize and layer the products in the homepage hero group.</p>
         </div>
-        <Link to="/admin/arranger" className="admin-btn-primary">Open designer →</Link>
+        <Link to="/auth/admin-services/admin/arranger" className="admin-btn-primary">Open designer →</Link>
       </div>
 
       <div className="admin-card">
         <h3>Quick actions</h3>
         <p style={{ marginBottom: 14, color: "var(--text-dim)", fontSize: 13.5 }}>Common tasks to update your website quickly.</p>
         <div className="admin-quick-actions">
-          <Link to="/admin/products" className="admin-btn">Add/edit products</Link>
-          <Link to="/admin/arranger" className="admin-btn">Arrange homepage products</Link>
-          <Link to="/admin/content" className="admin-btn">Edit homepage text</Link>
-          <Link to="/admin/gallery" className="admin-btn">Manage gallery</Link>
-          <Link to="/admin/documents" className="admin-btn">Manage documents</Link>
-          <Link to="/admin/reviews" className="admin-btn">Moderate reviews</Link>
-          <Link to="/admin/enquiries" className="admin-btn">View enquiries</Link>
+          <Link to="/auth/admin-services/admin/products" className="admin-btn">Add/edit products</Link>
+          <Link to="/auth/admin-services/admin/arranger" className="admin-btn">Arrange homepage products</Link>
+          <Link to="/auth/admin-services/admin/content" className="admin-btn">Edit homepage text</Link>
+          <Link to="/auth/admin-services/admin/gallery" className="admin-btn">Manage gallery</Link>
+          <Link to="/auth/admin-services/admin/documents" className="admin-btn">Manage documents</Link>
+          <Link to="/auth/admin-services/admin/reviews" className="admin-btn">Moderate reviews</Link>
+          <Link to="/auth/admin-services/admin/enquiries" className="admin-btn">View enquiries</Link>
           <button className="admin-btn" type="button" onClick={exportDealers} disabled={DEALERS.length === 0}>Export dealers CSV</button>
-          <Link to="/admin/settings" className="admin-btn">Site settings & theme</Link>
-          <Link to="/admin/activity" className="admin-btn">Activity log</Link>
+          <Link to="/auth/admin-services/admin/settings" className="admin-btn">Site settings & theme</Link>
+          <Link to="/auth/admin-services/admin/activity" className="admin-btn">Activity log</Link>
         </div>
       </div>
     </div>

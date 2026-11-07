@@ -355,7 +355,7 @@ export function Footer({ settings }: { settings: { phone: string; phoneAlt?: str
         </div>
         <div className="footer-bottom">
           <span>www.jagadambaplastic.com · नेपालमा बनेको</span>
-          <span>© 2026 {companyName} · <Link to="/admin">Admin</Link></span>
+          <span>© 2026 {companyName}</span>
         </div>
       </div>
     </footer>

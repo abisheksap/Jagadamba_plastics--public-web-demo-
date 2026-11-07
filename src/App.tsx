@@ -102,7 +102,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route
-            path="/admin/*"
+            path="/auth/admin-services/admin/*"
             element={
               <Suspense fallback={<PageLoader label="Loading admin" minHeight="100vh" />}>
                 <AdminApp />

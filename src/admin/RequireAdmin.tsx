@@ -4,7 +4,7 @@ import { isAdmin, sessionExpiresAt, signOut, subscribeToAdminAuth } from "../dat
 import { AdminDataProvider } from "../data/SiteDataProvider";
 import AdminLogin from "./AdminLogin";
 
-/** Gate for every /admin page: shows the login form until there is a live session. */
+/** Gate for every admin page: shows the login form until there is a live session. */
 export function RequireAdmin({ children }: { children: ReactNode }) {
   const [authed, setAuthed] = useState(isAdmin);
 

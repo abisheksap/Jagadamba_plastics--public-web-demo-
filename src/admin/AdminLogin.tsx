@@ -13,7 +13,7 @@ export default function AdminLogin() {
   const [needsSetup, setNeedsSetup] = useState(localNeedsSetup());
 
   const finish = (ok: boolean, message?: string) => {
-    if (ok) navigate("/admin", { replace: true });
+    if (ok) navigate("/auth/admin-services/admin", { replace: true });
     else setError(message ?? "Could not sign in.");
   };
 

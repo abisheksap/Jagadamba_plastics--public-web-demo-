@@ -4,16 +4,16 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { signOut } from "../data/adminAuth";
 
 const NAV = [
-  { to: "/admin", label: "Dashboard", end: true },
-  { to: "/admin/products", label: "Products" },
-  { to: "/admin/arranger", label: "Homepage designer" },
-  { to: "/admin/content", label: "Content" },
-  { to: "/admin/gallery", label: "Gallery" },
-  { to: "/admin/documents", label: "Documents" },
-  { to: "/admin/reviews", label: "Reviews" },
-  { to: "/admin/enquiries", label: "Enquiries" },
-  { to: "/admin/activity", label: "Activity log" },
-  { to: "/admin/settings", label: "Settings" },
+  { to: "/auth/admin-services/admin", label: "Dashboard", end: true },
+  { to: "/auth/admin-services/admin/products", label: "Products" },
+  { to: "/auth/admin-services/admin/arranger", label: "Homepage designer" },
+  { to: "/auth/admin-services/admin/content", label: "Content" },
+  { to: "/auth/admin-services/admin/gallery", label: "Gallery" },
+  { to: "/auth/admin-services/admin/documents", label: "Documents" },
+  { to: "/auth/admin-services/admin/reviews", label: "Reviews" },
+  { to: "/auth/admin-services/admin/enquiries", label: "Enquiries" },
+  { to: "/auth/admin-services/admin/activity", label: "Activity log" },
+  { to: "/auth/admin-services/admin/settings", label: "Settings" },
 ];
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
@@ -25,7 +25,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
   const onSignOut = () => {
     signOut();
-    navigate("/admin", { replace: true });
+    navigate("/auth/admin-services/admin", { replace: true });
   };
 
   return (
@@ -36,7 +36,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           Jagadamba Admin
         </div>
         <div className="side-label">DESIGN & MANAGE</div>
-        <Link to="/admin/arranger" className="admin-side-callout">
+        <Link to="/auth/admin-services/admin/arranger" className="admin-side-callout">
           <span className="admin-side-callout-kicker">HOMEPAGE DESIGNER</span>
           <strong>Arrange the product group</strong>
           <span>Drag, resize and place the hero products →</span>

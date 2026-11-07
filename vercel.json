@@ -67,7 +67,7 @@
       ]
     },
     {
-      "source": "/admin(.*)",
+      "source": "/auth/admin-services/admin(.*)",
       "headers": [
         {
           "key": "X-Robots-Tag",
